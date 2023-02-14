@@ -1,6 +1,10 @@
-import { Reviews } from "./mongodb";
+import { ReviewsCollection } from "./mongodb";
 
+/**
+ *
+ * @returns
+ */
 export const getAllReviews = async () => {
-  const reviews = await (await Reviews()).find({}).toArray();
+  const reviews = await (await ReviewsCollection()).find({}).toArray();
   return reviews;
 };

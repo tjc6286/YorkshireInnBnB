@@ -34,7 +34,43 @@ export const getDB = async () => {
  *
  * @returns Method to connect to db and pass  the Review collection down to the
  */
-export const Reviews = async () => {
+export const ReviewsCollection = async () => {
   const db = await getDB();
   return db.collection("Review");
+};
+
+/**
+ *
+ * @returns Method to connect to db and pass  the Rooms collection down to the
+ */
+export const RoomsCollection = async () => {
+  const db = await getDB();
+  return db.collection("Room");
+};
+
+/**
+ *
+ * @returns Method to connect to db and pass  the Booking collection down to the
+ */
+export const BookingsCollection = async () => {
+  const db = await getDB();
+  return db.collection("Booking");
+};
+
+/**
+ *
+ * @returns Method to connect to db and pass  the Customer collection down to the
+ */
+export const CustomersCollection = async () => {
+  const db = await getDB();
+  return db.collection("Customer");
+};
+
+/**
+ *
+ * @returns Method to connect to db and pass  the Room Reservation collection down to the
+ */
+export const ReservationsCollection = async () => {
+  const db = await getDB();
+  return db.collection("RoomReservation");
 };

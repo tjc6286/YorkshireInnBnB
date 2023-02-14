@@ -1,7 +1,11 @@
-import { getAllReviews } from "../../lib/reviews";
+import { getAllReviews } from "../../../lib/reviews";
 
+/**
+ *
+ * @returns
+ */
 export const get = async () => {
-  console.log("endpoint");
+  console.log("Log - GET ALL REVIEWS");
   const reviews = await getAllReviews();
   if (!reviews) {
     return new Response(null, {
