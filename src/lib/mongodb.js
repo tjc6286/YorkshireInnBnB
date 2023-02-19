@@ -23,8 +23,8 @@ export const getDB = async () => {
     if (!global._mongoConnection) {
       global._mongoConnection = await connectToDB();
       cachedMongo = global._mongoConnection;
+      return cachedMongo;
     }
-    return cachedMongo;
   }
   const mongo = await connectToDB();
   return mongo;

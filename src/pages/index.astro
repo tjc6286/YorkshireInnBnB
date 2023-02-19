@@ -1,48 +1,54 @@
 ---
 //using the method from server
-import { getAllRooms } from "../lib/rooms";
-var x = await getAllRooms();
+import DateRangeSelector from "../components/organisms/dateRangeSelector"
+import { getAllRooms } from "../lib/rooms"
+// var x = await getAllRooms();
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-		<div id="data"></div>
-	</head>
-	<body>
-		<h1>Astro</h1>
-		<h2>{x}</h2>
-	</body>
-	<script>
-		// Using the endpoint as normal endpoint from front end
-		// const response = await fetch('/api/room/getAll');
-		// const data = await response.json();
-		// console.log(data);
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head><div id="data"></div>
 
-		//SENDING DATA TO BACK END FROM FRONT END
-		// const data = { 
-		// 	rating: 3, 
-		// 	authorName: 'Test From frontend', 
-		// 	reviewText : "Test TExt",
-		// };
+  <body>
+    <h1>Astro</h1>
 
-		// fetch('/api/review/addOne', {
-		// method: 'POST',
-		// headers: {
-		// 	'Content-Type': 'application/json',
-		// },
-		// body: JSON.stringify(data),
-		// })
-		// .then((response) => response.json())
-		// .then((data) => {
-		// 	console.log('Success:', data);
-		// })
-		// .catch((error) => {
-		// 	console.error('Error:', error);
-		// });
-	</script>
+    <div style="margin:2rem;">
+      <DateRangeSelector client:only="react" />
+    </div>
+  </body>
+  <script>
+    // Using the endpoint as normal endpoint from front end
+    // const response = await fetch('/api/room/getAll');
+    // const data = await response.json();
+    // console.log(data);
+
+    //SENDING DATA TO BACK END FROM FRONT END
+    // const data = {
+    // 	rating: 3,
+    // 	authorName: 'Test From frontend',
+    // 	reviewText : "Test TExt",
+    // };
+
+    // fetch('/api/review/addOne', {
+    // method: 'POST',
+    // headers: {
+    // 	'Content-Type': 'application/json',
+    // },
+    // body: JSON.stringify(data),
+    // })
+    // .then((response) => response.json())
+    // .then((data) => {
+    // 	console.log('Success:', data);
+    // })
+    // .catch((error) => {
+    // 	console.error('Error:', error);
+    // });
+  </script>
+
+
 </html>
