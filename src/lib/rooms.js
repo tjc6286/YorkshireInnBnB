@@ -52,3 +52,42 @@ export const getBlueRoom = async () => {
     .toArray();
   return rooms;
 };
+
+/**
+ *
+ */
+export const getRoomsAvailabilityByDateRange = async (dateArray) => {
+  const rooms = await (
+    await RoomsCollection()
+  )
+    .find(
+      {},
+      {
+        unavailableDates: 1,
+        temporaryHoldDates: 1,
+      }
+    )
+    .toArray();
+
+  //Iterating through all rooms to look at unavailable dates
+  const availableRooms = rooms.filter((room) => {
+    // Iterating through all passed in dates and comparing to to unavailable Dates,
+    // if it matches found will equal true.
+    const matchUnavailableDates = dateArray.some((date) => {
+      return room.unavailableDates.find(
+        (uDate) => uDate.getTime() === new Date(date).getTime()
+      );
+    });
+
+    const matchTemporaryHoldDates = dateArray.some((date) => {
+      return room.temporaryHoldDates.find(
+        (uDate) => uDate.getTime() === new Date(date).getTime()
+      );
+    });
+
+    // if room unavailable or temporary hold dates not inside the dateArray the room is valid
+    return !matchUnavailableDates && !matchTemporaryHoldDates;
+  });
+
+  return availableRooms;
+};
