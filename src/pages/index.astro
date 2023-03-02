@@ -1,7 +1,8 @@
 ---
 //using the method from server
-import DateRangeSelector from "../components/organisms/dateRangeSelector"
-import { getAllRooms } from "../lib/rooms"
+import { Chip } from "@mui/material";
+import DateRangeSelector from "../components/organisms/dateRangeSelector";
+import { getAllRooms } from "../lib/rooms";
 // var x = await getAllRooms();
 ---
 
@@ -16,8 +17,8 @@ import { getAllRooms } from "../lib/rooms"
 
   <body>
     <h1>Astro</h1>
-
     <div style="margin:2rem;">
+      <!-- <Chip label="Chip Filled" /> -->
       <DateRangeSelector client:only="react" />
     </div>
   </body>

@@ -1,12 +1,13 @@
 import { TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { eachDayOfInterval } from "date-fns";
 import React from "react";
 import Button from "../../atoms/button";
 
-interface DateRangeSelectorProps {}
+// interface DateRangeSelectorProps {}
 
-const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({}) => {
+const DateRangeSelector = () => {
   const [startDate, setStartDate] = React.useState<Date | null>(null);
   const [endDate, setEndDate] = React.useState<Date | null>(null);
 
@@ -28,15 +29,27 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({}) => {
     if (!startDate || !endDate) return;
     if (startDate > endDate) return;
 
-    try {
-      fetch("/api/room/getAll")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    const allDatesBetweenStartAndEndDate = eachDayOfInterval({
+      start: startDate,
+      end: endDate,
+    });
+
+    console.log(allDatesBetweenStartAndEndDate);
+
+    fetch("/api/room/getRoomAvailabilityByDateRange", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(allDatesBetweenStartAndEndDate),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -75,5 +88,4 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({}) => {
     </div>
   );
 };
-
 export default DateRangeSelector;
