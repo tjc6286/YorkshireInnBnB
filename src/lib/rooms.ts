@@ -1,5 +1,5 @@
 import isDateInArray from "../helpers/isDateInArray";
-import type { RoomUnavailableDates } from "../types/room";
+import type { Room } from "../types/room";
 import { RoomsCollection } from "./mongodb";
 
 /**
@@ -55,12 +55,6 @@ export const getBlueRoom = async () => {
   return rooms;
 };
 
-function isInArray(array, value) {
-  return !!array.find((item) => {
-    return item.getTime() == value.getTime();
-  });
-}
-
 /**
  *
  */
@@ -72,21 +66,17 @@ export const getRoomsAvailabilityByDateRange = async (
     formattedDates.push(new Date(date));
   });
 
-  const rooms = await (await RoomsCollection())
-    .find({})
-    .project({ unavailableDates: 1, temporaryHoldDates: 1, name: 1 })
-    .toArray();
+  const rooms = await (await RoomsCollection()).find({}).toArray();
 
-  let availableRooms: Array<string> = [];
+  let availableRooms: Array<Room> = [];
 
-  rooms.forEach((room: RoomUnavailableDates) => {
+  rooms.forEach((room: Room) => {
     let dateFound = false;
     formattedDates.forEach((date: Date) => {
       if (
         isDateInArray(room.temporaryHoldDates, date) ||
         isDateInArray(room.unavailableDates, date)
       ) {
-        console.log(`Found date for ${room.name}`);
         dateFound = true;
       }
     });
@@ -94,7 +84,7 @@ export const getRoomsAvailabilityByDateRange = async (
     if (dateFound) {
       return;
     } else {
-      availableRooms.push(room.name);
+      availableRooms.push(room);
     }
   });
 
