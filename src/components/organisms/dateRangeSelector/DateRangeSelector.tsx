@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { eachDayOfInterval } from "date-fns";
@@ -12,6 +12,7 @@ const DateRangeSelector = () => {
   const [startDate, setStartDate] = React.useState<Date | null>(null);
   const [endDate, setEndDate] = React.useState<Date | null>(null);
   const [results, setResults] = React.useState<Array<Room>>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const handleSetStartDate = (newStartDate: Date) => {
     if (endDate && newStartDate > endDate) {
@@ -28,6 +29,7 @@ const DateRangeSelector = () => {
   };
 
   const handleSelectedDates = async () => {
+    setLoading(true);
     if (!startDate || !endDate) return;
     if (startDate > endDate) return;
 
@@ -46,6 +48,7 @@ const DateRangeSelector = () => {
       .then((response) => response.json())
       .then((data) => {
         setResults(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -103,14 +106,17 @@ const DateRangeSelector = () => {
           Book Room
         </button>
       </div> */}
-      <div className="m-8">
+      <div className="m-8 h-full">
         {results.length > 0 ? (
           results.map((room: Partial<Room>) => (
             <div
-              className="flex text-black rounded-md border-2 border-gray-600 m-8"
+              className="flex text-black rounded-md border-2 border-gray-600 my-4"
               key={room._id}
             >
-              <img className="h-44" src="assets/Gallery/bolero.png" />
+              <img
+                style={{ width: 240, height: 240 }}
+                src={`assets/Gallery/${room.imgPathName}`}
+              />
               <div className="flex flex-1 justify-items-center">
                 <div className="flex flex-col p-4">
                   <h2 className="block text-2xl">Room Name: {room.name}</h2>
@@ -123,8 +129,14 @@ const DateRangeSelector = () => {
               </button>
             </div>
           ))
+        ) : loading ? (
+          <div className="flex w-full h-screen justify-center align-middle">
+            <CircularProgress />
+          </div>
         ) : (
-          <h1 className="text-black text-xl">Please search for a room</h1>
+          <h1 className="text-black text-xl h-screen">
+            Please search for a room
+          </h1>
         )}
       </div>
     </div>

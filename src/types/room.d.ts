@@ -10,6 +10,7 @@ export type Room = {
   basePrice: number;
   unavailableDates: Array<string>;
   temporaryHoldDates: Array<string>;
+  imgPathName: string;
 };
 
 export type RoomUnavailableDates = Pick<

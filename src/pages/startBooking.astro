@@ -4,8 +4,8 @@ import DateRangeSelector from "../components/organisms/dateRangeSelector";
 ---
 
 <MainLayout title="Yorkshire Inn - Booking" activePage="about">
-  <section class="h-screen">
-    <di class="text-black">
+  <section>
+    <div class="text-black">
       <h2 class="text-2xl font-bold my-4 mx-8">
         Welcome to the Start of your cozy stay
       </h2>
@@ -18,9 +18,9 @@ import DateRangeSelector from "../components/organisms/dateRangeSelector";
         comfort and hospitality. Please select your desired dates below to start
         your booking process.
       </p>
-    </di>
-    <div class="flex items-center justify-center mb-8">
-      <DateRangeSelector client:visible />
+    </div>
+    <div class="flex flex-1 items-center justify-center mb-8">
+      <DateRangeSelector client:only="react" />
     </div>
     <!-- EXAMPLE ROOM RESULT -->
   </section>
