@@ -1,0 +1,40 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import DateRangeSelector from "../components/organisms/dateRangeSelector";
+---
+
+<MainLayout title="Yorkshire Inn - Booking" activePage="about">
+  <section class="h-screen">
+    <di class="text-black">
+      <h2 class="text-2xl font-bold my-4 mx-6">
+        Welcome to the Start of your cozy stay
+      </h2>
+      <p class="mx-6 my-4">
+        We're thrilled that you're considering a stay with us, and we can't wait
+        to help make your trip unforgettable. Our charming accommodations offer
+        a comfortable and relaxing atmosphere, with all the amenities you need
+        to feel right at home. Whether you're here for a weekend getaway or an
+        extended stay, we're confident that you'll love our unique blend of
+        comfort and hospitality. Please select your desired dates below to start
+        your booking process.
+      </p>
+    </di>
+    <div class="flex items-center justify-center">
+      <DateRangeSelector client:visible />
+    </div>
+    <!-- EXAMPLE ROOM RESULT -->
+    <div class="flex text-black rounded-md border-2 border-gray-600 mx-4">
+      <img class="h-44" src="assets/Gallery/bolero.png" />
+      <div class="flex-1">
+        <h2 class="block text-2xl">Room name</h2>
+        <h2 class="block font-bold">Price:</h2>
+        <p class="block">Description</p>
+      </div>
+      <button
+        class="px-4 py-2 inline-block bg-transparent outline outline-1 hover:text-white hover:bg-gray-600 transition-colors">
+        Book Room
+      </button>
+    </div>
+  </section>
+  <p>PRICE:</p>
+</MainLayout>

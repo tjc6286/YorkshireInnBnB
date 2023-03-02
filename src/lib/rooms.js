@@ -91,3 +91,8 @@ export const getRoomsAvailabilityByDateRange = async (dateArray) => {
 
   return availableRooms;
 };
+
+let formattedDates = [];
+dateArray.forEach((date) => {
+  formattedDates.push(new Date(date));
+});
