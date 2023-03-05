@@ -18,6 +18,9 @@ const DateRangeSelector = () => {
     if (endDate && newStartDate > endDate) {
       setEndDate(newStartDate);
     }
+    if (results.length > 0) {
+      setResults([]);
+    }
     setStartDate(newStartDate);
   };
 
@@ -25,7 +28,16 @@ const DateRangeSelector = () => {
     if (endDate && newEndDate < endDate) {
       return;
     }
+    if (results.length > 0) {
+      setResults([]);
+    }
     setEndDate(newEndDate);
+  };
+
+  const resetDates = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setResults([]);
   };
 
   const handleSelectedDates = async () => {
@@ -89,23 +101,10 @@ const DateRangeSelector = () => {
         <div className="mx-8">
           <Button
             label={results.length > 0 ? "Refresh" : "Search"}
-            onClick={handleSelectedDates}
+            onClick={results.length > 0 ? resetDates : handleSelectedDates}
           />
         </div>
       </div>
-      {/* <div className="flex text-black rounded-md border-2 border-gray-600 m-8">
-        <img className="h-44" src="assets/Gallery/bolero.png" />
-        <div className="flex flex-1 justify-items-center">
-          <div className="flex flex-col p-4">
-            <h2 className="block text-2xl">Room name</h2>
-            <h2 className="block font-bold">Price:</h2>
-            <p className="block">Description</p>
-          </div>
-        </div>
-        <button className="px-4 py-2 inline-block bg-transparent outline outline-1 hover:text-white hover:bg-gray-600 transition-colors">
-          Book Room
-        </button>
-      </div> */}
       <div className="m-8 h-full">
         {results.length > 0 ? (
           results.map((room: Partial<Room>) => (
@@ -135,7 +134,7 @@ const DateRangeSelector = () => {
           </div>
         ) : (
           <h1 className="text-black text-xl h-screen">
-            Please search for a room
+            Select a start and end date to see what rooms are available!
           </h1>
         )}
       </div>
