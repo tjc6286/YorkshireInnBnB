@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
 import type { Room } from "../types/room";
 import { RoomsCollection } from "./mongodb";
@@ -56,11 +57,12 @@ export const getBlueRoom = async () => {
 };
 
 /**
- *
+ * 
+ * @param dateArray 
+ * @returns 
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>,
-) => {
+  dateArray: Array<string>) => {
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
     formattedDates.push(new Date(date));
@@ -90,3 +92,25 @@ export const getRoomsAvailabilityByDateRange = async (
 
   return availableRooms;
 };
+
+/**
+ * 
+ * @param roomId Id for the room to be updated with temporary hold dates
+ * @param dateArray 
+ * @returns 
+ */
+export const addHoldDates = async (roomId:string, dateArray: Array<string>) =>{
+  const roomID = new ObjectId(roomId);
+  const roomsCollection =  await RoomsCollection();
+  const room = await roomsCollection.find({_id: roomID}).toArray();
+  const dates = room[0].temporaryHoldDates
+  const allDates = new Set(dates.concat(dateArray))
+  const updatedRoom = await roomsCollection.updateOne( { _id: roomID },
+  {
+    $set: {
+      temporaryHoldDates: Array.from(allDates)
+    }
+  })
+
+  return updatedRoom;
+}
