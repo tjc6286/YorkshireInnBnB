@@ -1,7 +1,7 @@
 import { CircularProgress, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { eachDayOfInterval } from "date-fns";
+import { addDays, eachDayOfInterval } from "date-fns";
 import React from "react";
 import type { Room } from "../../../types/room";
 import Button from "../../atoms/button";
@@ -16,7 +16,7 @@ const DateRangeSelector = () => {
 
   const handleSetStartDate = (newStartDate: Date) => {
     if (endDate && newStartDate > endDate) {
-      setEndDate(newStartDate);
+      setEndDate(addDays(newStartDate, 1));
     }
     if (results.length > 0) {
       setResults([]);
