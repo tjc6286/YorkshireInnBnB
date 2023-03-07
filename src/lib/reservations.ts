@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+import type { Reservation } from "../types/reservation";
 import { ReservationsCollection } from "./mongodb";
 
 /**
@@ -15,9 +17,9 @@ export const getAllReservations = async () => {
  * @param {newReservation}
  * @returns
  */
-export const insertNewReservation = async (newReservation) => {
+export const insertNewReservation = async (newReservation: Reservation) => {
   const reservations = await ReservationsCollection();
-  return reservations.insert(newReservation);
+  return await reservations.insert(newReservation);
 };
 
 /**
@@ -26,7 +28,7 @@ export const insertNewReservation = async (newReservation) => {
  * @param {updatedReservation}
  * @returns
  */
-export const updateReservation = async (reservation, updatedReservation) => {
+export const updateReservation = async (reservationID: string, updatedReservation: Reservation) => {
   const reservations = await ReservationsCollection();
-  return reservations.update(reservation, updatedReservation);
+  return await reservations.update({_id:new ObjectId(reservationID)}, updatedReservation);
 };
