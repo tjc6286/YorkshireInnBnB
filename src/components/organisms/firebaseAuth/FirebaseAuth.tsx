@@ -4,10 +4,6 @@ import "firebaseui/dist/firebaseui.css";
 import React from "react";
 import { app } from "../../../firebase";
 
-interface IAuthProps {
-  config: any;
-}
-
 var uiConfig = {
   // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
   signInFlow: "popup",
@@ -15,8 +11,9 @@ var uiConfig = {
   signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
 };
 
-const FirebaseAuth: React.FC<IAuthProps> = ({ config }) => {
+const FirebaseAuth: React.FC = () => {
   React.useEffect(() => {
+    //initialize firebase.
     app;
     var ui =
       firebaseui.auth.AuthUI.getInstance() ||
@@ -25,7 +22,15 @@ const FirebaseAuth: React.FC<IAuthProps> = ({ config }) => {
     ui.start("#firebaseui-auth-container", uiConfig);
   }, []);
 
-  return <div id="firebaseui-auth-container"></div>;
+  return (
+    <div
+      style={{
+        transform: `translate(0%,25%)`,
+      }}
+    >
+      <div id="firebaseui-auth-container"></div>
+    </div>
+  );
 };
 
 export default FirebaseAuth;

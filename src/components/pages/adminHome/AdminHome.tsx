@@ -26,7 +26,7 @@ const AdminHome: React.FC = () => {
           {/* <!-- Title --> */}
           <div className="flex justify-between items-center">
             <h3 className="text-3xl text-white font-bold text-center md:mt-2 mt-10">
-              Welcome To your Admin Portal
+              Yorkshire Inn Admin Portal
             </h3>
             <div className="inline-flex items-center space-x-2">
               <p className="text-white">Logged in as : {userEmail}</p>
