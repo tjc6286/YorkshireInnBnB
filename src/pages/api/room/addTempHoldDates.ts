@@ -11,7 +11,7 @@ export const post: APIRoute = async ({ request }) => {
     
     const roomId = data.roomId;
     const dates = data.dates;
-    //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
+    //VALIDATION NEEDED
     const room = await addHoldDates(roomId, dates);
     return new Response(JSON.stringify(room), {
       status: 200,
