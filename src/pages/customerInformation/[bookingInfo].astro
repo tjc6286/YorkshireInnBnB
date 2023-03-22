@@ -1,0 +1,15 @@
+---
+import { getRoomById } from "../../lib/rooms";
+
+const { bookingInfo } = Astro.params;
+
+const roomId = bookingInfo?.split("-")[0];
+const startDate = bookingInfo?.split("-")[1];
+const endDate = bookingInfo?.split("-")[2];
+
+const roomInformationResponse = await getRoomById(roomId!);
+
+console.log(roomInformationResponse);
+---
+
+<h1>{roomId}: {startDate} : {endDate}</h1>

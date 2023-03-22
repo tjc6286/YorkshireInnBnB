@@ -1,3 +1,3 @@
-import DateRangeSelector from "./dateRangeSelector"
+import RoomAvailabilityDateRangeSelector from "./dateRangeSelectors";
 
-export default { DateRangeSelector }
+export default RoomAvailabilityDateRangeSelector;

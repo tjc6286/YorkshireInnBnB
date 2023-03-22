@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import DateRangeSelector from "../components/organisms/dateRangeSelector";
+import RoomAvailabilityDateRangeSelector from "../components/organisms";
 ---
 
 <MainLayout title="Yorkshire Inn - Booking" activePage="about">
@@ -20,7 +21,7 @@ import DateRangeSelector from "../components/organisms/dateRangeSelector";
       </p>
     </div>
     <div class="flex flex-1 items-center justify-center mb-8">
-      <DateRangeSelector client:only="react" />
+      <RoomAvailabilityDateRangeSelector client:only="react" />
     </div>
     <!-- EXAMPLE ROOM RESULT -->
   </section>
