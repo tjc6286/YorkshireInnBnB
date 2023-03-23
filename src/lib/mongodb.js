@@ -13,6 +13,14 @@ const connectToDB = async () => {
   return mongo.db("YorkshireInnBnB");
 };
 
+/**
+ * Get access to the mongo db client for transaction purposes
+ * @returns
+ */
+export const getMongoClient = async () => {
+  return await new MongoClient(uri, options);
+};
+
 export const getDB = async () => {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).

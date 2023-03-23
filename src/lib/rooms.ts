@@ -72,7 +72,7 @@ export const getRoomById = async (roomId: string) => {
  * @returns
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
@@ -112,7 +112,7 @@ export const getRoomsAvailabilityByDateRange = async (
  */
 export const addHoldDates = async (
   roomId: string,
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
   const roomID = new ObjectId(roomId);
   const roomsCollection = await RoomsCollection();
@@ -125,7 +125,7 @@ export const addHoldDates = async (
       $set: {
         temporaryHoldDates: Array.from(allDates),
       },
-    },
+    }
   );
 
   return updatedRoom;
