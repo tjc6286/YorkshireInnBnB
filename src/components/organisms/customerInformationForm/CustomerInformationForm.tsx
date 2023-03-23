@@ -1,3 +1,4 @@
+import format from "date-fns/format";
 import React from "react";
 import type { Room } from "../../../types/room";
 import Button from "../../atoms/button";
@@ -11,6 +12,8 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 }) => {
   const [roomInfo, setRoomInfo] = React.useState<Room>({} as Room);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [sDate, setSDate] = React.useState<string>("");
+  const [eDate, setEDate] = React.useState<string>("");
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
@@ -44,6 +47,10 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 
   React.useEffect(() => {
     const roomID = bookingInfo.split("-")[0];
+    const startDate = bookingInfo.split("-")[1];
+    const endDate = bookingInfo.split("-")[2];
+    setSDate(format(new Date(startDate), "MM/dd/yyyy"));
+    setEDate(format(new Date(endDate), "MM/dd/yyyy"));
     fetchRoomInfo(roomID);
   }, []);
 
@@ -105,6 +112,13 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               />
               <h2 className="text-2xl font-bold py-3">{roomInfo.name}</h2>
               <p className="pr-4">{roomInfo.description}</p>
+              <p className=" pt-2 pr-4 font-bold">FROM:</p>
+              <p className="pr-4">{sDate}</p>
+              <p className="pr-4 font-bold">TO:</p>
+              <p className="pr-4">{eDate}</p>
+              <p className="mt-4 pr-4 font-semibold text-xl">
+                Price/Night: ${roomInfo.basePrice}
+              </p>
             </div>
             <div
               style={{
@@ -136,7 +150,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       First Name
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-first-name"
                       type="text"
                       placeholder="Jane"
