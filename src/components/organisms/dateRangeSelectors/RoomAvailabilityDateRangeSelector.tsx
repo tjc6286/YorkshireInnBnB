@@ -8,15 +8,15 @@ import Button from "../../atoms/button";
 
 // interface DateRangeSelectorProps {}
 
-const DateRangeSelector = () => {
-  const [startDate, setStartDate] = React.useState<Date | null>(null);
-  const [endDate, setEndDate] = React.useState<Date | null>(null);
+const RoomAvailabilityDateRangeSelector = () => {
+  const [startDate, setStartDate] = React.useState<string | null>(null);
+  const [endDate, setEndDate] = React.useState<string | null>(null);
   const [results, setResults] = React.useState<Array<Room>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const handleSetStartDate = (newStartDate: Date) => {
-    if (endDate && newStartDate > endDate) {
-      setEndDate(addDays(newStartDate, 1));
+  const handleSetStartDate = (newStartDate: string) => {
+    if (endDate && new Date(newStartDate) > new Date(endDate)) {
+      setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
     }
     if (results.length > 0) {
       setResults([]);
@@ -24,8 +24,8 @@ const DateRangeSelector = () => {
     setStartDate(newStartDate);
   };
 
-  const handleSetEndDate = (newEndDate: Date) => {
-    if (endDate && newEndDate < endDate) {
+  const handleSetEndDate = (newEndDate: string) => {
+    if (endDate && new Date(newEndDate) < new Date(endDate)) {
       return;
     }
     if (results.length > 0) {
@@ -43,11 +43,11 @@ const DateRangeSelector = () => {
   const handleSelectedDates = async () => {
     setLoading(true);
     if (!startDate || !endDate) return;
-    if (startDate > endDate) return;
+    if (new Date(startDate) > new Date(endDate)) return;
 
     const allDatesBetweenStartAndEndDate = eachDayOfInterval({
-      start: startDate,
-      end: endDate,
+      start: new Date(startDate),
+      end: new Date(endDate),
     });
 
     fetch("/api/room/getRoomAvailabilityByDateRange", {
@@ -77,7 +77,7 @@ const DateRangeSelector = () => {
               value={startDate}
               disablePast
               onChange={(newValue: Date | null) => {
-                newValue && handleSetStartDate(newValue);
+                newValue && handleSetStartDate(newValue.toUTCString());
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -89,10 +89,10 @@ const DateRangeSelector = () => {
               label={"End Date"}
               value={endDate}
               disablePast
-              minDate={startDate ?? undefined}
+              minDate={startDate ? new Date(startDate) : undefined}
               disabled={!startDate}
               onChange={(newValue: Date | null) => {
-                newValue && handleSetEndDate(newValue);
+                newValue && handleSetEndDate(newValue.toUTCString());
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -100,7 +100,8 @@ const DateRangeSelector = () => {
         </div>
         <div className="mx-8">
           <Button
-            label={results.length > 0 ? "Refresh" : "Search"}
+            disabled={!endDate}
+            label={results.length > 0 ? "Reset" : "Search"}
             onClick={results.length > 0 ? resetDates : handleSelectedDates}
           />
         </div>
@@ -123,9 +124,14 @@ const DateRangeSelector = () => {
                   <p className="block">Description: {room.description}</p>
                 </div>
               </div>
-              <button className="px-4 py-2 inline-block bg-transparent outline outline-1 hover:text-white hover:bg-gray-600 transition-colors">
+              <a
+                href={`/customerInformation/${room._id}-${
+                  startDate + "-" + endDate
+                }`}
+                className="px-4 py-2 flex items-center bg-transparent outline outline-1 hover:text-white hover:bg-gray-600 transition-colors "
+              >
                 Book Room
-              </button>
+              </a>
             </div>
           ))
         ) : loading ? (
@@ -141,4 +147,4 @@ const DateRangeSelector = () => {
     </div>
   );
 };
-export default DateRangeSelector;
+export default RoomAvailabilityDateRangeSelector;

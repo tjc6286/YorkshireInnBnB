@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
 import type { Room } from "../types/room";
 import { RoomsCollection } from "./mongodb";
-
 /**
  *
  * @returns
@@ -57,12 +56,24 @@ export const getBlueRoom = async () => {
 };
 
 /**
- * 
- * @param dateArray 
- * @returns 
+ *
+ * @returns
+ */
+export const getRoomById = async (roomId: string) => {
+  const room = await (await RoomsCollection())
+    .find({ _id: new ObjectId(roomId) })
+    .toArray();
+  return room;
+};
+
+/**
+ *
+ * @param dateArray
+ * @returns
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>) => {
+  dateArray: Array<string>
+) => {
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
     formattedDates.push(new Date(date));
@@ -94,23 +105,28 @@ export const getRoomsAvailabilityByDateRange = async (
 };
 
 /**
- * 
+ *
  * @param roomId Id for the room to be updated with temporary hold dates
- * @param dateArray 
- * @returns 
+ * @param dateArray
+ * @returns
  */
-export const addHoldDates = async (roomId:string, dateArray: Array<string>) =>{
+export const addHoldDates = async (
+  roomId: string,
+  dateArray: Array<string>
+) => {
   const roomID = new ObjectId(roomId);
-  const roomsCollection =  await RoomsCollection();
-  const room = await roomsCollection.find({_id: roomID}).toArray();
-  const dates = room[0].temporaryHoldDates
-  const allDates = new Set(dates.concat(dateArray))
-  const updatedRoom = await roomsCollection.updateOne( { _id: roomID },
-  {
-    $set: {
-      temporaryHoldDates: Array.from(allDates)
+  const roomsCollection = await RoomsCollection();
+  const room = await roomsCollection.find({ _id: roomID }).toArray();
+  const dates = room[0].temporaryHoldDates;
+  const allDates = new Set(dates.concat(dateArray));
+  const updatedRoom = await roomsCollection.updateOne(
+    { _id: roomID },
+    {
+      $set: {
+        temporaryHoldDates: Array.from(allDates),
+      },
     }
-  })
+  );
 
   return updatedRoom;
-}
+};

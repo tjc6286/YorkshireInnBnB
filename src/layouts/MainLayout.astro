@@ -12,7 +12,7 @@
  */
 
 //COMPONENT PROPS
-const { title, activePage } = Astro.props;
+const { title, activePage, heroImgPath } = Astro.props;
 
 //STYLES FOR NAV ITEMS
 let activeNavCss =
@@ -88,11 +88,11 @@ if (activePage === "home") {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="text-white bg-[#F4F7FA]">
+  <body class="bg-[#F4F7FA]">
     <nav class="sticky top-0 z-50 flex bg-[#36353A] items-center h-20">
       <div class="container flex flex-wrap items-center justify-end mx-auto">
         <a href="#home" class="mx-auto md:hidden">
-          <img src="assets/Logo.png" alt="Yorkshire Inn Logo" />
+          <img src={heroImgPath} alt="Yorkshire Inn Logo" />
         </a>
         <!-- Hamburger Menu -->
         <button
@@ -126,7 +126,7 @@ if (activePage === "home") {
           >
             <li>
               <a
-                href="#home"
+                href="/#home"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Home</a
@@ -134,7 +134,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="#amenities"
+                href="/#amenities"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Amenities</a
@@ -142,7 +142,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="/"
+                href="/#reviews"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Reviews</a
@@ -150,8 +150,8 @@ if (activePage === "home") {
             </li>
             <li>
               <!-- Navbar Logo -->
-              <a href="#home"
-                ><img src="assets/Logo.png" alt="Yorkshire Inn Logo" /></a
+              <a href="/#home"
+                ><img src={heroImgPath} alt="Yorkshire Inn Logo" /></a
               >
             </li>
             <li>
@@ -164,7 +164,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="#gallery"
+                href="/#gallery"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Gallery</a
@@ -172,7 +172,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="#contact"
+                href="/#contact"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Contact</a
@@ -192,31 +192,31 @@ if (activePage === "home") {
               <a href="/" class={homeCSS} aria-current="page">Home</a>
             </li>
             <li>
-              <a href="/amenities" class={amenitiesCSS}>Amenities</a>
+              <a href="/#amenities" class={amenitiesCSS}>Amenities</a>
             </li>
             <li>
-              <a href="/reviews" class={reviewsCSS}>Reviews</a>
+              <a href="/#reviews" class={reviewsCSS}>Reviews</a>
             </li>
             <li>
-              <a href="/rooms" class={roomsCSS}>Rooms</a>
+              <a href="/#rooms" class={roomsCSS}>Rooms</a>
             </li>
             <li>
-              <a href="/gallery" class={galleryCSS}>Gallery</a>
+              <a href="/#gallery" class={galleryCSS}>Gallery</a>
             </li>
             <li>
-              <a href="/contact" class={contactCSS}>Contact</a>
+              <a href="/#contact" class={contactCSS}>Contact</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
     <!-- END NAVBAR -->
-    <div style="display: block">
+    <div style="display: block; min-height: max-content;">
       <slot />
     </div>
     <!-- FOOTER -->
     <footer
-      class="text-gray-800 bg-[#F4F7FA] p-4 sm:p-6"
+      class="text-gray-800 bg-[#F4F7FA]"
       style="position: relative; bottom: 0"
     >
       <div class="bg-[#36353A]">

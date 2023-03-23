@@ -1,0 +1,34 @@
+---
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getRoomById } from "../../lib/rooms";
+import heroImg from "/assets/Logo.png";
+const { bookingInfo } = Astro.params;
+import CustomerInformationForm from "../../components/organisms/customerInformationForm";
+import { eachDayOfInterval } from "date-fns";
+
+// export async function getStaticPaths() {
+
+//   // const roomInformationResponse = await getRoomById(roomId!);
+
+//   return [
+//     { params: { bookingInfo }, props: { } },
+//     { params: { ... } },
+//     { params: { ... } },
+//     // ...
+//   ];
+// }
+
+const roomId = bookingInfo?.split("-")[0];
+const startDate = bookingInfo?.split("-")[1];
+const endDate = bookingInfo?.split("-")[2];
+
+const allDatesBetweenStartAndEndDate = eachDayOfInterval({
+  start: new Date(startDate!),
+  end: new Date(endDate!),
+});
+---
+
+<MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
+  <CustomerInformationForm client:only bookingInfo={bookingInfo!} />
+</MainLayout>
