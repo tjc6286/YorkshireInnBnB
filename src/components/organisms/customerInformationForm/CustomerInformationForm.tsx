@@ -3,12 +3,10 @@ import type { Room } from "../../../types/room";
 
 interface CustomerInformationFormProps {
   bookingInfo: string;
-  images?: Array<any>;
 }
 
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
-  images,
 }) => {
   const [roomInfo, setRoomInfo] = React.useState<Room>({} as Room);
   const [loading, setLoading] = React.useState<boolean>(false);

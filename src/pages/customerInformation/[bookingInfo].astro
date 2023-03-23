@@ -4,13 +4,8 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import { getRoomById } from "../../lib/rooms";
 import heroImg from "/assets/Logo.png";
 const { bookingInfo } = Astro.params;
-import roseSuite from "/assets/Gallery/rosesuite.png";
-import bolero from "/assets/Gallery/bolero.png";
-import blueRoom from "/assets/Gallery/blueroom.png";
-import lodge from "/assets/Gallery/lodge.png";
 import CustomerInformationForm from "../../components/organisms/customerInformationForm";
-
-const images = [roseSuite, bolero, blueRoom, lodge];
+import { eachDayOfInterval } from "date-fns";
 
 // export async function getStaticPaths() {
 
@@ -24,14 +19,14 @@ const images = [roseSuite, bolero, blueRoom, lodge];
 //   ];
 // }
 
-// const roomId = bookingInfo?.split("-")[0];
-// const startDate = bookingInfo?.split("-")[1];
-// const endDate = bookingInfo?.split("-")[2];
+const roomId = bookingInfo?.split("-")[0];
+const startDate = bookingInfo?.split("-")[1];
+const endDate = bookingInfo?.split("-")[2];
 
-// const roomInformationResponse = await getRoomById(roomId!);
-
-// const roomInformation = roomInformationResponse[0];
-// console.log(roomInformation);
+const allDatesBetweenStartAndEndDate = eachDayOfInterval({
+  start: new Date(startDate!),
+  end: new Date(endDate!),
+});
 ---
 
 <MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
