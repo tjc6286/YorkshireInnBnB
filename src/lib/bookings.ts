@@ -82,9 +82,11 @@ export const bookingCreateTransaction = async (
       const customerCollection = db.collection("Customer");
       const reservationCollection = db.collection("RoomReservation");
 
-      ret.booking = bookingCollection.insertOne(newBooking, { session });
-      ret.customer = customerCollection.insertOne(newCustomer, { session });
-      ret.reservation = reservationCollection.insertOne(newReservation, {
+      ret.booking = await bookingCollection.insertOne(newBooking, { session });
+      ret.customer = await customerCollection.insertOne(newCustomer, {
+        session,
+      });
+      ret.reservation = await reservationCollection.insertOne(newReservation, {
         session,
       });
 

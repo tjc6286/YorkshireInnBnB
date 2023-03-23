@@ -1,5 +1,6 @@
 import React from "react";
 import type { Room } from "../../../types/room";
+import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
   bookingInfo: string;
@@ -10,6 +11,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 }) => {
   const [roomInfo, setRoomInfo] = React.useState<Room>({} as Room);
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  const [petCheck, setPetCheck] = React.useState<boolean>(false);
+  const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
 
   const fetchRoomInfo = async (roomId: string) => {
     setLoading(true);
@@ -32,6 +36,12 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     }
   };
 
+  const handleSubmit = (event) => {
+    //TODO: handle submit to send to stripe page and
+    event.preventDefault();
+    alert("test");
+  };
+
   React.useEffect(() => {
     const roomID = bookingInfo.split("-")[0];
     fetchRoomInfo(roomID);
@@ -45,8 +55,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         width: "100%",
         height: "100dvh",
         justifyContent: "center",
-      }}
-    >
+      }}>
       Loading...
     </div>
   ) : (
@@ -54,25 +63,22 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       style={{
         display: "flex",
         width: "100%",
-        height: "100dvh",
+        height: "140dvh",
         justifyContent: "center",
-      }}
-    >
+      }}>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           width: "90%",
-        }}
-      >
+        }}>
         <div
           style={{
             display: "flex",
             flex: 1,
             margin: "2rem",
             flexDirection: "column",
-          }}
-        >
+          }}>
           <h2
             style={{
               fontFamily: "Playfair Display",
@@ -82,8 +88,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               letterSpacing: "0.035em",
               color: "#000000",
               paddingBottom: "1rem",
-            }}
-          >
+            }}>
             Selected Room
           </h2>
           <div style={{ display: "flex", flex: 1, flexDirection: "row" }}>
@@ -92,8 +97,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                 display: "flex",
                 flex: 5,
                 flexDirection: "column",
-              }}
-            >
+              }}>
               <img
                 style={{ width: "100%" }}
                 src={`/assets/Gallery/${roomInfo.imgPathName}`}
@@ -108,8 +112,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                 flex: 8,
                 flexDirection: "column",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <h2
                 style={{
                   fontFamily: "Playfair Display",
@@ -121,8 +124,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   paddingBottom: "1rem",
                   textAlign: "center",
                   width: "100%",
-                }}
-              >
+                }}>
                 Customer Information
               </h2>
               <form className="w-full max-w-lg">
@@ -130,8 +132,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-first-name"
-                    >
+                      htmlFor="grid-first-name">
                       First Name
                     </label>
                     <input
@@ -148,8 +149,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/2 px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-last-name"
-                    >
+                      htmlFor="grid-last-name">
                       Last Name
                     </label>
                     <input
@@ -164,8 +164,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
+                      htmlFor="grid-password">
                       Email
                     </label>
                     <input
@@ -176,8 +175,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
+                      htmlFor="grid-password">
                       Phone
                     </label>
                     <input
@@ -188,8 +186,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
-                    >
+                      htmlFor="grid-password">
                       Address
                     </label>
                     <input
@@ -202,8 +199,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-city"
-                    >
+                      htmlFor="grid-city">
                       City
                     </label>
                     <input
@@ -216,15 +212,13 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-state"
-                    >
+                      htmlFor="grid-state">
                       State
                     </label>
                     <div className="relative">
                       <select
                         className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="grid-state"
-                      >
+                        id="grid-state">
                         <option>New Mexico</option>
                         <option>Missouri</option>
                         <option>Texas</option>
@@ -233,8 +227,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                         <svg
                           className="fill-current h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
+                          viewBox="0 0 20 20">
                           <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                         </svg>
                       </div>
@@ -243,8 +236,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-zip"
-                    >
+                      htmlFor="grid-zip">
                       Zip
                     </label>
                     <input
@@ -254,6 +246,68 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       placeholder="90210"
                     />
                   </div>
+                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-pets">
+                      Are you traveling with a pet(s)
+                    </label>
+                    <input
+                      className=""
+                      id="grid-pets"
+                      type="checkbox"
+                      placeholder="90210"
+                      checked={petCheck}
+                      onChange={() => setPetCheck(!petCheck)}
+                    />
+                  </div>
+                  {petCheck ? (
+                    <div className="w-full px-3">
+                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        htmlFor="grid-pet-desc">
+                        Please Describe your pets (Number | Species)
+                      </label>
+                      <input
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-pet-desc"
+                      />
+                    </div>
+                  ) : null}
+                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-alergies">
+                      Any Food Alergies?
+                    </label>
+                    <input
+                      className=""
+                      id="grid-alergies"
+                      type="checkbox"
+                      placeholder="90210"
+                      checked={allergyCheck}
+                      onChange={() => setAllergyCheck(!allergyCheck)}
+                    />
+                  </div>
+                  {allergyCheck ? (
+                    <div className="w-full px-3">
+                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        htmlFor="grid-allergies-desc">
+                        Please Describe Your Allergies.
+                      </label>
+                      <input
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-allergies-desc"
+                      />
+                    </div>
+                  ) : null}
+                </div>
+                <div>
+                  <Button
+                    label={"Continue to Paymnet"}
+                    onClick={(e: any) => handleSubmit(e)}
+                  />
                 </div>
               </form>
             </div>
