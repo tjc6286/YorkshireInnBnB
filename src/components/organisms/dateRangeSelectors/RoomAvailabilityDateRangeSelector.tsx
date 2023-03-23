@@ -22,6 +22,7 @@ const RoomAvailabilityDateRangeSelector = () => {
       setResults([]);
     }
     setStartDate(newStartDate);
+    setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
   };
 
   const handleSetEndDate = (newEndDate: string) => {
