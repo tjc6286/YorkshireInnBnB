@@ -1,15 +1,39 @@
 ---
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import MainLayout from "../../layouts/MainLayout.astro";
 import { getRoomById } from "../../lib/rooms";
-
+import heroImg from "/assets/Logo.png";
 const { bookingInfo } = Astro.params;
+import roseSuite from "/assets/Gallery/rosesuite.png";
+import bolero from "/assets/Gallery/bolero.png";
+import blueRoom from "/assets/Gallery/blueroom.png";
+import lodge from "/assets/Gallery/lodge.png";
+import CustomerInformationForm from "../../components/organisms/customerInformationForm";
 
-const roomId = bookingInfo?.split("-")[0];
-const startDate = bookingInfo?.split("-")[1];
-const endDate = bookingInfo?.split("-")[2];
+const images = [roseSuite, bolero, blueRoom, lodge];
 
-const roomInformationResponse = await getRoomById(roomId!);
+// export async function getStaticPaths() {
 
-console.log(roomInformationResponse);
+//   // const roomInformationResponse = await getRoomById(roomId!);
+
+//   return [
+//     { params: { bookingInfo }, props: { } },
+//     { params: { ... } },
+//     { params: { ... } },
+//     // ...
+//   ];
+// }
+
+// const roomId = bookingInfo?.split("-")[0];
+// const startDate = bookingInfo?.split("-")[1];
+// const endDate = bookingInfo?.split("-")[2];
+
+// const roomInformationResponse = await getRoomById(roomId!);
+
+// const roomInformation = roomInformationResponse[0];
+// console.log(roomInformation);
 ---
 
-<h1>{roomId}: {startDate} : {endDate}</h1>
+<MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
+  <CustomerInformationForm client:only bookingInfo={bookingInfo!} />
+</MainLayout>

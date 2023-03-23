@@ -1,10 +1,5 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-//using the method from server
-import { Chip } from "@mui/material";
-import DateRangeSelector from "../components/organisms/dateRangeSelector";
-import { getAllRooms } from "../lib/rooms";
-// var x = await getAllRooms();
 ---
 
 <style>
@@ -26,7 +21,11 @@ import { getAllRooms } from "../lib/rooms";
       rel="stylesheet"
     />
   </head>
-  <MainLayout title="Yorkshire Inn" activePage="home">
+  <MainLayout
+    title="Yorkshire Inn"
+    activePage="home"
+    heroImgPath="assets/Logo.png"
+  >
     <!-- Hero Section -->
     <section
       id="home"

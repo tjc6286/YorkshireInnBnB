@@ -100,7 +100,8 @@ const RoomAvailabilityDateRangeSelector = () => {
         </div>
         <div className="mx-8">
           <Button
-            label={results.length > 0 ? "Refresh" : "Search"}
+            disabled={!endDate}
+            label={results.length > 0 ? "Reset" : "Search"}
             onClick={results.length > 0 ? resetDates : handleSelectedDates}
           />
         </div>

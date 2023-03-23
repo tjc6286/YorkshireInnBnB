@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
 import type { Room } from "../types/room";
 import { RoomsCollection } from "./mongodb";
-
 /**
  *
  * @returns
@@ -61,7 +60,9 @@ export const getBlueRoom = async () => {
  * @returns
  */
 export const getRoomById = async (roomId: string) => {
-  const room = await (await RoomsCollection()).find({ _id: new ObjectId(roomId) }).toArray();
+  const room = await (await RoomsCollection())
+    .find({ _id: new ObjectId(roomId) })
+    .toArray();
   return room;
 };
 
