@@ -1,10 +1,25 @@
+import { CircularProgress } from "@mui/material";
 import format from "date-fns/format";
 import React from "react";
+import { states } from "../../../data/states";
 import type { Room } from "../../../types/room";
 import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
   bookingInfo: string;
+}
+
+interface IFormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  petsDescription?: string;
+  allergiesDescription?: string;
 }
 
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
@@ -17,6 +32,19 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
+
+  const [formState, setFormState] = React.useState<IFormState>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    petsDescription: "",
+    allergiesDescription: "",
+  });
 
   const fetchRoomInfo = async (roomId: string) => {
     setLoading(true);
@@ -39,10 +67,18 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+    setFormState({ ...formState, [name]: value });
+  };
+
+  const handleSubmit = (event: Event) => {
     //TODO: handle submit to send to stripe page and
     event.preventDefault();
-    alert("test");
+
+    alert(JSON.stringify(formState));
   };
 
   React.useEffect(() => {
@@ -54,7 +90,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     fetchRoomInfo(roomID);
   }, []);
 
-  console.log(roomInfo);
   return loading ? (
     <div
       style={{
@@ -64,7 +99,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         justifyContent: "center",
       }}
     >
-      Loading...
+      <div className="m-auto">
+        <CircularProgress color="inherit" />
+      </div>
     </div>
   ) : (
     <div
@@ -118,10 +155,16 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               />
               <h2 className="text-2xl font-bold py-3">{roomInfo.name}</h2>
               <p className="pr-4">{roomInfo.description}</p>
-              <p className=" pt-2 pr-4 font-bold">FROM:</p>
-              <p className="pr-4">{sDate}</p>
-              <p className="pr-4 font-bold">TO:</p>
-              <p className="pr-4">{eDate}</p>
+              <div className="flex flex-row justify-around">
+                <div>
+                  <p className=" pt-2 pr-4 font-bold">FROM:</p>
+                  <p className="pr-4">{sDate}</p>
+                </div>
+                <div>
+                  <p className="pr-4 pt-2 font-bold">TO:</p>
+                  <p className="pr-4">{eDate}</p>
+                </div>
+              </div>
               <p className="mt-4 pr-4 font-semibold text-xl">
                 Price/Night: ${roomInfo.basePrice}
               </p>
@@ -162,7 +205,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-first-name"
                       type="text"
-                      placeholder="Jane"
+                      name="firstName"
+                      value={formState.firstName}
+                      onChange={handleInputChange}
                     />
                     {/* TODO: Add error handling and validation */}
                     {/* <p className="text-red-500 text-xs italic">
@@ -180,7 +225,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-last-name"
                       type="text"
-                      placeholder="Doe"
+                      name="lastName"
+                      value={formState.lastName}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -188,37 +235,49 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="grid-email"
                     >
                       Email
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-password"
+                      id="grid-email"
+                      type="email"
+                      name="email"
+                      value={formState.email}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="grid-phone"
                     >
                       Phone
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-password"
+                      id="grid-phone"
+                      type="tel"
+                      name="phone"
+                      value={formState.phone}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-password"
+                      htmlFor="grid-address"
                     >
                       Address
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-password"
+                      id="grid-address"
+                      type="text"
+                      name="address"
+                      value={formState.address}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -234,7 +293,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-city"
                       type="text"
-                      placeholder="Rochester"
+                      name="city"
+                      value={formState.city}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
@@ -248,14 +309,17 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       <select
                         className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="grid-state"
+                        name="state"
+                        value={formState.state}
+                        onChange={handleInputChange}
+                        placeholder="Select a state"
                       >
-                        <option>Select State</option>
-                        <option>New York</option>
-                        <option>Colorado</option>
-                        <option>Georgia</option>
-                        <option>New Mexico</option>
-                        <option>Missouri</option>
-                        <option>Texas</option>
+                        <option value="" selected disabled></option>
+                        {states.map((state) => (
+                          <option key={state.name} value={state.name}>
+                            {state.name}
+                          </option>
+                        ))}
                       </select>
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg
@@ -279,7 +343,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="grid-zip"
                       type="text"
-                      placeholder="90210"
+                      name="zip"
+                      value={formState.zip}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
@@ -304,11 +370,15 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                         htmlFor="grid-pet-desc"
                       >
-                        Please Describe your pets (Number | Species)
+                        Please describe your pet(s)
                       </label>
                       <input
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="grid-pet-desc"
+                        type="text"
+                        name="petsDescription"
+                        value={formState.petsDescription}
+                        onChange={handleInputChange}
                       />
                     </div>
                   ) : null}
@@ -339,13 +409,17 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       <input
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="grid-allergies-desc"
+                        type="text"
+                        name="allergiesDescription"
+                        value={formState.allergiesDescription}
+                        onChange={handleInputChange}
                       />
                     </div>
                   ) : null}
                 </div>
                 <div>
                   <Button
-                    label={"Continue to Paymnet"}
+                    label={"Continue to Payment"}
                     onClick={(e: any) => handleSubmit(e)}
                   />
                 </div>
