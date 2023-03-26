@@ -32,6 +32,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
+  const [errors, setErrors] = React.useState<string[]>([]);
 
   const [formState, setFormState] = React.useState<IFormState>({
     firstName: "",
@@ -67,6 +68,35 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     }
   };
 
+  const validateForm = () => {
+    const errors = [];
+    switch (true) {
+      case formState.firstName === "":
+        errors.push("firstName");
+      case formState.lastName === "":
+        errors.push("lastName");
+      case formState.email === "":
+        errors.push("email");
+      case formState.phone === "":
+        errors.push("phone");
+      case formState.address === "":
+        errors.push("address");
+      case formState.city === "":
+        errors.push("city");
+      case formState.state === "":
+        errors.push("state");
+      case formState.zip === "":
+        errors.push("zip");
+      default:
+        break;
+    }
+    if (errors.length > 0) {
+      setErrors(errors);
+      return true;
+    }
+    return false;
+  };
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -77,6 +107,11 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   const handleSubmit = (event: Event) => {
     //TODO: handle submit to send to stripe page and
     event.preventDefault();
+
+    const errorFound = validateForm();
+    if (errorFound) {
+      return;
+    }
 
     alert(JSON.stringify(formState));
   };
@@ -207,6 +242,11 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       type="text"
                       name="firstName"
                       value={formState.firstName}
+                      style={
+                        errors.includes("firstName")
+                          ? { borderColor: "red" }
+                          : {}
+                      }
                       onChange={handleInputChange}
                     />
                     {/* TODO: Add error handling and validation */}
@@ -228,6 +268,11 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="lastName"
                       value={formState.lastName}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("lastName")
+                          ? { borderColor: "red" }
+                          : {}
+                      }
                     />
                   </div>
                 </div>
@@ -246,6 +291,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="email"
                       value={formState.email}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("email") ? { borderColor: "red" } : {}
+                      }
                     />
                   </div>
                   <div className="w-full px-3">
@@ -262,6 +310,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="phone"
                       value={formState.phone}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("phone") ? { borderColor: "red" } : {}
+                      }
                     />
                   </div>
                   <div className="w-full px-3">
@@ -278,6 +329,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="address"
                       value={formState.address}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("address") ? { borderColor: "red" } : {}
+                      }
                     />
                   </div>
                 </div>
@@ -296,6 +350,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="city"
                       value={formState.city}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("city") ? { borderColor: "red" } : {}
+                      }
                     />
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
@@ -312,7 +369,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                         name="state"
                         value={formState.state}
                         onChange={handleInputChange}
-                        placeholder="Select a state"
+                        style={
+                          errors.includes("state") ? { borderColor: "red" } : {}
+                        }
                       >
                         <option value="" selected disabled></option>
                         {states.map((state) => (
@@ -346,6 +405,9 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                       name="zip"
                       value={formState.zip}
                       onChange={handleInputChange}
+                      style={
+                        errors.includes("zip") ? { borderColor: "red" } : {}
+                      }
                     />
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
