@@ -1,6 +1,7 @@
 import { CircularProgress, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import type { DateValidationError } from "@mui/x-date-pickers/internals";
 import { addDays, eachDayOfInterval, format } from "date-fns";
 import React from "react";
 import type { TempReservation } from "../../../types/reservation";
@@ -19,6 +20,10 @@ const RoomAvailabilityDateRangeSelector = () => {
   const [numberOfGuests, setNumberOfGuests] = React.useState<number>(2);
   const [unaccountedGuests, setUnaccountedGuests] = React.useState<number>(0);
   const [errors, setErrors] = React.useState<Array<string>>([]);
+  const [endDateError, setEndDateError] =
+    React.useState<DateValidationError | null>(null);
+  const [startDateError, setStartDateError] =
+    React.useState<DateValidationError | null>(null);
 
   const originalResults = React.useRef<Array<RoomAvailability>>([]);
 
@@ -169,7 +174,47 @@ const RoomAvailabilityDateRangeSelector = () => {
         console.error("Error:", error);
       });
   };
-  console.log(endDate);
+
+  const endDateErrorMessage = React.useMemo(() => {
+    switch (endDateError) {
+      case "maxDate": {
+        return "Reservations cannot be made beyond 1 year from today";
+      }
+
+      case "minDate": {
+        return "Reservations cannot be made before today";
+      }
+
+      case "invalidDate": {
+        return "Please enter a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [endDateError]);
+
+  const startDateErrorMessage = React.useMemo(() => {
+    switch (startDateError) {
+      case "maxDate": {
+        return "Reservations cannot be made beyond 1 year from today";
+      }
+
+      case "minDate": {
+        return "Reservations cannot be made before today";
+      }
+
+      case "invalidDate": {
+        return "Please enter a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [startDateError]);
+
   return (
     <div className="flex flex-1 flex-col justify-center">
       <div className="flex flex-row items-center">
@@ -187,12 +232,17 @@ const RoomAvailabilityDateRangeSelector = () => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label={"Start Date"}
-              value={startDate}
+              value={startDate ? new Date(startDate) : null}
               disablePast
-              inputFormat="MM/dd/yyyy"
               maxDate={addDays(new Date(), 365)}
               onChange={(newValue: Date | null) => {
                 newValue && handleSetStartDate(newValue.toUTCString());
+              }}
+              onError={(newError) => setStartDateError(newError)}
+              slotProps={{
+                textField: {
+                  helperText: startDateErrorMessage,
+                },
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -202,12 +252,17 @@ const RoomAvailabilityDateRangeSelector = () => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label={"End Date"}
-              value={endDate}
+              value={endDate ? new Date(endDate) : null}
               disablePast
-              inputFormat="MM/dd/yyyy"
               maxDate={addDays(new Date(), 365)}
               minDate={startDate ? new Date(startDate) : undefined}
               disabled={!startDate}
+              onError={(newError) => setEndDateError(newError)}
+              slotProps={{
+                textField: {
+                  helperText: endDateErrorMessage,
+                },
+              }}
               onChange={(newValue: Date | null) => {
                 if (newValue && newValue <= new Date()) return;
 
@@ -221,7 +276,16 @@ const RoomAvailabilityDateRangeSelector = () => {
           <Button
             disabled={!endDate}
             label={results.length > 0 ? "Reset" : "Search"}
-            onClick={results.length > 0 ? resetDates : handleSelectedDates}
+            onClick={
+              results.length > 0
+                ? resetDates
+                : () => {
+                    if (endDateError || startDateError) {
+                      return;
+                    }
+                    handleSelectedDates();
+                  }
+            }
           />
         </div>
       </div>
