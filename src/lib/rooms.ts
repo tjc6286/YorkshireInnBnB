@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
-import type { Room } from "../types/room";
+import type { RoomAvailability } from "../types/room";
 import { RoomsCollection } from "./mongodb";
 /**
  *
@@ -72,7 +72,7 @@ export const getRoomById = async (roomId: string) => {
  * @returns
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>
+  dateArray: Array<string>,
 ) => {
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
@@ -81,9 +81,7 @@ export const getRoomsAvailabilityByDateRange = async (
 
   const rooms = await (await RoomsCollection()).find({}).toArray();
 
-  let availableRooms: Array<Room> = [];
-
-  rooms.forEach((room: Room) => {
+  rooms.forEach((room: RoomAvailability) => {
     let dateFound = false;
     formattedDates.forEach((date: Date) => {
       if (
@@ -95,13 +93,14 @@ export const getRoomsAvailabilityByDateRange = async (
     });
 
     if (dateFound) {
+      room.isAvailable = false;
       return;
     } else {
-      availableRooms.push(room);
+      room.isAvailable = true;
     }
   });
 
-  return availableRooms;
+  return rooms;
 };
 
 /**
@@ -112,7 +111,7 @@ export const getRoomsAvailabilityByDateRange = async (
  */
 export const addHoldDates = async (
   roomId: string,
-  dateArray: Array<string>
+  dateArray: Array<string>,
 ) => {
   const roomID = new ObjectId(roomId);
   const roomsCollection = await RoomsCollection();
@@ -125,7 +124,7 @@ export const addHoldDates = async (
       $set: {
         temporaryHoldDates: Array.from(allDates),
       },
-    }
+    },
   );
 
   return updatedRoom;
