@@ -1,7 +1,9 @@
 ---
 import FirebaseAuth from "../components/organisms/firebaseAuth";
 import firebase from "firebase/compat/app";
+import MainLayout from "../layouts/MainLayout.astro";
 
+import heroImg from "/assets/Logo.png";
 const firebaseConfig = {
   apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
   authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -13,4 +15,6 @@ const firebaseConfig = {
 };
 ---
 
-<FirebaseAuth client:only="react" config={firebaseConfig} />
+<MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
+  <FirebaseAuth client:only="react" config={firebaseConfig} />
+</MainLayout>

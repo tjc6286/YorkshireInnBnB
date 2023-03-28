@@ -25,9 +25,13 @@ const FirebaseAuth: React.FC = () => {
   return (
     <div
       style={{
+        height: "100dvh",
         transform: `translate(0%,25%)`,
       }}
     >
+      <h1 className="w-full mb-4 text-center font-semibold">
+        Administrator Login
+      </h1>
       <div id="firebaseui-auth-container"></div>
     </div>
   );
