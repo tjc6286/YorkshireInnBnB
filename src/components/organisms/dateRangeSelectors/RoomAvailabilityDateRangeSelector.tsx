@@ -6,7 +6,6 @@ import { addDays, eachDayOfInterval, format } from "date-fns";
 import React from "react";
 import type { TempReservation } from "../../../types/reservation";
 import type { Room, RoomAvailability } from "../../../types/room";
-import Button from "../../atoms/button";
 import ReservationsTable from "../reservationsTable";
 
 // interface DateRangeSelectorProps {}
@@ -90,7 +89,6 @@ const RoomAvailabilityDateRangeSelector = () => {
       );
 
       if (specialDatePrice) {
-        console.log(specialDatePrice.price);
         dailyPrices.push(specialDatePrice.price);
       } else {
         dailyPrices.push(room.basePrice!);
@@ -175,6 +173,32 @@ const RoomAvailabilityDateRangeSelector = () => {
       });
   };
 
+  const handleCreateTemporaryBooking = () => {
+    try {
+      fetch("/api/booking/createInProcessBooking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          startDate: format(new Date(startDate!), "MM/dd/yyyy").toString(),
+          endDate: format(new Date(endDate!), "MM/dd/yyyy").toString(),
+          itinerary,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          window.location.href = `/customerInformation/${data}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const endDateErrorMessage = React.useMemo(() => {
     switch (endDateError) {
       case "maxDate": {
@@ -244,7 +268,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   helperText: startDateErrorMessage,
                 },
               }}
-              renderInput={(params) => <TextField {...params} />}
+              componentsProps={{ textField: { variant: "outlined" } }}
             />
           </LocalizationProvider>
         </div>
@@ -257,7 +281,10 @@ const RoomAvailabilityDateRangeSelector = () => {
               maxDate={addDays(new Date(), 365)}
               minDate={startDate ? new Date(startDate) : undefined}
               disabled={!startDate}
-              onError={(newError) => setEndDateError(newError)}
+              onError={(newError) => {
+                setErrors([...errors, "badEndDate"]);
+                setEndDateError(newError);
+              }}
               slotProps={{
                 textField: {
                   helperText: endDateErrorMessage,
@@ -268,34 +295,58 @@ const RoomAvailabilityDateRangeSelector = () => {
 
                 newValue && handleSetEndDate(newValue.toString());
               }}
-              renderInput={(params) => <TextField {...params} />}
+              componentsProps={{ textField: { variant: "outlined" } }}
             />
           </LocalizationProvider>
         </div>
-        <div className="mx-4">
-          <Button
-            disabled={!endDate}
-            label={results.length > 0 ? "Reset" : "Search"}
-            onClick={
-              results.length > 0
-                ? resetDates
-                : () => {
-                    if (endDateError || startDateError) {
-                      return;
-                    }
-                    handleSelectedDates();
+        <button
+          disabled={!endDate}
+          className="px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px"
+          style={{
+            fontFamily: "Martel",
+            fontWeight: "400",
+            fontSize: "20px",
+            lineHeight: "34px",
+            letterSpacing: "0.13em",
+          }}
+          onClick={
+            results.length > 0
+              ? resetDates
+              : () => {
+                  if (endDateError || startDateError) {
+                    return;
                   }
-            }
-          />
-        </div>
+                  handleSelectedDates();
+                }
+          }
+        >
+          {results.length > 0 ? "Reset" : "Search"}
+        </button>
       </div>
       <div className="m-8 h-full">
         {itinerary.length > 0 && (
-          <ReservationsTable
-            reservations={itinerary}
-            onRemove={handleRemoveItineraryItem}
-            unaccountedGuests={unaccountedGuests}
-          />
+          <>
+            <ReservationsTable
+              reservations={itinerary}
+              onRemove={handleRemoveItineraryItem}
+              unaccountedGuests={unaccountedGuests}
+            />
+            <div className="w-full flex justify-end">
+              <button
+                className="px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mt-10 mx-px"
+                style={{
+                  fontFamily: "Martel",
+                  fontWeight: "400",
+                  fontSize: "20px",
+                  lineHeight: "34px",
+                  letterSpacing: "0.13em",
+                }}
+                onClick={handleCreateTemporaryBooking}
+              >
+                Book Now!
+              </button>
+            </div>
+          </>
         )}
         {results.length > 0 ? (
           results.map((room: Partial<RoomAvailability>) => (

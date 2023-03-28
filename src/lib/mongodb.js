@@ -67,6 +67,15 @@ export const BookingsCollection = async () => {
 
 /**
  *
+ * @returns Method to connect to db and pass  the Booking collection down to the
+ */
+export const InProcessBookingCollection = async () => {
+  const db = await getDB();
+  return db.collection("InProcessBooking");
+};
+
+/**
+ *
  * @returns Method to connect to db and pass  the Customer collection down to the
  */
 export const CustomersCollection = async () => {

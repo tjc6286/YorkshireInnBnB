@@ -14,7 +14,7 @@ const ReservationsTable: React.FC<IReservationTableProps> = ({
 }) => {
   return (
     <div className="">
-      <table className="w-[60%] rounded-md border-2 text-left text-sm">
+      <table className="w-full rounded-md border-2 text-left text-sm">
         <thead className="bg-[#36353A] text-neutral-100 text-xs uppercase ">
           <tr>
             <th scope="col" className="px-6 py-3">
@@ -39,8 +39,8 @@ const ReservationsTable: React.FC<IReservationTableProps> = ({
                 {reservation.roomName}
               </th>
               <td className="px-6 py-4">{reservation.guestCount} Guests</td>
-              <td className="px-6 py-4 text-center">${reservation.subtotal}</td>
-              <td className="px-6 py-4">
+              <td className="px-6 py-4">${reservation.subtotal}</td>
+              <td className="px-6 py-4 flex justify-end">
                 <button
                   type="button"
                   className="mr-2 mb-2 rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none"

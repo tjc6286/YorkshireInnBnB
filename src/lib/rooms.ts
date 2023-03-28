@@ -110,22 +110,35 @@ export const getRoomsAvailabilityByDateRange = async (
  * @returns
  */
 export const addHoldDates = async (
-  roomId: string,
+  roomId: string | Array<string>,
   dateArray: Array<string>,
 ) => {
-  const roomID = new ObjectId(roomId);
   const roomsCollection = await RoomsCollection();
-  const room = await roomsCollection.find({ _id: roomID }).toArray();
-  const dates = room[0].temporaryHoldDates;
-  const allDates = new Set(dates.concat(dateArray));
-  const updatedRoom = await roomsCollection.updateOne(
-    { _id: roomID },
-    {
-      $set: {
-        temporaryHoldDates: Array.from(allDates),
-      },
-    },
-  );
 
-  return updatedRoom;
+  try {
+    if (roomId instanceof Array) {
+      //write an updateMany query to update all the rooms
+      const objs = roomId.map((id) => new ObjectId(id));
+      console.log(objs, "about to update");
+      await roomsCollection.updateMany(
+        { _id: { $in: objs } },
+        {
+          $push: { temporaryHoldDates: { $each: dateArray } },
+        },
+      );
+    } else {
+      await roomsCollection.updateOne(
+        { _id: roomId[0] },
+        {
+          $push: { temporaryHoldDates: { $each: dateArray } },
+        },
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  } finally {
+  }
+
+  return true;
 };

@@ -1,8 +1,12 @@
 import { ObjectId } from "mongodb";
 import type { Booking } from "../types/Booking";
-import type { Reservation } from "../types/reservation";
 import type { Customer } from "../types/customer";
-import { BookingsCollection, getMongoClient } from "./mongodb";
+import type { Reservation } from "../types/reservation";
+import {
+  BookingsCollection,
+  getMongoClient,
+  InProcessBookingCollection,
+} from "./mongodb";
 
 /**
  *
@@ -42,12 +46,12 @@ export const insertNewbooking = async (newBooking: Booking) => {
  */
 export const updateBooking = async (
   bookingID: string,
-  updatedBooking: Booking
+  updatedBooking: Booking,
 ) => {
   const bookingcollection = await BookingsCollection();
   return await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
-    updatedBooking
+    updatedBooking,
   );
 };
 
@@ -57,7 +61,7 @@ export const updateBooking = async (
 export const bookingCreateTransaction = async (
   newBooking: Booking,
   newCustomer: Customer,
-  newReservation: Reservation
+  newReservation: Reservation,
 ) => {
   const client = await getMongoClient();
   client.connect();
@@ -97,4 +101,27 @@ export const bookingCreateTransaction = async (
     await client.close();
   }
   return ret;
+};
+
+/**
+ * @param {newbooking}
+ * @returns
+ */
+export const insertNewInProcessBooking = async (newBooking: any) => {
+  const bookingcollection = await InProcessBookingCollection();
+  //TODO: validate the information
+  try {
+    const result = await bookingcollection.insertOne(newBooking);
+    return result.insertedId;
+  } catch (e) {
+    console.log("Error: Problem inserting temporary booking: " + newBooking);
+  }
+};
+
+export const getInProcessBookingByID = async (booking: string) => {
+  //TODO: add the correct parameters to the find
+  const inProcessBookings = await (await InProcessBookingCollection())
+    .find({ _id: new ObjectId(booking) })
+    .toArray();
+  return inProcessBookings[0];
 };

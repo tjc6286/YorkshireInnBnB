@@ -1,12 +1,11 @@
 import { CircularProgress } from "@mui/material";
-import format from "date-fns/format";
 import React from "react";
 import { states } from "../../../data/states";
 import type { Room } from "../../../types/room";
 import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
-  bookingInfo: string;
+  bookingInfo: any;
 }
 
 interface IFormState {
@@ -27,8 +26,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 }) => {
   const [roomInfo, setRoomInfo] = React.useState<Room>({} as Room);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [sDate, setSDate] = React.useState<string>("");
-  const [eDate, setEDate] = React.useState<string>("");
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
@@ -116,15 +113,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     alert(JSON.stringify(formState));
   };
 
-  React.useEffect(() => {
-    const roomID = bookingInfo.split("-")[0];
-    const startDate = bookingInfo.split("-")[1];
-    const endDate = bookingInfo.split("-")[2];
-    setSDate(format(new Date(startDate), "MM/dd/yyyy"));
-    setEDate(format(new Date(endDate), "MM/dd/yyyy"));
-    fetchRoomInfo(roomID);
-  }, []);
-
   return loading ? (
     <div
       style={{
@@ -173,7 +161,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               paddingBottom: "1rem",
             }}
           >
-            Selected Room
+            Your Stay
           </h2>
           <div style={{ display: "flex", flex: 1, flexDirection: "row" }}>
             <div
@@ -185,22 +173,74 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
             >
               <img
                 style={{ width: "100%" }}
-                src={`/assets/Gallery/${roomInfo.imgPathName}`}
+                src={`/assets/Gallery/yorkshirebanner.png`}
                 alt="Beautiful Room Image"
               />
-              <h2 className="text-2xl font-bold py-3">{roomInfo.name}</h2>
-              <p className="pr-4">{roomInfo.description}</p>
-              <div className="flex flex-row justify-around">
+              <div className="flex flex-row justify-evenly mt-4">
                 <div>
-                  <p className=" pt-2 pr-4 font-bold">FROM:</p>
-                  <p className="pr-4">{sDate}</p>
+                  <p className=" pt-2 pr-4 font-bold">Check In</p>
+                  <p className="pr-4">{bookingInfo.startDate}</p>
                 </div>
                 <div>
-                  <p className="pr-4 pt-2 font-bold">TO:</p>
-                  <p className="pr-4">{eDate}</p>
+                  <p className="pr-4 pt-2 font-bold">Check Out</p>
+                  <p className="pr-4">{bookingInfo.endDate}</p>
                 </div>
               </div>
-              <p className="mt-4 pr-4 font-semibold text-xl">
+              <div className="flex flex-row w-full justify-between">
+                <h2
+                  style={{
+                    fontFamily: "Playfair Display",
+                    fontWeight: "600",
+                    fontSize: 24,
+                    lineHeight: "129%",
+                    letterSpacing: "0.035em",
+                    color: "#000000",
+                    paddingTop: "1rem",
+                  }}
+                >
+                  {bookingInfo.itinerary.length > 1 ? "Rooms" : "Room"}
+                </h2>
+                <h2
+                  style={{
+                    fontFamily: "Playfair Display",
+                    fontWeight: "600",
+                    fontSize: 24,
+                    lineHeight: "129%",
+                    letterSpacing: "0.035em",
+                    color: "#000000",
+                    paddingTop: "1rem",
+                  }}
+                >
+                  Guest Count
+                </h2>
+                <h2
+                  style={{
+                    fontFamily: "Playfair Display",
+                    fontWeight: "600",
+                    fontSize: 24,
+                    lineHeight: "129%",
+                    letterSpacing: "0.035em",
+                    color: "#000000",
+                    paddingTop: "1rem",
+                  }}
+                >
+                  Price
+                </h2>
+              </div>
+
+              {bookingInfo.itinerary.map((room: any) => (
+                <div className="flex flex-row w-full justify-between">
+                  <p className="mt-2 text-xl">{room.roomName}</p>
+                  <p className="mt-2  text-xl">{room.guestCount}</p>
+                  <p className="mt-2 text-xl">
+                    {room.subtotal.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </p>
+                </div>
+              ))}
+              <p className="mt-4 font-semibold text-xl">
                 Price/Night: ${roomInfo.basePrice}
               </p>
             </div>
