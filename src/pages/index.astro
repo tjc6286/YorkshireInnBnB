@@ -69,10 +69,8 @@ import { getAllRooms } from "../lib/rooms";
       id="amenities"
       class="scroll-mt-20 flex flex-col bg-[#F4F7FA] min-h-screen text-black justify-items-center"
     >
-      <div
-        class="flex-1 flex items-center mx-auto w-[70%] md:w-[75%] sm:w-[100%]"
-      >
-        <div style="display: grid; grid-template-columns: 1fr;" class="mx-10">
+      <div class="flex-1 flex items-center mx-auto w-[70%] md:w-[75%] sm:w-[100%]">
+        <div class="mx-10 hidden lg:grid lg:grid-cols-1">
           <div style="grid-row-start: 1; grid-column-start: 1;">
             <img src="assets/barroom 1.png" alt="Picture of Bar Room" />
           </div>
@@ -82,7 +80,7 @@ import { getAllRooms } from "../lib/rooms";
           >
             <img src="assets/food 1.png" alt="Picture of Food" />
           </div>
-        </div>
+      </div>
         <div class="flex-1 flex items-center px-1 py-2 flex-col">
           <h2
             class="p-1 m-1"
@@ -184,7 +182,7 @@ import { getAllRooms } from "../lib/rooms";
       </div>
     </section>
     <!-- Room Section -->
-    <section id="room" class="scroll-mt-20 flex flex-col bg-[#F4F7FA] text-black justify-items-center">
+    <section id="room" class="scroll-mt-8 flex flex-col bg-[#F4F7FA] text-black justify-items-center">
       <section>
         <div
           class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0"

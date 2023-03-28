@@ -16,9 +16,9 @@ const { title, activePage } = Astro.props;
 
 //STYLES FOR NAV ITEMS
 let activeNavCss =
-  "block py-2 pl-3 pr-4 text-black bg-[#3BA576] rounded md:bg-transparent md:text-[#3BA576] md:p-0";
+  "block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
 let navCSS =
-  "block py-2 pl-3 pr-4 text-white rounded hover:bg-[#3BA576] md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
+  "block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
 
 //STYLES REFERENCE VARIABLE
 var homeCSS = "";
@@ -186,25 +186,25 @@ if (activePage === "home") {
           id="navbar-mobile"
         >
           <ul
-            class="flex flex-col p-4 mt-4 border border-[#262b29] bg-[#081710] md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
+            class="flex flex-col p-4 mt-4 border border-[#262b29] bg-[#36353A] md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
           >
             <li>
               <a href="/" class={homeCSS} aria-current="page">Home</a>
             </li>
             <li>
-              <a href="/amenities" class={amenitiesCSS}>Amenities</a>
+              <a href="#amenities" class={amenitiesCSS}>Amenities</a>
             </li>
             <li>
-              <a href="/reviews" class={reviewsCSS}>Reviews</a>
+              <a href="#reviews" class={reviewsCSS}>Reviews</a>
             </li>
             <li>
-              <a href="/rooms" class={roomsCSS}>Rooms</a>
+              <a href="#room" class={roomsCSS}>Rooms</a>
             </li>
             <li>
-              <a href="/gallery" class={galleryCSS}>Gallery</a>
+              <a href="#gallery" class={galleryCSS}>Gallery</a>
             </li>
             <li>
-              <a href="/contact" class={contactCSS}>Contact</a>
+              <a href="#contact" class={contactCSS}>Contact</a>
             </li>
           </ul>
         </div>
@@ -241,10 +241,10 @@ if (activePage === "home") {
                 >Contact</a
               >
             </div>
-            <div class="flex justify-center my-10">
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 my-10">
               <a href="https://www.facebook.com/theyorkshireinn/">
                 <div
-                  class="flex items-center border w-auto rounded-lg px-4 py-2 w-48 mx-2"
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ if (activePage === "home") {
               </a>
               <a href="https://www.instagram.com/the_yorkshire_inn/">
                 <div
-                  class="flex items-center border w-auto rounded-lg px-4 py-2 w-48 mx-2"
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -288,7 +288,7 @@ if (activePage === "home") {
                 href="https://www.yelp.com/biz/the-yorkshire-inn-phelps?osq=THE+YORKSHIRE+INN"
               >
                 <div
-                  class="flex items-center border w-auto rounded-lg px-4 py-2 w-48 mx-2"
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -310,7 +310,7 @@ if (activePage === "home") {
             </div>
           </div>
           <div
-            class="mt-28 flex flex-col md:flex-row md:justify-between items-center text-sm text-gray-300"
+            class="px-10 mt-16 lg:mt-28 flex flex-col md:flex-row md:justify-between items-center text-sm text-gray-300"
           >
             <p class="order-2 md:order-1 mt-8 md:mt-0">
               &copy; COPYRIGHT © 2022 THE YORKSHIRE INN - ALL RIGHTS RESERVED.
