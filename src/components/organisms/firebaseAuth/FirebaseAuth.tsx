@@ -30,7 +30,7 @@ const FirebaseAuth: React.FC = () => {
       }}
     >
       <h1 className="w-full mb-4 text-center font-semibold">
-        Administrator Login
+        Administrator Portal
       </h1>
       <div id="firebaseui-auth-container"></div>
     </div>
