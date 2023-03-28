@@ -12,23 +12,29 @@ export const getAllCustomers = async () => {
 };
 
 /**
- * 
- * @param newCustomer 
- * @returns 
+ *
+ * @param newCustomer
+ * @returns
  */
-export const insertNewCustomer = async (newCustomer:Customer) => {
+export const insertNewCustomer = async (newCustomer: Customer) => {
   // For customer: check if customer already exisits using the email
   const customers = await CustomersCollection();
-  return customers.insert(newCustomer);
+
+  const res = await customers.insertOne(newCustomer);
+
+  return res.insertedId;
 };
 
 /**
- * 
- * @param customer 
- * @param updateCustomer 
- * @returns 
+ *
+ * @param customer
+ * @param updateCustomer
+ * @returns
  */
-export const updateCustomer = async (customerID: string, updateCustomer: Customer) => {
+export const updateCustomer = async (
+  customerID: string,
+  updateCustomer: Customer,
+) => {
   const customers = await CustomersCollection();
-  return customers.update({_id: new ObjectId(customerID)}, updateCustomer);
+  return customers.update({ _id: new ObjectId(customerID) }, updateCustomer);
 };

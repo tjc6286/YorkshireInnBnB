@@ -1,7 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
 import { states } from "../../../data/states";
-import type { Room } from "../../../types/room";
 import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
@@ -19,12 +18,12 @@ interface IFormState {
   zip: string;
   petsDescription?: string;
   allergiesDescription?: string;
+  previousBookings?: Array<any>;
 }
 
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
 }) => {
-  const [roomInfo, setRoomInfo] = React.useState<Room>({} as Room);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
@@ -42,28 +41,8 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     zip: "",
     petsDescription: "",
     allergiesDescription: "",
+    previousBookings: [],
   });
-
-  const fetchRoomInfo = async (roomId: string) => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/room/getById", {
-        method: "Post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: roomId }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        setRoomInfo(data[0]);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const validateForm = () => {
     const errors = [];
@@ -110,7 +89,46 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       return;
     }
 
-    alert(JSON.stringify(formState));
+    //write a post request to the backend to create a booking
+    try {
+      fetch("/api/booking/createBooking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        //TODO: HANDLE MULTIPLE RESERVATIONS
+        body: JSON.stringify({
+          customer: {
+            ...formState,
+          },
+          reservation: {
+            roomId: bookingInfo.itinerary[0].roomId,
+            guestCount: bookingInfo.guestCount,
+            isCanceled: false,
+            cancelReason: "",
+            petsIncluded: "",
+            petsDescription: "",
+            foodAllergies: "",
+            subtotal: getRoomsSubtotal(),
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          window.location.href = `/confirmation/${data.booking}`;
+        });
+    } catch (error) {}
+
+    // alert(JSON.stringify(formState));
+  };
+
+  const getRoomsSubtotal = () => {
+    let subtotal = 0;
+    bookingInfo.itinerary.forEach((room: any) => {
+      subtotal += room.subtotal;
+    });
+    return subtotal;
   };
 
   return loading ? (
@@ -229,7 +247,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               </div>
 
               {bookingInfo.itinerary.map((room: any) => (
-                <div className="flex flex-row w-full justify-between">
+                <div className="flex flex-row w-full justify-between mb-4">
                   <p className="mt-2 text-xl">{room.roomName}</p>
                   <p className="mt-2  text-xl">{room.guestCount}</p>
                   <p className="mt-2 text-xl">
@@ -240,9 +258,48 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   </p>
                 </div>
               ))}
-              <p className="mt-4 font-semibold text-xl">
-                Price/Night: ${roomInfo.basePrice}
-              </p>
+              <hr className="pv-4" />
+              <div className="flex flex-row w-full justify-between">
+                <p className="mt-4 font-semibold text-xl">Room Subtotal:</p>
+                <p className="mt-4 font-semibold text-xl">
+                  {getRoomsSubtotal().toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </p>
+              </div>
+              <div className="flex flex-row w-full justify-between">
+                <p className="mt-2 font-semibold text-xl">Taxes:</p>
+                <p className="mt-2 font-semibold text-xl">
+                  {(getRoomsSubtotal() * 0.08).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </p>
+              </div>
+              <div className="flex flex-row w-full justify-between">
+                <p className="mt-2 font-semibold text-xl">Booking Tax:</p>
+                <p className="mt-2 font-semibold text-xl">
+                  {(getRoomsSubtotal() * 0.03).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </p>
+              </div>
+              <hr />
+              <div className="flex flex-row w-full justify-between">
+                <p className="mt-8 font-semibold text-2xl">Booking Total:</p>
+                <p className="mt-8 font-semibold text-2xl">
+                  {(
+                    getRoomsSubtotal() +
+                    getRoomsSubtotal() * 0.08 +
+                    getRoomsSubtotal() * 0.03
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </p>
+              </div>
             </div>
             <div
               style={{

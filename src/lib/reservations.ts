@@ -19,7 +19,10 @@ export const getAllReservations = async () => {
  */
 export const insertNewReservation = async (newReservation: Reservation) => {
   const reservations = await ReservationsCollection();
-  return await reservations.insert(newReservation);
+
+  const insertedReservation = await reservations.insertOne(newReservation);
+
+  return insertedReservation.insertedId;
 };
 
 /**
@@ -28,7 +31,13 @@ export const insertNewReservation = async (newReservation: Reservation) => {
  * @param {updatedReservation}
  * @returns
  */
-export const updateReservation = async (reservationID: string, updatedReservation: Reservation) => {
+export const updateReservation = async (
+  reservationID: string,
+  updatedReservation: Reservation,
+) => {
   const reservations = await ReservationsCollection();
-  return await reservations.update({_id:new ObjectId(reservationID)}, updatedReservation);
+  return await reservations.update(
+    { _id: new ObjectId(reservationID) },
+    updatedReservation,
+  );
 };

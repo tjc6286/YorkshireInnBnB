@@ -33,9 +33,11 @@ export const getBookingByID = async (booking: Booking) => {
  * @param {newbooking}
  * @returns
  */
-export const insertNewbooking = async (newBooking: Booking) => {
+export const insertNewbooking = async (newBooking: any) => {
   const bookingcollection = await BookingsCollection();
-  return await bookingcollection.insert(newBooking);
+
+  const insertedBooking = await bookingcollection.insertOne(newBooking);
+  return insertedBooking.insertedId;
 };
 
 /**
