@@ -17,12 +17,10 @@ export const post: APIRoute = async ({ request }) => {
     });
 
     const dateStrings = allDatesBetweenStartAndEndDate.map((date) =>
-      format(date, "MM-dd-yyyy"),
+      format(date, "MM-dd-yyyy")
     );
 
     const roomsToUpdate = data.itinerary.map((room: any) => room._id);
-
-    console.log(roomsToUpdate);
     const datesAdded = await addHoldDates(roomsToUpdate, dateStrings);
 
     if (!datesAdded) {

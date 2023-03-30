@@ -14,15 +14,24 @@ export const getAllReservations = async () => {
 };
 
 /**
- * @param {newReservation}
- * @returns
+ * Method to insert a new reservation/s into the Reservations collection
+ *
+ * @param newReservations Array of reservation objects to insert into the Reservations collection
+ * @returns insertedId or insertedIds of the Reservation Objects inserted into the Reservations collection
  */
-export const insertNewReservation = async (newReservation: Reservation) => {
+export const insertNewReservations = async (
+  newReservations: Array<Reservation>
+) => {
   const reservations = await ReservationsCollection();
-
-  const insertedReservation = await reservations.insertOne(newReservation);
-
-  return insertedReservation.insertedId;
+  if (newReservations.length === 1) {
+    const insertedReservation = await reservations.insertOne(
+      newReservations[0]
+    );
+    return insertedReservation.insertedId;
+  } else if (newReservations.length > 1) {
+    const insertedReservations = await reservations.insertMany(newReservations);
+    return insertedReservations.insertedIds;
+  }
 };
 
 /**
@@ -33,11 +42,11 @@ export const insertNewReservation = async (newReservation: Reservation) => {
  */
 export const updateReservation = async (
   reservationID: string,
-  updatedReservation: Reservation,
+  updatedReservation: Reservation
 ) => {
   const reservations = await ReservationsCollection();
   return await reservations.update(
     { _id: new ObjectId(reservationID) },
-    updatedReservation,
+    updatedReservation
   );
 };
