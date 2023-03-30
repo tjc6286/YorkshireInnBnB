@@ -9,8 +9,8 @@ import {
 } from "./mongodb";
 
 /**
- *
- * @returns
+ * Method to get all bookings from the Bookings collection
+ * @returns Array of Booking objects
  */
 export const getAllBookings = async () => {
   const bookings = await (await BookingsCollection()).find({}).toArray();
@@ -18,8 +18,9 @@ export const getAllBookings = async () => {
 };
 
 /**
- * @param {bookingParams}
- * @returns
+ * Method to get a booking by its ID from the Bookings collection.
+ * @param bookingId ID of the Booking to get from the Bookings collection
+ * @returns Booking object
  */
 export const getBookingByID = async (booking: Booking) => {
   //TODO: add the correct parameters to the find
@@ -30,8 +31,9 @@ export const getBookingByID = async (booking: Booking) => {
 };
 
 /**
- * @param {newbooking}
- * @returns
+ * Method to insert a new booking into the Bookings collection.
+ * @param newBooking Booking object to insert into the Bookings collection
+ * @returns insertedId of the Booking Object inserted into the Bookings collection
  */
 export const insertNewbooking = async (newBooking: any) => {
   const bookingcollection = await BookingsCollection();
@@ -41,10 +43,10 @@ export const insertNewbooking = async (newBooking: any) => {
 };
 
 /**
- *
- * @param {booking}
- * @param {updateBooking}
- * @returns
+ * Method to update a booking by its ID and update it with the updatedBooking object.
+ * @param bookingID ID of the Booking to update
+ * @param updatedBooking Updated Booking object
+ * @returns Booking object
  */
 export const updateBooking = async (
   bookingID: string,
