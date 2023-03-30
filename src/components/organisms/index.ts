@@ -1,3 +1,4 @@
-import DateRangeSelector from "./dateRangeSelector"
+import CustomerInformationForm from "./customerInformationForm";
+import RoomAvailabilityDateRangeSelector from "./dateRangeSelectors";
 
-export default { DateRangeSelector }
+export default { RoomAvailabilityDateRangeSelector, CustomerInformationForm };

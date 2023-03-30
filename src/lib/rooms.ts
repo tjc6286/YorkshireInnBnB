@@ -1,10 +1,11 @@
+import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
-import type { Room } from "../types/room";
+import type { RoomAvailability } from "../types/room";
 import { RoomsCollection } from "./mongodb";
 
 /**
- *
- * @returns
+ * Method to get all rooms from the Rooms collection
+ * @returns Array of room objects
  */
 export const getAllRooms = async () => {
   const rooms = await (await RoomsCollection()).find({}).toArray();
@@ -12,8 +13,9 @@ export const getAllRooms = async () => {
 };
 
 /**
+ * Method to get the Bolero room from the Rooms collection
  *
- * @returns
+ * @returns Array containing the Bolero room object
  */
 export const getBoleroRoom = async () => {
   const rooms = await (await RoomsCollection())
@@ -23,8 +25,9 @@ export const getBoleroRoom = async () => {
 };
 
 /**
+ * Method to get The Rose Suit room from the Rooms collection
  *
- * @returns
+ * @returns Array containing The Rose Suit room object
  */
 export const getRoseRoom = async () => {
   const rooms = await (await RoomsCollection())
@@ -34,8 +37,9 @@ export const getRoseRoom = async () => {
 };
 
 /**
+ * Method to get The Lodge Suit room from the Rooms collection
  *
- * @returns
+ * @returns Array containing The Lodge Suit room object
  */
 export const getLodgeRoom = async () => {
   const rooms = await (await RoomsCollection())
@@ -45,8 +49,9 @@ export const getLodgeRoom = async () => {
 };
 
 /**
+ * Method to get The Blue room from the Rooms collection
  *
- * @returns
+ * @returns Array containing The Blue room object
  */
 export const getBlueRoom = async () => {
   const rooms = await (await RoomsCollection())
@@ -56,10 +61,25 @@ export const getBlueRoom = async () => {
 };
 
 /**
+ * Method to get a room by its ID from the Rooms collection.
  *
+ * @param roomId ID of the room to get from the Rooms collection
+ * @returns Room object
+ */
+export const getRoomById = async (roomId: string) => {
+  const room = await (await RoomsCollection())
+    .find({ _id: new ObjectId(roomId) })
+    .toArray();
+  return room;
+};
+
+/**
+ * Method to get an array of rooms based on their availability based on a dates passed in.
+ * @param dateArray Array of dates to check for availability
+ * @returns Array of room objects
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
@@ -68,9 +88,7 @@ export const getRoomsAvailabilityByDateRange = async (
 
   const rooms = await (await RoomsCollection()).find({}).toArray();
 
-  let availableRooms: Array<Room> = [];
-
-  rooms.forEach((room: Room) => {
+  rooms.forEach((room: RoomAvailability) => {
     let dateFound = false;
     formattedDates.forEach((date: Date) => {
       if (
@@ -82,11 +100,52 @@ export const getRoomsAvailabilityByDateRange = async (
     });
 
     if (dateFound) {
+      room.isAvailable = false;
       return;
     } else {
-      availableRooms.push(room);
+      room.isAvailable = true;
     }
   });
 
-  return availableRooms;
+  return rooms;
+};
+
+/**
+ * Method to add an array of dates to a room's temporaryHoldDates array.
+ * @param roomId ID of the room to add the dates to
+ * @param dateArray Array of dates to add to the room's temporaryHoldDates array
+ * @returns Boolean indicating success or failure
+ */
+export const addHoldDates = async (
+  roomId: string | Array<string>,
+  dateArray: Array<string>
+) => {
+  const roomsCollection = await RoomsCollection();
+
+  try {
+    if (roomId instanceof Array) {
+      //write an updateMany query to update all the rooms
+      const objs = roomId.map((id) => new ObjectId(id));
+      console.log(objs, "about to update");
+      await roomsCollection.updateMany(
+        { _id: { $in: objs } },
+        {
+          $push: { temporaryHoldDates: { $each: dateArray } },
+        }
+      );
+    } else {
+      await roomsCollection.updateOne(
+        { _id: roomId[0] },
+        {
+          $push: { temporaryHoldDates: { $each: dateArray } },
+        }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  } finally {
+  }
+
+  return true;
 };

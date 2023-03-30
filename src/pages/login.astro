@@ -1,0 +1,20 @@
+---
+import FirebaseAuth from "../components/organisms/firebaseAuth";
+import firebase from "firebase/compat/app";
+import MainLayout from "../layouts/MainLayout.astro";
+
+import heroImg from "/assets/Logo.png";
+const firebaseConfig = {
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.PUBLIC_FIREBASE_APPLICATION_ID,
+  measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID,
+};
+---
+
+<MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
+  <FirebaseAuth client:only="react" config={firebaseConfig} />
+</MainLayout>

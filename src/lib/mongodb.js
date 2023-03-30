@@ -1,11 +1,17 @@
+/**
+ * Documentation for the following code:
+ * https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#std-label-node-connect-to-mongodb
+ */
 import { MongoClient } from "mongodb";
 
-//DOCUMENTATION
-// https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#std-label-node-connect-to-mongodb
 const uri = import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
 
+/**
+ * Method to connect to the DB
+ * @returns {Promise<MongoClient>} The mongo client
+ */
 const connectToDB = async () => {
   const mongo = await new MongoClient(uri, options).connect();
   // Change this to your own DB name of course.
@@ -13,6 +19,18 @@ const connectToDB = async () => {
   return mongo.db("YorkshireInnBnB");
 };
 
+/**
+ * Get access to the mongo db client for transaction purposes
+ * @returns {Promise<MongoClient>} The mongo client
+ */
+export const getMongoClient = async () => {
+  return await new MongoClient(uri, options);
+};
+
+/**
+ * Get access to the DB
+ * @returns {Promise<MongoClient>} The mongo client
+ */
 export const getDB = async () => {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
@@ -31,8 +49,9 @@ export const getDB = async () => {
 };
 
 /**
+ * Method to connect to db and pass the Reviews collection
  *
- * @returns Method to connect to db and pass  the Review collection down to the
+ * @returns The Reviews collection
  */
 export const ReviewsCollection = async () => {
   const db = await getDB();
@@ -40,8 +59,9 @@ export const ReviewsCollection = async () => {
 };
 
 /**
+ * Method to connect to db and pass the Rooms collection
  *
- * @returns Method to connect to db and pass  the Rooms collection down to the
+ * @returns The Rooms collection
  */
 export const RoomsCollection = async () => {
   const db = await getDB();
@@ -49,8 +69,9 @@ export const RoomsCollection = async () => {
 };
 
 /**
+ * Method to connect to db and pass the Bookings collection
  *
- * @returns Method to connect to db and pass  the Booking collection down to the
+ * @returns The Bookings Collection
  */
 export const BookingsCollection = async () => {
   const db = await getDB();
@@ -58,8 +79,19 @@ export const BookingsCollection = async () => {
 };
 
 /**
+ * Method to connect to db and pass the InProcessBookings collection
  *
- * @returns Method to connect to db and pass  the Customer collection down to the
+ * @returns The InProcessBookings Collection
+ */
+export const InProcessBookingCollection = async () => {
+  const db = await getDB();
+  return db.collection("InProcessBooking");
+};
+
+/**
+ * Method to connect to db and pass the Customer collection
+ *
+ * @returns The Customer Collection
  */
 export const CustomersCollection = async () => {
   const db = await getDB();
@@ -67,8 +99,9 @@ export const CustomersCollection = async () => {
 };
 
 /**
+ * Method to connect to db and pass the Reservations collection
  *
- * @returns Method to connect to db and pass  the Room Reservation collection down to the
+ * @returns The Reservations Collection
  */
 export const ReservationsCollection = async () => {
   const db = await getDB();

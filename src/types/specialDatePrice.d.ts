@@ -1,5 +1,5 @@
 type SpecialDatePrice = {
-  date: Date;
+  date: string;
   price: number;
 };
 

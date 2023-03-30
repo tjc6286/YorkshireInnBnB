@@ -1,0 +1,19 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import heroImg from "/assets/Logo.png";
+const { tempBookingDetails } = Astro.params;
+import CustomerInformationForm from "../../components/organisms/customerInformationForm";
+import { getInProcessBookingByID } from "../../lib/bookings";
+
+let bookingInfo: any;
+try {
+  bookingInfo = await getInProcessBookingByID(tempBookingDetails!);
+} catch (error) {
+  console.log(error);
+  Astro.redirect("/404");
+}
+---
+
+<MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
+  <CustomerInformationForm client:only bookingInfo={bookingInfo!} />
+</MainLayout>
