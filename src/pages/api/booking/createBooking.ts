@@ -1,10 +1,8 @@
-import { insertNewbooking } from "../../../lib/bookings";
-// import { insertNewCustomer } from "../../../lib/customers";
-// import { insertNewReservation } from "../../../lib/reservations";
 import type { APIRoute } from "astro";
 import { ObjectId } from "mongodb";
+import { insertNewbooking } from "../../../lib/bookings";
 import { insertNewCustomer } from "../../../lib/customers";
-import { insertNewReservation } from "../../../lib/reservations";
+import { insertNewReservations } from "../../../lib/reservations";
 /**
  *
  * @param { request }
@@ -27,15 +25,14 @@ export const post: APIRoute = async ({ request }) => {
       return new Response(null, { status: 400 });
     }
 
-    //TODO: HANDLE MORE THAN ONE RESERVATION
-    const reservation = await insertNewReservation(data.reservation);
+    const reservations = await insertNewReservations(data.reservation);
 
-    if (!reservation) {
+    if (!reservations) {
       return new Response(null, { status: 400 });
     }
 
     const bookingObj = {
-      reservationIds: [reservation],
+      reservationIds: [...reservations],
       transactionId: "100232",
       totalPrice: 238.65,
       isThirdParty: false,

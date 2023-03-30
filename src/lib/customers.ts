@@ -3,8 +3,9 @@ import type { Customer } from "../types/customer";
 import { CustomersCollection } from "./mongodb";
 
 /**
+ * Method to get all customers from the Customers collection
  *
- * @returns
+ * @returns Array of customer objects
  */
 export const getAllCustomers = async () => {
   const reviews = await (await CustomersCollection()).find({}).toArray();
@@ -12,28 +13,26 @@ export const getAllCustomers = async () => {
 };
 
 /**
+ * Method to insert a new customer into the Customers collection.
  *
- * @param newCustomer
- * @returns
+ * @param customerID ID of the customer to get from the Customers collection
+ * @returns Customer object
  */
 export const insertNewCustomer = async (newCustomer: Customer) => {
-  // For customer: check if customer already exisits using the email
   const customers = await CustomersCollection();
-
   const res = await customers.insertOne(newCustomer);
-
   return res.insertedId;
 };
 
 /**
+ * Method to get a customer by its ID from the Customers collection.
  *
- * @param customer
- * @param updateCustomer
- * @returns
+ * @param customerID ID of the customer to get from the Customers collection
+ * @returns Customer object
  */
 export const updateCustomer = async (
   customerID: string,
-  updateCustomer: Customer,
+  updateCustomer: Customer
 ) => {
   const customers = await CustomersCollection();
   return customers.update({ _id: new ObjectId(customerID) }, updateCustomer);
