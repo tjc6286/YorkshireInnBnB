@@ -1,8 +1,6 @@
-import { insertNewbooking } from "../../../lib/bookings";
-// import { insertNewCustomer } from "../../../lib/customers";
-// import { insertNewReservation } from "../../../lib/reservations";
 import type { APIRoute } from "astro";
 import { ObjectId } from "mongodb";
+import { insertNewbooking } from "../../../lib/bookings";
 import { insertNewCustomer } from "../../../lib/customers";
 import { insertNewReservations } from "../../../lib/reservations";
 /**

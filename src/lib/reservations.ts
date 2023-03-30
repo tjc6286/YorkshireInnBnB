@@ -3,8 +3,8 @@ import type { Reservation } from "../types/reservation";
 import { ReservationsCollection } from "./mongodb";
 
 /**
- *
- * @returns
+ * Method to get all reservations from the Reservations collection
+ * @returns Array of reservation objects
  */
 export const getAllReservations = async () => {
   const reservations = await (await ReservationsCollection())
@@ -35,10 +35,11 @@ export const insertNewReservations = async (
 };
 
 /**
+ * Method to get a reservation by its ID and upadte it with the updatedReservation object.
  *
- * @param {reservation}
- * @param {updatedReservation}
- * @returns
+ * @param reservationID ID of the reservation to update
+ * @param updatedReservation Updated reservation object
+ * @returns Reservation object
  */
 export const updateReservation = async (
   reservationID: string,
