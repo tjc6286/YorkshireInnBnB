@@ -14,23 +14,12 @@ export const getAllCustomers = async () => {
 
 /**
  * Method to insert a new customer into the Customers collection.
- * If Customer already exists, return existing customer.
  *
  * @param customerID ID of the customer to get from the Customers collection
  * @returns Customer object
  */
 export const insertNewCustomer = async (newCustomer: Customer) => {
   const customers = await CustomersCollection();
-
-  const existingCustomer = await customers.findOne({
-    email: newCustomer.email,
-  });
-
-  if (existingCustomer) {
-    //return existing customer
-    return existingCustomer._id;
-  }
-
   const res = await customers.insertOne(newCustomer);
   return res.insertedId;
 };
