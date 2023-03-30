@@ -4,11 +4,14 @@ import { insertNewInProcessBooking } from "../../../lib/bookings";
 import { addHoldDates } from "../../../lib/rooms";
 
 /**
- * @param { request }
- * @returns send back the new InProcessBooking ObjectID
- * @description
  * This API route is used to create a new InProcessBooking in the database
  * to help pass along the data in the checkout flow.
+ *
+ * @param { request } holds the data coming in from the client
+ * - startDate: Date
+ * - endDate: Date
+ * - itinerary : Array of Room Objects
+ * @returns send back the new InProcessBooking ObjectID
  **/
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {
