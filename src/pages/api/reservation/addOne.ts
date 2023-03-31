@@ -1,4 +1,4 @@
-import { insertNewReservation } from "../../../lib/reservations";
+import { insertNewReservations } from "../../../lib/reservations";
 import type { APIRoute } from "astro";
 
 /**
@@ -11,7 +11,7 @@ export const post: APIRoute = async ({ request }) => {
   //TODO: possible extract {}
   var newReservation = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
-    const reservation = await insertNewReservation(newReservation);
+    const reservation = await insertNewReservations(newReservation);
     return new Response(JSON.stringify(reservation), {
       status: 200,
     });
