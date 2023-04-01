@@ -1,3 +1,4 @@
 import AdminHome from "./AdminHome";
+import AdminRoom from "./AdminRoom";
 
-export default AdminHome;
+export { AdminHome, AdminRoom };
