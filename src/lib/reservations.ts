@@ -51,3 +51,20 @@ export const updateReservation = async (
     updatedReservation
   );
 };
+
+/**
+ * Method to cancel all reservations in the reservations array passed in.
+ *
+ * @param reservations Array of reservation objects to cancel
+ * @returns void
+ */
+export const cancelReservations = async (reservations: Array<Reservation>) => {
+  const reservationsCollection = await ReservationsCollection();
+  //loop through all reservations and update the reservation status to "cancelled"
+  for (const reservation of reservations) {
+    await reservationsCollection.update(
+      { _id: new ObjectId(reservation._id) },
+      { $set: { isCanceled: true } }
+    );
+  }
+};

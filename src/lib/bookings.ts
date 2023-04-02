@@ -4,6 +4,8 @@ import type { Customer } from "../types/customer";
 import type { Reservation } from "../types/reservation";
 import {
   BookingsCollection,
+  CustomerCollection,
+  ReservationCollection,
   getMongoClient,
   InProcessBookingCollection,
 } from "./mongodb";
@@ -22,12 +24,41 @@ export const getAllBookings = async () => {
  * @param bookingId ID of the Booking to get from the Bookings collection
  * @returns Booking object
  */
-export const getBookingByID = async (booking: Booking) => {
+export const getBookingByID = async (bookingId: ObjectId) => {
   //TODO: add the correct parameters to the find
   const bookings = await (await BookingsCollection())
-    .find({ _id: new ObjectId(booking._id) })
+    .find({ _id: bookingId })
     .toArray();
   return bookings[0];
+};
+
+/**
+ * Method to get booking by its id and returning the booking, customer, and reservations attached to it.
+ *
+ * @param bookingId ID of the Booking to get from the Bookings collection
+ * @returns Object containing the Booking, Customer, and Reservations
+ */
+export const bookingLookup = async (bookingId: string) => {
+  const bookings = await (await BookingsCollection())
+    .find({ _id: new ObjectId(bookingId) })
+    .toArray();
+
+  const customer = await (await CustomerCollection())
+    .find({ _id: new ObjectId(bookings[0].customerID) })
+    .toArray();
+
+  const reservations = await (await ReservationCollection())
+    .find({ _id: { $in: bookings[0].reservationIDs } })
+    .toArray();
+
+  //create object to return using the booking, customer, and reservations
+  const bookingReturn = {
+    booking: bookings[0],
+    customer: customer[0],
+    reservations: reservations,
+  };
+
+  return bookingReturn;
 };
 
 /**
@@ -88,6 +119,20 @@ export const getInProcessBookingByID = async (bookingId: string) => {
     .find({ _id: new ObjectId(bookingId) })
     .toArray();
   return inProcessBookings[0];
+};
+
+/**
+ * Remove a Booking by the passed in ID.
+ *
+ * @param bookingId ID of the Booking to remove
+ * @returns Booking object
+ */
+export const removeBookingByID = async (bookingId: ObjectId) => {
+  const bookingcollection = await BookingsCollection();
+  const result = await bookingcollection.findOneAndDelete({ _id: bookingId });
+
+  // result.value contains the deleted document or null if no document was found
+  return result.value;
 };
 
 //BOOKING TRANSACTION EXAMPLE
