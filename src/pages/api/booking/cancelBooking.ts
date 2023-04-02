@@ -26,10 +26,14 @@ export const post: APIRoute = async ({ request }) => {
     } else {
       await cancelReservations(booking.reservationIds);
       var deletedBooking = await removeBookingByID(bookingId);
+
+      if (deletedBooking === undefined) {
+        return new Response(null, { status: 400 });
+      }
       return new Response(JSON.stringify({ deletedBooking }), {
         status: 200,
       });
     }
-    return new Response(null, { status: 400 });
   }
+  return new Response(null, { status: 400 });
 };
