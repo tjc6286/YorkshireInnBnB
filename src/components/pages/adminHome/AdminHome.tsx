@@ -9,7 +9,7 @@ const AdminHome: React.FC = () => {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
 
-      setUserEmail(user.email ?? "Admin");
+      userEmail === "" && setUserEmail(user.email ?? "Admin");
 
       // ...
     } else {
@@ -59,7 +59,10 @@ const AdminHome: React.FC = () => {
               <h4 className="text-white text-2xl font-bold capitalize text-center"></h4>
               <p className="text-white/50">Manage bookings</p>
             </div>
-            <div className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
+            <a
+              href="/adminRoom"
+              className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover"
+            >
               <svg
                 className="text-white w-[30%]"
                 aria-hidden="true"
@@ -79,7 +82,7 @@ const AdminHome: React.FC = () => {
               <p className="text-white/50 text-center">
                 Manage Room Availability and Pricing
               </p>
-            </div>
+            </a>
             <div className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
               <svg
                 className="text-white w-[30%]"
