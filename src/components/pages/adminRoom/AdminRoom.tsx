@@ -1,9 +1,8 @@
-import React from "react";
-import { CircularProgress, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { addDays } from "date-fns";
+import React from "react";
 import { auth, signOutUser } from "../../../firebase";
-import { format, subMonths, addMonths, addDays } from "date-fns";
 
 const AdminRoom: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
@@ -15,7 +14,7 @@ const AdminRoom: React.FC = () => {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
 
-      setUserEmail(user.email ?? "Admin");
+      userEmail === "" && setUserEmail(user.email ?? "Admin");
 
       // ...
     } else {
@@ -27,11 +26,10 @@ const AdminRoom: React.FC = () => {
 
   const handleSetStartDate = (newStartDate: string) => {
     if (endDate && new Date(newStartDate) > new Date(endDate)) {
-      setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
+      setEndDate(addDays(new Date(newStartDate), 1).toString());
     }
 
     setStartDate(newStartDate);
-    setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
   };
 
   const handleSetEndDate = (newEndDate: string) => {
@@ -54,7 +52,8 @@ const AdminRoom: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+            >
               {" "}
               Return Home
             </a>
@@ -65,7 +64,8 @@ const AdminRoom: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#">
+                href="#"
+              >
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -80,7 +80,7 @@ const AdminRoom: React.FC = () => {
                   disablePast
                   maxDate={addDays(new Date(), 365)}
                   onChange={(newValue: Date | null) => {
-                    newValue && handleSetStartDate(newValue.toUTCString());
+                    newValue && handleSetStartDate(newValue.toString());
                   }}
                   componentsProps={{ textField: { variant: "outlined" } }}
                 />
@@ -114,7 +114,8 @@ const AdminRoom: React.FC = () => {
                 lineHeight: "34px",
                 letterSpacing: "0.13em",
               }}
-              onClick={() => {}}>
+              onClick={() => {}}
+            >
               Submit
             </button>
           </div>
