@@ -17,7 +17,9 @@ import {
  * @returns Array of Booking objects
  */
 export const getAllBookings = async () => {
+  //SERVER LOGGING
   console.log("Method: getAllBookings");
+
   const bookings = await (await BookingsCollection()).find({}).toArray();
   disconnectDB();
   return bookings;
@@ -29,8 +31,7 @@ export const getAllBookings = async () => {
  * @returns Booking object
  */
 export const getBookingByID = async (bookingId: ObjectId) => {
-  //TODO: add the correct parameters to the find
-
+  //SERVER LOGGING
   console.log("Method: getBookingByID - ID: " + bookingId);
 
   const bookings = await (await BookingsCollection())
@@ -47,6 +48,7 @@ export const getBookingByID = async (bookingId: ObjectId) => {
  * @returns Object containing the Booking, Customer, and Reservations
  */
 export const bookingLookup = async (bookingId: string) => {
+  //SERVER LOGGING
   console.log("Method: bookingLookup - ID: " + bookingId);
 
   const bookings = await (await BookingsCollection())
@@ -77,7 +79,9 @@ export const bookingLookup = async (bookingId: string) => {
  * @returns insertedId of the Booking Object inserted into the Bookings collection
  */
 export const insertNewbooking = async (newBooking: any) => {
+  //SERVER LOGGING
   console.log("Method: insertNewbooking - newBooking: " + newBooking);
+
   const bookingcollection = await BookingsCollection();
 
   const insertedBooking = await bookingcollection.insertOne(newBooking);
@@ -95,6 +99,7 @@ export const updateBooking = async (
   bookingID: string,
   updatedBooking: Booking
 ) => {
+  //SERVER LOGGING
   console.log("Method: updateBooking - bookingID: " + bookingID);
   console.log("Method: updateBooking - updatedBooking: " + updatedBooking);
 
@@ -114,7 +119,9 @@ export const updateBooking = async (
  * @returns {bookingID} the ID of the booking that was inserted
  */
 export const insertNewInProcessBooking = async (newBooking: any) => {
+  //SERVER LOGGING
   console.log("Method: insertNewInProcessBooking - newBooking: " + newBooking);
+
   const bookingcollection = await InProcessBookingCollection();
   //TODO: validate the information
   try {
@@ -134,7 +141,9 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
  * @returns InProcessBooking object
  */
 export const getInProcessBookingByID = async (bookingId: string) => {
+  //SERVER LOGGING
   console.log("Method: getInProcessBookingByID - ID: " + bookingId);
+
   //TODO: add the correct parameters to the find
   const inProcessBookings = await (await InProcessBookingCollection())
     .find({ _id: new ObjectId(bookingId) })
@@ -151,7 +160,9 @@ export const getInProcessBookingByID = async (bookingId: string) => {
  * @returns Booking object
  */
 export const removeBookingByID = async (bookingId: ObjectId) => {
+  //SERVER LOGGING
   console.log("Method: removeBookingByID - ID: " + bookingId);
+
   const bookingcollection = await BookingsCollection();
   const result = await bookingcollection.findOneAndDelete({ _id: bookingId });
 

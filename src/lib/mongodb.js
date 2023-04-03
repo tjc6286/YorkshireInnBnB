@@ -15,7 +15,7 @@ let connectedClient;
  * @returns {Promise<MongoClient>} The mongo client
  */
 const connectToDB = async () => {
-  console.log("**Connecting to DB**");
+  console.log("**Connecting to DB** - " + new Date().toLocaleTimeString());
   connectedClient = await new MongoClient(uri, options).connect();
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
@@ -28,7 +28,9 @@ const connectToDB = async () => {
  */
 export const disconnectDB = async () => {
   if (connectedClient) {
-    console.log("**Closing DB connection**\n");
+    console.log(
+      "**Closing DB connection** - " + new Date().toLocaleTimeString() + "\n"
+    );
     await connectedClient.close();
   }
 };

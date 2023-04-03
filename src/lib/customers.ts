@@ -8,14 +8,18 @@ import { CustomersCollection, disconnectDB } from "./mongodb";
  * @returns Array of customer objects
  */
 export const getAllCustomers = async () => {
+  //SERVER LOGGING
   console.log("Method: getAllCustomers");
+
   const reviews = await (await CustomersCollection()).find({}).toArray();
   return reviews;
 };
 
 //get customer by id
 export const getCustomerByID = async (customerID: string) => {
+  //SERVER LOGGING
   console.log("Method: getCustomerByID - customerID: ", customerID.toString());
+
   const customers = await (await CustomersCollection())
     .find({ _id: new ObjectId(customerID) })
     .toArray();
@@ -30,7 +34,9 @@ export const getCustomerByID = async (customerID: string) => {
  * @returns Customer object
  */
 export const insertNewCustomer = async (newCustomer: Customer) => {
+  //SERVER LOGGING
   console.log("Method: insertNewCustomer - customerID: ", newCustomer);
+
   const customers = await CustomersCollection();
   const res = await customers.insertOne(newCustomer);
   disconnectDB();
@@ -47,6 +53,7 @@ export const updateCustomer = async (
   customerID: string,
   updateCustomer: Customer
 ) => {
+  //SERVER LOGGING
   console.log("Method: updateCustomer - customerID: ", customerID);
   console.log("Method: updateCustomer - updateCustomer: ", updateCustomer);
 
