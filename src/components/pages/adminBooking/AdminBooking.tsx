@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   FormControlLabel,
   Paper,
@@ -197,9 +198,16 @@ const AdminBooking: React.FC = () => {
                           </TableCell>
                           <TableCell>${entry.booking.totalPrice}</TableCell>
                           <TableCell>
-                            <a href="#" style={{ textDecoration: "underline" }}>
-                              Cancel Booking
-                            </a>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {}}
+                              style={{
+                                backgroundColor: "red",
+                                color: "white",
+                              }}>
+                              Cancel
+                            </Button>
                           </TableCell>
                         </TableRow>
                       );
