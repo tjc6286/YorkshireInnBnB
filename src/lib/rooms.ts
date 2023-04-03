@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
 import type { RoomAvailability } from "../types/room";
 import type SpecialDatePrice from "../types/specialDatePrice";
-import { RoomsCollection } from "./mongodb";
+import { RoomsCollection, disconnectDB } from "./mongodb";
 
 /**
  * Method to get all rooms from the Rooms collection
@@ -10,6 +10,7 @@ import { RoomsCollection } from "./mongodb";
  */
 export const getAllRooms = async () => {
   const rooms = await (await RoomsCollection()).find({}).toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -22,6 +23,7 @@ export const getBoleroRoom = async () => {
   const rooms = await (await RoomsCollection())
     .find({ name: "Bolero" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -34,6 +36,7 @@ export const getRoseRoom = async () => {
   const rooms = await (await RoomsCollection())
     .find({ name: "The Rose Suite" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -46,6 +49,7 @@ export const getLodgeRoom = async () => {
   const rooms = await (await RoomsCollection())
     .find({ name: "Lodge Suite" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -58,6 +62,7 @@ export const getBlueRoom = async () => {
   const rooms = await (await RoomsCollection())
     .find({ name: "Blue Room" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -71,6 +76,7 @@ export const getSpecialDatePrice = async (roomId: string) => {
   const room = await (await RoomsCollection())
     .find({ _id: new ObjectId(roomId) })
     .toArray();
+  disconnectDB();
   return room[0].specialPriceDates;
 };
 
@@ -84,6 +90,7 @@ export const getRoomById = async (roomId: string) => {
   const room = await (await RoomsCollection())
     .find({ _id: new ObjectId(roomId) })
     .toArray();
+  disconnectDB();
   return room;
 };
 
@@ -120,7 +127,7 @@ export const getRoomsAvailabilityByDateRange = async (
       room.isAvailable = true;
     }
   });
-
+  disconnectDB();
   return rooms;
 };
 
@@ -160,7 +167,7 @@ export const addHoldDates = async (
     return false;
   } finally {
   }
-
+  disconnectDB();
   return true;
 };
 
@@ -200,6 +207,7 @@ export const addBlockDates = async (
     console.log(error);
     return false;
   } finally {
+    disconnectDB();
   }
 
   return true;
@@ -224,8 +232,9 @@ export const removeBlockDate = async (roomId: string, date: string) => {
   } catch (error) {
     console.log(error);
     return false;
+  } finally {
+    disconnectDB();
   }
-
   return true;
 };
 
@@ -258,6 +267,8 @@ export const addSpecialDatePrices = async (
     console.log(`Added special date prices for room with ID: ${roomId}`);
   } catch (error) {
     console.error("Error adding special date prices", error);
+  } finally {
+    disconnectDB();
   }
 };
 
@@ -289,5 +300,7 @@ export const removeSpecialDatePrice = async (
   } catch (error) {
     console.error("Error removing special date price", error);
     return null;
+  } finally {
+    disconnectDB();
   }
 };

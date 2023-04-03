@@ -8,15 +8,29 @@ const uri = import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
 
+let connectedClient;
+
 /**
- * Method to connect to the DB
+ * Method to connect to the DB and cache the connection client.
  * @returns {Promise<MongoClient>} The mongo client
  */
 const connectToDB = async () => {
-  const mongo = await new MongoClient(uri, options).connect();
+  console.log("Connecting to DB");
+  connectedClient = await new MongoClient(uri, options).connect();
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
-  return mongo.db("YorkshireInnBnB");
+  return connectedClient.db("YorkshireInnBnB");
+};
+
+/**
+ * Method to disconnect from the DB
+ * @returns void
+ */
+export const disconnectDB = async () => {
+  if (connectedClient) {
+    console.log("Closing DB connection");
+    await connectedClient.close();
+  }
 };
 
 /**

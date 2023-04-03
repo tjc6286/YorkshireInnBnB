@@ -4,6 +4,7 @@ import type { Customer } from "../types/customer";
 import type { Reservation } from "../types/reservation";
 import { getCustomerByID } from "./customers";
 import {
+  disconnectDB,
   BookingsCollection,
   CustomerCollection,
   ReservationCollection,
@@ -17,6 +18,7 @@ import {
  */
 export const getAllBookings = async () => {
   const bookings = await (await BookingsCollection()).find({}).toArray();
+  disconnectDB();
   return bookings;
 };
 
@@ -30,6 +32,7 @@ export const getBookingByID = async (bookingId: ObjectId) => {
   const bookings = await (await BookingsCollection())
     .find({ _id: bookingId })
     .toArray();
+  disconnectDB();
   return bookings[0];
 };
 
@@ -58,7 +61,7 @@ export const bookingLookup = async (bookingId: string) => {
     customer: customer[0],
     reservations: reservations,
   };
-
+  disconnectDB();
   return bookingReturn;
 };
 
@@ -71,6 +74,7 @@ export const insertNewbooking = async (newBooking: any) => {
   const bookingcollection = await BookingsCollection();
 
   const insertedBooking = await bookingcollection.insertOne(newBooking);
+  disconnectDB();
   return insertedBooking.insertedId;
 };
 
@@ -85,10 +89,12 @@ export const updateBooking = async (
   updatedBooking: Booking
 ) => {
   const bookingcollection = await BookingsCollection();
-  return await bookingcollection.update(
+  const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
     updatedBooking
   );
+  disconnectDB();
+  return returnBooking;
 };
 
 /**
@@ -105,6 +111,8 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
     return result.insertedId;
   } catch (e) {
     console.log("Error: Problem inserting temporary booking: " + newBooking);
+  } finally {
+    disconnectDB();
   }
 };
 
@@ -119,6 +127,8 @@ export const getInProcessBookingByID = async (bookingId: string) => {
   const inProcessBookings = await (await InProcessBookingCollection())
     .find({ _id: new ObjectId(bookingId) })
     .toArray();
+
+  disconnectDB();
   return inProcessBookings[0];
 };
 
@@ -133,6 +143,7 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   const result = await bookingcollection.findOneAndDelete({ _id: bookingId });
 
   // result.value contains the deleted document or null if no document was found
+  disconnectDB();
   return result.value;
 };
 

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import type { Customer } from "../types/customer";
-import { CustomersCollection } from "./mongodb";
+import { CustomersCollection, disconnectDB } from "./mongodb";
 
 /**
  * Method to get all customers from the Customers collection
@@ -17,6 +17,7 @@ export const getCustomerByID = async (customerID: string) => {
   const customers = await (await CustomersCollection())
     .find({ _id: new ObjectId(customerID) })
     .toArray();
+  disconnectDB();
   return customers[0];
 };
 
@@ -29,6 +30,7 @@ export const getCustomerByID = async (customerID: string) => {
 export const insertNewCustomer = async (newCustomer: Customer) => {
   const customers = await CustomersCollection();
   const res = await customers.insertOne(newCustomer);
+  disconnectDB();
   return res.insertedId;
 };
 
@@ -43,5 +45,10 @@ export const updateCustomer = async (
   updateCustomer: Customer
 ) => {
   const customers = await CustomersCollection();
-  return customers.update({ _id: new ObjectId(customerID) }, updateCustomer);
+  const updatedCustomer = customers.update(
+    { _id: new ObjectId(customerID) },
+    updateCustomer
+  );
+  disconnectDB();
+  return updatedCustomer;
 };

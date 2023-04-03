@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import type { Reservation } from "../types/reservation";
-import { ReservationsCollection } from "./mongodb";
+import { ReservationsCollection, disconnectDB } from "./mongodb";
 
 /**
  * Method to get all reservations from the Reservations collection
@@ -10,6 +10,7 @@ export const getAllReservations = async () => {
   const reservations = await (await ReservationsCollection())
     .find({})
     .toArray();
+  disconnectDB();
   return reservations;
 };
 
@@ -18,6 +19,7 @@ export const getReservationByID = async (reservationID: string) => {
   const reservations = await (await ReservationsCollection())
     .find({ _id: new ObjectId(reservationID) })
     .toArray();
+  disconnectDB();
   return reservations[0];
 };
 
@@ -35,9 +37,11 @@ export const insertNewReservations = async (
     const insertedReservation = await reservations.insertOne(
       newReservations[0]
     );
+    disconnectDB();
     return insertedReservation.insertedId;
   } else if (newReservations.length > 1) {
     const insertedReservations = await reservations.insertMany(newReservations);
+    disconnectDB();
     return insertedReservations.insertedIds;
   }
 };
@@ -54,10 +58,14 @@ export const updateReservation = async (
   updatedReservation: Reservation
 ) => {
   const reservations = await ReservationsCollection();
-  return await reservations.update(
+  const returnReservation = await reservations.update(
     { _id: new ObjectId(reservationID) },
     updatedReservation
   );
+
+  disconnectDB();
+
+  return returnReservation;
 };
 
 /**
@@ -75,4 +83,6 @@ export const cancelReservations = async (reservations: Array<Reservation>) => {
       { $set: { isCanceled: true } }
     );
   }
+  disconnectDB();
+  return true;
 };
