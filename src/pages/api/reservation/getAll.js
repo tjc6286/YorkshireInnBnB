@@ -1,11 +1,13 @@
 import { getAllReservations } from "../../../lib/reservations";
-
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @returns
  */
 export const get = async () => {
-  console.log("Log - GET ALL RESERVATIONS");
+  //SERVER LOGGING
+  logMessage("ENDPOINT: /api/reservation/getAll", "Getting All Reservations");
+
   const reservations = await getAllReservations();
   if (!reservations) {
     return new Response(null, {

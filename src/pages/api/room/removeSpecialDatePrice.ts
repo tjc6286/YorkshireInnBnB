@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { logMessage } from "../../../lib/logger.js";
 import { removeSpecialDatePrice } from "../../../lib/rooms.js";
 
 /**
@@ -12,11 +13,11 @@ export const post: APIRoute = async ({ request }) => {
     const roomId = data.roomId;
 
     //SERVER LOGGING
-    console.log(
-      "ENDPOINT: /api/room/removeSpecialDatePrice - " + new Date().toISOString
+    logMessage(
+      "ENDPOINT: /api/room/removeSpecialDatePrice",
+      "Room ID: " + roomId
     );
-    console.log("Room ID: " + roomId);
-    console.log("Date: " + date);
+    logMessage("ENDPOINT: /api/room/removeSpecialDatePrice", "Date: " + date);
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
     const room = await removeSpecialDatePrice(roomId, date);

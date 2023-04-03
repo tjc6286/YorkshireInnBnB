@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
 import { getRoomsAvailabilityByDateRange } from "../../../lib/rooms.js";
+import { logMessage } from "../../../lib/logger.js";
+
 /**
  *
  * @returns
@@ -10,11 +12,10 @@ export const post: APIRoute = async ({ request }) => {
     const dates = data;
 
     //SERVER LOGGING
-    console.log(
-      "ENDPOINT: /api/room/getRoomAvailabilityByDateRange - " +
-        new Date().toISOString
+    logMessage(
+      "ENDPOINT: /api/room/getRoomAvailabilityByDateRange",
+      "Getting Rooms avialble for Dates: " + dates
     );
-    console.log("Dates: " + dates);
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
     if (!dates) {

@@ -3,14 +3,14 @@ import isDateInArray from "../helpers/isDateInArray";
 import type { RoomAvailability } from "../types/room";
 import type SpecialDatePrice from "../types/specialDatePrice";
 import { RoomsCollection, disconnectDB } from "./mongodb";
-
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 /**
  * Method to get all rooms from the Rooms collection
  * @returns Array of room objects
  */
 export const getAllRooms = async () => {
   //SERVER LOGGING
-  console.log("Method: getAllRooms");
+  logMessage("Method: getAllRooms", "Getting All Rooms");
 
   const rooms = await (await RoomsCollection()).find({}).toArray();
   disconnectDB();
@@ -24,7 +24,7 @@ export const getAllRooms = async () => {
  */
 export const getBoleroRoom = async () => {
   //SERVER LOGGING
-  console.log("Method: getBoleroRoom");
+  logMessage("Method: getBoleroRoom", "Getting Bolero Room");
 
   const rooms = await (await RoomsCollection())
     .find({ name: "Bolero" })
@@ -39,8 +39,8 @@ export const getBoleroRoom = async () => {
  * @returns Array containing The Rose Suit room object
  */
 export const getRoseRoom = async () => {
-  //SERVER LOGGING
-  console.log("Method: getRoseRoom");
+  //SERVER LOGGING;
+  logMessage("Method: getRoseRoom", "Getting Rose Room");
 
   const rooms = await (await RoomsCollection())
     .find({ name: "The Rose Suite" })
@@ -56,7 +56,7 @@ export const getRoseRoom = async () => {
  */
 export const getLodgeRoom = async () => {
   //SERVER LOGGING
-  console.log("Method: getLodgeRoom");
+  logMessage("Method: getLodgeRoom", "Getting Lodge Room");
 
   const rooms = await (await RoomsCollection())
     .find({ name: "Lodge Suite" })
@@ -72,7 +72,7 @@ export const getLodgeRoom = async () => {
  */
 export const getBlueRoom = async () => {
   //SERVER LOGGING
-  console.log("Method: getBlueRoom");
+  logMessage("Method: getBlueRoom", "Getting Blue Room");
 
   const rooms = await (await RoomsCollection())
     .find({ name: "Blue Room" })
@@ -89,7 +89,10 @@ export const getBlueRoom = async () => {
  */
 export const getSpecialDatePrice = async (roomId: string) => {
   //SERVER LOGGING
-  console.log("Method: getSpecialDatePrice - roomId: ", roomId);
+  logMessage(
+    "Method: getSpecialDatePrice",
+    "Getting Special Date Price for Room ID: " + roomId
+  );
 
   const room = await (await RoomsCollection())
     .find({ _id: new ObjectId(roomId) })
@@ -106,7 +109,7 @@ export const getSpecialDatePrice = async (roomId: string) => {
  */
 export const getRoomById = async (roomId: string) => {
   //SERVER LOGGING
-  console.log("Method: getRoomById - roomId: ", roomId);
+  logMessage("Method: getRoomById", "Getting Room by ID: " + roomId);
 
   const room = await (await RoomsCollection())
     .find({ _id: new ObjectId(roomId) })
@@ -124,9 +127,9 @@ export const getRoomsAvailabilityByDateRange = async (
   dateArray: Array<string>
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: getRoomsAvailabilityByDateRange - dateArray: ",
-    dateArray
+  logMessage(
+    "Method: getRoomsAvailabilityByDateRange",
+    "Getting Rooms Availability by Date Range: " + dateArray
   );
 
   let formattedDates: Array<Date> = [];
@@ -169,12 +172,8 @@ export const addHoldDates = async (
   dateArray: Array<string>
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: addHoldDates - roomId: ",
-    roomId,
-    " - dateArray: ",
-    dateArray
-  );
+  logMessage("Method: addHoldDates", "Adding Hold Dates to Room ID: " + roomId);
+  logMessage("Method: addHoldDates", "Dates to Add: " + dateArray);
 
   const roomsCollection = await RoomsCollection();
 
@@ -217,12 +216,11 @@ export const addBlockDates = async (
   dateArray: Array<string>
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: addBlockDates - roomId: ",
-    roomId,
-    " - dateArray: ",
-    dateArray
+  logMessage(
+    "Method: addBlockDates",
+    "Adding Block Dates to Room ID: " + roomId
   );
+  logMessage("Method: addBlockDates", "Dates to Add: " + dateArray);
 
   const roomsCollection = await RoomsCollection();
   try {
@@ -264,7 +262,11 @@ export const addBlockDates = async (
  */
 export const removeBlockDate = async (roomId: string, date: string) => {
   //SERVER LOGGING
-  console.log("Method: removeBlockDate - roomId: ", roomId, " - date: ", date);
+  logMessage(
+    "Method: removeBlockDate",
+    "Removing Block Date from Room ID: " + roomId
+  );
+  logMessage("Method: removeBlockDate", "Date to Remove: " + date);
 
   const roomsCollection = await RoomsCollection();
   // check if roomId is a valid ObjectId
@@ -301,14 +303,12 @@ export const addSpecialDatePrices = async (
   dates: string[]
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: addSpecialDatePrices - roomId: ",
-    roomId,
-    " - updatedPrice: ",
-    updatedPrice,
-    " - dates: ",
-    dates
+  logMessage(
+    "Method: addSpecialDatePrices",
+    "Adding Special Date Prices to Room ID: " + roomId
   );
+  logMessage("Method: addSpecialDatePrices", "Updated Price: " + updatedPrice);
+  logMessage("Method: addSpecialDatePrices", "Dates to Add: " + dates);
 
   const roomsCollection = await RoomsCollection();
 
@@ -343,11 +343,13 @@ export const removeSpecialDatePrice = async (
   dateToRemove: string
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: removeSpecialDatePrice - roomId: ",
-    roomId,
-    " - dateToRemove: ",
-    dateToRemove
+  logMessage(
+    "Method: removeSpecialDatePrice",
+    "Removing Special Date Price from Room ID: " + roomId
+  );
+  logMessage(
+    "Method: removeSpecialDatePrice",
+    "Date to Remove: " + dateToRemove
   );
 
   const roomsCollection = await RoomsCollection();

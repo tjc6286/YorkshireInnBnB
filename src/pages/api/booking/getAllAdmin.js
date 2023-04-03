@@ -1,15 +1,14 @@
 import { getAllBookings } from "../../../lib/bookings";
 import { getCustomerByID } from "../../../lib/customers";
 import { getReservationByID } from "../../../lib/reservations";
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @returns
  */
 export const get = async () => {
   //SERVER LOGGING
-  console.log(
-    "Endpoint: /api/booking/getAllAdmin - " + new Date().toISOString()
-  );
+  logMessage("ENDPOINT: /api/booking/getAllAdmin", "Getting All Bookings");
 
   const bookings = await getAllBookings();
   if (!bookings) {

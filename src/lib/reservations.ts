@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import type { Reservation } from "../types/reservation";
 import { ReservationsCollection, disconnectDB } from "./mongodb";
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 
 /**
  * Method to get all reservations from the Reservations collection
@@ -8,7 +9,7 @@ import { ReservationsCollection, disconnectDB } from "./mongodb";
  */
 export const getAllReservations = async () => {
   //SERVER LOGGING
-  console.log("Method: getAllReservations");
+  logMessage("Method: getAllReservations", "Getting All Reservations");
 
   const reservations = await (await ReservationsCollection())
     .find({})
@@ -20,7 +21,10 @@ export const getAllReservations = async () => {
 //get reservation by id
 export const getReservationByID = async (reservationID: string) => {
   //SERVER LOGGING
-  console.log("Method: getReservationByID - reservationID: ", reservationID);
+  logMessage(
+    "Method: getReservationByID",
+    "Getting Reservation by ID: " + reservationID
+  );
 
   const reservations = await (await ReservationsCollection())
     .find({ _id: new ObjectId(reservationID) })
@@ -39,10 +43,11 @@ export const insertNewReservations = async (
   newReservations: Array<Reservation>
 ) => {
   //SERVER LOGGING
-  console.log(
-    "Method: insertNewReservations - newReservations: ",
-    newReservations
+  logMessage(
+    "Method: insertNewReservations",
+    "Inserting New Reservation:" + newReservations
   );
+
   const reservations = await ReservationsCollection();
   if (newReservations.length === 1) {
     const insertedReservation = await reservations.insertOne(
@@ -69,10 +74,13 @@ export const updateReservation = async (
   updatedReservation: Reservation
 ) => {
   //SERVER LOGGING
-  console.log("Method: updateReservation - reservationID: ", reservationID);
-  console.log(
-    "Method: updateReservation - updatedReservation: ",
-    updatedReservation
+  logMessage(
+    "Method: updateReservation",
+    "Updating Reservation: " + reservationID
+  );
+  logMessage(
+    "Method: updateReservation",
+    "Updating Reservation with: " + updatedReservation
   );
 
   const reservations = await ReservationsCollection();
@@ -94,7 +102,10 @@ export const updateReservation = async (
  */
 export const cancelReservations = async (reservations: Array<Reservation>) => {
   //SERVER LOGGING
-  console.log("Method: cancelReservations - reservations: ", reservations);
+  logMessage(
+    "Method: cancelReservations",
+    "Cancelling Reservations: " + reservations
+  );
 
   const reservationsCollection = await ReservationsCollection();
   //loop through all reservations and update the reservation status to "cancelled"
