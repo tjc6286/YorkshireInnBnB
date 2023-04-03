@@ -68,8 +68,8 @@ export const getDB = async () => {
  * @returns The Reviews collection
  */
 export const ReviewsCollection = async () => {
-  console.log("**Getting Reviews Collection**");
   const db = await getDB();
+  console.log("**Getting Reviews Collection**");
   return db.collection("Review");
 };
 
@@ -79,8 +79,8 @@ export const ReviewsCollection = async () => {
  * @returns The Rooms collection
  */
 export const RoomsCollection = async () => {
-  console.log("**Getting Rooms Collection**");
   const db = await getDB();
+  console.log("**Getting Rooms Collection**");
   return db.collection("Room");
 };
 
@@ -90,8 +90,8 @@ export const RoomsCollection = async () => {
  * @returns The Bookings Collection
  */
 export const BookingsCollection = async () => {
-  console.log("**Getting Bookings Collection**");
   const db = await getDB();
+  console.log("**Getting Bookings Collection**");
   return db.collection("Booking");
 };
 
@@ -101,8 +101,8 @@ export const BookingsCollection = async () => {
  * @returns The InProcessBookings Collection
  */
 export const InProcessBookingCollection = async () => {
-  console.log("**Getting InProcessBookings Collection**");
   const db = await getDB();
+  console.log("**Getting InProcessBookings Collection**");
   return db.collection("InProcessBooking");
 };
 
@@ -112,8 +112,8 @@ export const InProcessBookingCollection = async () => {
  * @returns The Customer Collection
  */
 export const CustomersCollection = async () => {
-  console.log("**Getting Customer Collection**");
   const db = await getDB();
+  console.log("**Getting Customer Collection**");
   return db.collection("Customer");
 };
 
@@ -123,7 +123,7 @@ export const CustomersCollection = async () => {
  * @returns The Reservations Collection
  */
 export const ReservationsCollection = async () => {
-  console.log("**Getting Reservations Collection**");
   const db = await getDB();
+  console.log("**Getting Reservations Collection**");
   return db.collection("RoomReservation");
 };
