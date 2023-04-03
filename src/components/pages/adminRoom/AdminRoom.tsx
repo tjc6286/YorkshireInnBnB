@@ -92,51 +92,51 @@ const AdminRoom: React.FC = () => {
         console.log(selectedRoom);
 
         //if blocking hit the block endpoint
-        if (isBlocking) {
-          fetch("/api/room/block", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              roomNumber: selectedRoom,
-              startDate: startDate,
-              endDate: endDate,
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Success:", data);
-              //reload the page
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        } else {
-          //hit the update price endpoint
-          fetch("/api/room/updatePrice", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              roomNumber: selectedRoom,
-              startDate: startDate,
-              endDate: endDate,
-              price: updatePrice,
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Success:", data);
-              //reload the page
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        }
+        // if (isBlocking) {
+        //   fetch("/api/room/block", {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //       roomNumber: selectedRoom,
+        //       startDate: startDate,
+        //       endDate: endDate,
+        //     }),
+        //   })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //       console.log("Success:", data);
+        //       //reload the page
+        //       window.location.reload();
+        //     })
+        //     .catch((error) => {
+        //       console.error("Error:", error);
+        //     });
+        // } else {
+        //   //hit the update price endpoint
+        //   fetch("/api/room/updatePrice", {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //       roomNumber: selectedRoom,
+        //       startDate: startDate,
+        //       endDate: endDate,
+        //       price: updatePrice,
+        //     }),
+        //   })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //       console.log("Success:", data);
+        //       //reload the page
+        //       window.location.reload();
+        //     })
+        //     .catch((error) => {
+        //       console.error("Error:", error);
+        //     });
+        // }
 
         // Reset all fields
         resetDates();

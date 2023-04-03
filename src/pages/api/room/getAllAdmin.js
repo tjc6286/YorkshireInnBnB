@@ -6,11 +6,17 @@ import { getAllRooms } from "../../../lib/rooms";
  */
 export const get = async () => {
   const rooms = await getAllRooms();
-  // Create a map of blocked rooms
-  const blockedMap = [];
 
-  // Create a map of blocked rooms
+  const blockedMap = [];
   const priceMap = [];
+
+  if (!rooms) {
+    return new Response(null, {
+      status: 404,
+      statusText: "Not found",
+    });
+  }
+
   rooms.forEach((room) => {
     room.unavailableDates.forEach((date) => {
       blockedMap.push({
@@ -29,13 +35,6 @@ export const get = async () => {
       });
     });
   });
-
-  if (!rooms) {
-    return new Response(null, {
-      status: 404,
-      statusText: "Not found",
-    });
-  }
 
   //TODO: CLEAN RESPONSE
   return new Response(

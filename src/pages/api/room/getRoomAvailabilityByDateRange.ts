@@ -10,6 +10,9 @@ export const post: APIRoute = async ({ request }) => {
     const dates = data;
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
+    if (!dates) {
+      return new Response("No dates provided", { status: 400 });
+    }
 
     const room = await getRoomsAvailabilityByDateRange(dates);
     return new Response(JSON.stringify(room), {
