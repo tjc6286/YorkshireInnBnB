@@ -15,7 +15,7 @@ let connectedClient;
  * @returns {Promise<MongoClient>} The mongo client
  */
 const connectToDB = async () => {
-  console.log("Connecting to DB");
+  console.log("**Connecting to DB**");
   connectedClient = await new MongoClient(uri, options).connect();
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
@@ -28,7 +28,7 @@ const connectToDB = async () => {
  */
 export const disconnectDB = async () => {
   if (connectedClient) {
-    console.log("Closing DB connection");
+    console.log("**Closing DB connection**\n");
     await connectedClient.close();
   }
 };
@@ -68,6 +68,7 @@ export const getDB = async () => {
  * @returns The Reviews collection
  */
 export const ReviewsCollection = async () => {
+  console.log("**Getting Reviews Collection**");
   const db = await getDB();
   return db.collection("Review");
 };
@@ -78,6 +79,7 @@ export const ReviewsCollection = async () => {
  * @returns The Rooms collection
  */
 export const RoomsCollection = async () => {
+  console.log("**Getting Rooms Collection**");
   const db = await getDB();
   return db.collection("Room");
 };
@@ -88,6 +90,7 @@ export const RoomsCollection = async () => {
  * @returns The Bookings Collection
  */
 export const BookingsCollection = async () => {
+  console.log("**Getting Bookings Collection**");
   const db = await getDB();
   return db.collection("Booking");
 };
@@ -98,6 +101,7 @@ export const BookingsCollection = async () => {
  * @returns The InProcessBookings Collection
  */
 export const InProcessBookingCollection = async () => {
+  console.log("**Getting InProcessBookings Collection**");
   const db = await getDB();
   return db.collection("InProcessBooking");
 };
@@ -108,6 +112,7 @@ export const InProcessBookingCollection = async () => {
  * @returns The Customer Collection
  */
 export const CustomersCollection = async () => {
+  console.log("**Getting Customer Collection**");
   const db = await getDB();
   return db.collection("Customer");
 };
@@ -118,6 +123,7 @@ export const CustomersCollection = async () => {
  * @returns The Reservations Collection
  */
 export const ReservationsCollection = async () => {
+  console.log("**Getting Reservations Collection**");
   const db = await getDB();
   return db.collection("RoomReservation");
 };

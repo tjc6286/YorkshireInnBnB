@@ -7,6 +7,9 @@ import { ReservationsCollection, disconnectDB } from "./mongodb";
  * @returns Array of reservation objects
  */
 export const getAllReservations = async () => {
+  //SERVER LOGGING
+  console.log("Method: getAllReservations");
+
   const reservations = await (await ReservationsCollection())
     .find({})
     .toArray();
@@ -16,6 +19,9 @@ export const getAllReservations = async () => {
 
 //get reservation by id
 export const getReservationByID = async (reservationID: string) => {
+  //SERVER LOGGING
+  console.log("Method: getReservationByID - reservationID: ", reservationID);
+
   const reservations = await (await ReservationsCollection())
     .find({ _id: new ObjectId(reservationID) })
     .toArray();
@@ -32,6 +38,11 @@ export const getReservationByID = async (reservationID: string) => {
 export const insertNewReservations = async (
   newReservations: Array<Reservation>
 ) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: insertNewReservations - newReservations: ",
+    newReservations
+  );
   const reservations = await ReservationsCollection();
   if (newReservations.length === 1) {
     const insertedReservation = await reservations.insertOne(
@@ -57,6 +68,13 @@ export const updateReservation = async (
   reservationID: string,
   updatedReservation: Reservation
 ) => {
+  //SERVER LOGGING
+  console.log("Method: updateReservation - reservationID: ", reservationID);
+  console.log(
+    "Method: updateReservation - updatedReservation: ",
+    updatedReservation
+  );
+
   const reservations = await ReservationsCollection();
   const returnReservation = await reservations.update(
     { _id: new ObjectId(reservationID) },
@@ -75,6 +93,9 @@ export const updateReservation = async (
  * @returns void
  */
 export const cancelReservations = async (reservations: Array<Reservation>) => {
+  //SERVER LOGGING
+  console.log("Method: cancelReservations - reservations: ", reservations);
+
   const reservationsCollection = await ReservationsCollection();
   //loop through all reservations and update the reservation status to "cancelled"
   for (const reservation of reservations) {
