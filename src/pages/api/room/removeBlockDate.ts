@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { addSpecialDatePrices } from "../../../lib/rooms.js";
+import { removeBlockDate } from "../../../lib/rooms.js";
 /**
  *
  * @returns
@@ -8,14 +8,15 @@ export const post: APIRoute = async ({ request }) => {
   console.log("WORKING");
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
-    const dates = data.dates;
     const roomId = data.roomId;
-    const price = data.price;
+    const dates = data.date;
+
+    console.log(roomId, "in removeBlockDate");
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
-    const room = await addSpecialDatePrices(roomId, price, dates);
+    const success = await removeBlockDate(roomId, dates);
 
-    return new Response(JSON.stringify(room), {
+    return new Response(JSON.stringify(success), {
       status: 200,
     });
   }

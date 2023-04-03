@@ -175,7 +175,7 @@ export const addBlockDates = async (
   dateArray: Array<string>
 ) => {
   const roomsCollection = await RoomsCollection();
-
+  console.log(roomId, dateArray, "in addBlockDates");
   try {
     if (roomId instanceof Array) {
       //write an updateMany query to update all the rooms
@@ -188,8 +188,9 @@ export const addBlockDates = async (
         }
       );
     } else {
+      console.log(roomId, "about to update");
       await roomsCollection.updateOne(
-        { _id: roomId[0] },
+        { _id: new ObjectId(roomId) },
         {
           $push: { unavailableDates: { $each: dateArray } },
         }
@@ -199,6 +200,30 @@ export const addBlockDates = async (
     console.log(error);
     return false;
   } finally {
+  }
+
+  return true;
+};
+
+//given a date: string and a roomId remove the date from the unavailableDates array
+export const removeBlockDate = async (roomId: string, date: string) => {
+  const roomsCollection = await RoomsCollection();
+  //console.log(roomId, "room ID");
+  // check if roomId is a valid ObjectId
+  if (!ObjectId.isValid(roomId)) {
+    console.log(`Invalid ObjectId: ${roomId}`);
+    return false;
+  }
+
+  // remove the given date from the unavailableDates array in the room with the given roomId
+  try {
+    await roomsCollection.updateOne(
+      { _id: new ObjectId(roomId) },
+      { $pull: { unavailableDates: date } }
+    );
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 
   return true;

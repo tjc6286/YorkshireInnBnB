@@ -22,6 +22,7 @@ export const get = async () => {
       blockedMap.push({
         key: room.name + date,
         room: room.name,
+        roomId: room._id,
         date: date,
       });
       //sort blockedMap by date
@@ -34,6 +35,7 @@ export const get = async () => {
       priceMap.push({
         key: room.name + specialPriceDates.date,
         room: room.name,
+        roomId: room._id,
         date: specialPriceDates.date,
         price: specialPriceDates.price,
       });

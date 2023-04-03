@@ -8,7 +8,7 @@ import { removeSpecialDatePrice } from "../../../lib/rooms.js";
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
-    const date = data.dates;
+    const date = data.date;
     const roomId = data.roomId;
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE

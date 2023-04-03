@@ -14,7 +14,7 @@ import {
 import TextField from "@mui/material/TextField";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, format } from "date-fns";
+import { addDays, eachDayOfInterval, format } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import type SpecialDatePrice from "../../../types/specialDatePrice";
@@ -91,52 +91,49 @@ const AdminRoom: React.FC = () => {
         console.log(isBlocking);
         console.log(selectedRoom);
 
-        //if blocking hit the block endpoint
-        // if (isBlocking) {
-        //   fetch("/api/room/block", {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //       roomNumber: selectedRoom,
-        //       startDate: startDate,
-        //       endDate: endDate,
-        //     }),
-        //   })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       console.log("Success:", data);
-        //       //reload the page
-        //       window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //       console.error("Error:", error);
-        //     });
-        // } else {
-        //   //hit the update price endpoint
-        //   fetch("/api/room/updatePrice", {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //       roomNumber: selectedRoom,
-        //       startDate: startDate,
-        //       endDate: endDate,
-        //       price: updatePrice,
-        //     }),
-        //   })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       console.log("Success:", data);
-        //       //reload the page
-        //       window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //       console.error("Error:", error);
-        //     });
-        // }
+        const allDatesBetweenStartAndEndDate = eachDayOfInterval({
+          start: new Date(startDate),
+          end: new Date(endDate),
+        });
+
+        if (isBlocking) {
+          fetch("/api/room/addBlockDates", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              roomId: selectedRoom,
+              dates: allDatesBetweenStartAndEndDate,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              //reload the page
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          //update the special price by hitting the addSpecialDatePrice endpoint
+          fetch("/api/room/addSpecialDatePrice", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              roomId: selectedRoom,
+              dates: allDatesBetweenStartAndEndDate,
+              price: updatePrice,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              //reload the page
+              window.location.reload();
+            });
+        }
 
         // Reset all fields
         resetDates();
@@ -144,6 +141,48 @@ const AdminRoom: React.FC = () => {
         setUpdatePrice("");
       }
     }
+  };
+
+  const removeBlockDate = (roomId: string, date: string) => {
+    fetch("/api/room/removeBlockDate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: roomId,
+        date: date,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //reload the page
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const removeSpecialDatePrice = (roomId: string, date: string) => {
+    fetch("/api/room/removeSpecialDatePrice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: roomId,
+        date: date,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //reload the page
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   useEffect(() => {
@@ -294,9 +333,14 @@ const AdminRoom: React.FC = () => {
                             {format(new Date(entry.date), "MM/dd/yyyy")}
                           </TableCell>
                           <TableCell>
-                            <a href="#" style={{ textDecoration: "underline" }}>
+                            <button
+                              onClick={() => {
+                                console.log(entry);
+                                removeBlockDate(entry.roomId, entry.date);
+                              }}
+                              className="text-red-500 hover:underline">
                               Remove Block
-                            </a>
+                            </button>
                           </TableCell>
                         </TableRow>
                       );
@@ -329,9 +373,17 @@ const AdminRoom: React.FC = () => {
                           </TableCell>
                           <TableCell>$ {entry.price}</TableCell>
                           <TableCell>
-                            <a href="#" style={{ textDecoration: "underline" }}>
+                            <button
+                              onClick={() => {
+                                console.log(entry);
+                                removeSpecialDatePrice(
+                                  entry.roomId,
+                                  entry.date
+                                );
+                              }}
+                              className="text-red-500 hover:underline">
                               Remove Price Change
-                            </a>
+                            </button>
                           </TableCell>
                         </TableRow>
                       );
