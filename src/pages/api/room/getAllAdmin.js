@@ -1,12 +1,12 @@
 import { getAllRooms } from "../../../lib/rooms";
-
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @returns
  */
 export const get = async () => {
   //SERVER LOGGING
-  console.log("Endpoint: /api/room/getAllAdmin - " + new Date().toISOString());
+  logMessage("ENDPOINT: /api/room/getAllAdmin", "Getting All Rooms");
 
   const rooms = await getAllRooms();
 

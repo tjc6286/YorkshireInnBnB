@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import type { Customer } from "../types/customer";
 import { CustomersCollection, disconnectDB } from "./mongodb";
-
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 /**
  * Method to get all customers from the Customers collection
  *
@@ -9,7 +9,7 @@ import { CustomersCollection, disconnectDB } from "./mongodb";
  */
 export const getAllCustomers = async () => {
   //SERVER LOGGING
-  console.log("Method: getAllCustomers");
+  logMessage("Method: getAllCustomers", "Getting All Customers");
 
   const reviews = await (await CustomersCollection()).find({}).toArray();
   return reviews;
@@ -18,7 +18,10 @@ export const getAllCustomers = async () => {
 //get customer by id
 export const getCustomerByID = async (customerID: string) => {
   //SERVER LOGGING
-  console.log("Method: getCustomerByID - customerID: ", customerID.toString());
+  logMessage(
+    "Method: getCustomerByID",
+    "Getting Customer by ID: " + customerID
+  );
 
   const customers = await (await CustomersCollection())
     .find({ _id: new ObjectId(customerID) })
@@ -35,7 +38,10 @@ export const getCustomerByID = async (customerID: string) => {
  */
 export const insertNewCustomer = async (newCustomer: Customer) => {
   //SERVER LOGGING
-  console.log("Method: insertNewCustomer - customerID: ", newCustomer);
+  logMessage(
+    "Method: insertNewCustomer",
+    "Inserting New Customer:" + newCustomer
+  );
 
   const customers = await CustomersCollection();
   const res = await customers.insertOne(newCustomer);
@@ -54,8 +60,14 @@ export const updateCustomer = async (
   updateCustomer: Customer
 ) => {
   //SERVER LOGGING
-  console.log("Method: updateCustomer - customerID: ", customerID);
-  console.log("Method: updateCustomer - updateCustomer: ", updateCustomer);
+  logMessage(
+    "Method: updateCustomer",
+    "Updating Customer by ID: " + customerID
+  );
+  logMessage(
+    "Method: updateCustomer",
+    "Updating Customer with: " + updateCustomer
+  );
 
   const customers = await CustomersCollection();
   const updatedCustomer = customers.update(

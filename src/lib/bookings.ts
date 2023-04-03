@@ -100,8 +100,8 @@ export const updateBooking = async (
   updatedBooking: Booking
 ) => {
   //SERVER LOGGING
-  console.log("Method: updateBooking - bookingID: " + bookingID);
-  console.log("Method: updateBooking - updatedBooking: " + updatedBooking);
+  logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
+  logMessage("Method: updateBooking", "Updated Booking: " + updatedBooking);
 
   const bookingcollection = await BookingsCollection();
   const returnBooking = await bookingcollection.update(
@@ -120,7 +120,10 @@ export const updateBooking = async (
  */
 export const insertNewInProcessBooking = async (newBooking: any) => {
   //SERVER LOGGING
-  console.log("Method: insertNewInProcessBooking - newBooking: " + newBooking);
+  logMessage(
+    "Method: insertNewInProcessBooking",
+    "Inserting New Booking Obj:" + newBooking
+  );
 
   const bookingcollection = await InProcessBookingCollection();
   //TODO: validate the information
@@ -142,7 +145,10 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
  */
 export const getInProcessBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
-  console.log("Method: getInProcessBookingByID - ID: " + bookingId);
+  logMessage(
+    "Method: getInProcessBookingByID",
+    "Getting InProcessBooking by ID: " + bookingId
+  );
 
   //TODO: add the correct parameters to the find
   const inProcessBookings = await (await InProcessBookingCollection())
@@ -161,7 +167,10 @@ export const getInProcessBookingByID = async (bookingId: string) => {
  */
 export const removeBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
-  console.log("Method: removeBookingByID - ID: " + bookingId);
+  logMessage(
+    "Method: removeBookingByID",
+    "Removing Booking by ID: " + bookingId
+  );
 
   const bookingcollection = await BookingsCollection();
   const result = await bookingcollection.findOneAndDelete({ _id: bookingId });

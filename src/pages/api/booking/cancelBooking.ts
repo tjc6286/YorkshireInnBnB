@@ -6,6 +6,7 @@ import {
   removeBookingByID,
 } from "../../../lib/bookings";
 import { insertNewCustomer } from "../../../lib/customers";
+import { logMessage } from "../../../lib/logger";
 import {
   cancelReservations,
   insertNewReservations,
@@ -22,8 +23,10 @@ export const post: APIRoute = async ({ request }) => {
     var bookingId = new ObjectId(data.bookingId);
 
     //SERVER LOGGING
-    console.log("ENDPOINT: /api/booking/cancelBooking");
-    console.log("Booking ID: " + bookingId);
+    logMessage(
+      "ENDPOINT: /api/booking/cancelBooking",
+      "Booking ID: " + bookingId
+    );
 
     var booking = await getBookingByID(bookingId);
 

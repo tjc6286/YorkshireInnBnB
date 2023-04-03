@@ -1,4 +1,5 @@
 import { getBlueRoom } from "../../../lib/rooms";
+import { logMessage } from "../../../lib/logger";
 
 /**
  *
@@ -6,7 +7,8 @@ import { getBlueRoom } from "../../../lib/rooms";
  */
 export const get = async () => {
   //SERVER LOGGING
-  console.log("Endpoint: /api/room/blue - " + new Date().toISOString());
+  logMessage("ENDPOINT: /api/room/blue", "Getting Blue Room");
+
   const room = await getBlueRoom();
   if (!room) {
     return new Response(null, {
