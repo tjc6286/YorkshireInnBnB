@@ -1,7 +1,9 @@
 import {
+  Box,
   Button,
   Checkbox,
   FormControlLabel,
+  Modal,
   Paper,
   Radio,
   RadioGroup,
@@ -11,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -20,12 +23,25 @@ import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import type SpecialDatePrice from "../../../types/specialDatePrice";
 
+const modalStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const AdminBooking: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
   const [bookingList, setBookingList] = React.useState<any[]>([]);
-
+  const [modalState, setModalState] = React.useState(false);
+  const [bookingIdToCancel, setBookingIdToCancel] = React.useState("");
   auth.onAuthStateChanged((user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -61,6 +77,38 @@ const AdminBooking: React.FC = () => {
     setEndDate(null);
   };
 
+  const handleOpenModal = (bookingId: string) => {
+    setBookingIdToCancel(bookingId);
+    setModalState(true);
+  };
+
+  const handleCloseModal = () => {
+    setBookingIdToCancel("");
+    setModalState(false);
+  };
+
+  const handleCancelBooking = (bookingId: string) => {
+    // fetch("/api/booking/cancelBooking", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     bookingId: bookingIdToCancel,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setBookingList(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+    alert("Booking cancelled");
+    handleCloseModal();
+  };
+
   const handleSubmit = () => {
     if (startDate && endDate) {
       //TODO: remove after testing
@@ -79,6 +127,7 @@ const AdminBooking: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setBookingList(data);
       })
       .catch((error) => {
@@ -198,16 +247,22 @@ const AdminBooking: React.FC = () => {
                           </TableCell>
                           <TableCell>${entry.booking.totalPrice}</TableCell>
                           <TableCell>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => {}}
-                              style={{
-                                backgroundColor: "red",
-                                color: "white",
-                              }}>
-                              Cancel
-                            </Button>
+                            {entry.booking.isCancelled ? (
+                              <p>Cancelled</p>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                  handleOpenModal(entry.booking._id.toString());
+                                }}
+                                style={{
+                                  backgroundColor: "red",
+                                  color: "white",
+                                }}>
+                                Cancel
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       );
@@ -219,6 +274,43 @@ const AdminBooking: React.FC = () => {
           </div>
         </div>
       </div>
+      <Modal
+        open={modalState}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Cancelling a Booking
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {`Are you sure you want to cancel booking with the ID: ${bookingIdToCancel}?`}
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleCancelBooking(bookingIdToCancel);
+            }}
+            style={{
+              backgroundColor: "#2196f3",
+              color: "white",
+              marginRight: "10px",
+            }}>
+            Cancel Booking
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleCloseModal}
+            style={{
+              backgroundColor: "red",
+              color: "white",
+            }}>
+            Stop Cancel
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 };

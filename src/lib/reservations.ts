@@ -13,6 +13,14 @@ export const getAllReservations = async () => {
   return reservations;
 };
 
+//get reservation by id
+export const getReservationByID = async (reservationID: string) => {
+  const reservations = await (await ReservationsCollection())
+    .find({ _id: new ObjectId(reservationID) })
+    .toArray();
+  return reservations[0];
+};
+
 /**
  * Method to insert a new reservation/s into the Reservations collection
  *

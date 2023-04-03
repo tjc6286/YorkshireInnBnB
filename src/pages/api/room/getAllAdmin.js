@@ -24,6 +24,10 @@ export const get = async () => {
         room: room.name,
         date: date,
       });
+      //sort blockedMap by date
+      blockedMap.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
     });
 
     room.specialPriceDates.forEach((specialPriceDates) => {
@@ -32,6 +36,10 @@ export const get = async () => {
         room: room.name,
         date: specialPriceDates.date,
         price: specialPriceDates.price,
+      });
+      //sort priceMap by date
+      priceMap.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
       });
     });
   });
