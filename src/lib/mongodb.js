@@ -15,7 +15,10 @@ let connectedClient;
  * @returns {Promise<MongoClient>} The mongo client
  */
 const connectToDB = async () => {
-  console.log("[Connecting to DB] - " + new Date().toLocaleTimeString());
+  console.log(
+    "\x1b[36m%s\x1b[0m",
+    "[Connecting to DB] - " + new Date().toLocaleTimeString()
+  );
   if (!connectedClient) {
     connectedClient = await new MongoClient(uri, options);
   }
@@ -32,6 +35,7 @@ const connectToDB = async () => {
 export const disconnectDB = async () => {
   if (connectedClient) {
     console.log(
+      "\x1b[33m%s\x1b[0m",
       "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n"
     );
     await connectedClient.close();
