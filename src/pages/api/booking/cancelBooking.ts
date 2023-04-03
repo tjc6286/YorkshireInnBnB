@@ -20,7 +20,13 @@ export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {
     var data = await request.json();
     var bookingId = new ObjectId(data.bookingId);
+
+    //SERVER LOGGING
+    console.log("ENDPOINT: /api/booking/cancelBooking");
+    console.log("Booking ID: " + bookingId);
+
     var booking = await getBookingByID(bookingId);
+
     if (!booking) {
       return new Response(null, { status: 400 });
     } else {

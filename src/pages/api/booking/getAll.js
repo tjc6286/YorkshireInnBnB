@@ -5,7 +5,9 @@ import { getAllBookings } from "../../../lib/bookings";
  * @returns
  */
 export const get = async () => {
-  console.log("LOG - Get ALL BOOKINGS");
+  //SERVER LOGGING
+  console.log("Endpoint: /api/booking/getAll - " + new Date().toISOString());
+
   const bookings = await getAllBookings();
   if (!bookings) {
     return new Response(null, {

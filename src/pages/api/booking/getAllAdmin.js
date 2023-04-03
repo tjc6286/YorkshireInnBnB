@@ -6,6 +6,11 @@ import { getReservationByID } from "../../../lib/reservations";
  * @returns
  */
 export const get = async () => {
+  //SERVER LOGGING
+  console.log(
+    "Endpoint: /api/booking/getAllAdmin - " + new Date().toISOString()
+  );
+
   const bookings = await getAllBookings();
   if (!bookings) {
     return new Response(null, {

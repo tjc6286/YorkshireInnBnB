@@ -11,6 +11,11 @@ export const post: APIRoute = async ({ request }) => {
     const dates = data.dates;
     const roomId = data.roomId;
 
+    //SERVER LOGGING
+    console.log("ENDPOINT: /api/room/addBlockDates");
+    console.log("Room ID: " + roomId);
+    console.log("Dates: " + dates);
+
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
     const room = await addBlockDates(roomId, dates);
 

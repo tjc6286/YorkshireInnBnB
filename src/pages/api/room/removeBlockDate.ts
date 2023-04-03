@@ -11,7 +11,12 @@ export const post: APIRoute = async ({ request }) => {
     const roomId = data.roomId;
     const dates = data.date;
 
-    console.log(roomId, "in removeBlockDate");
+    //SERVER LOGGING
+    console.log(
+      "ENDPOINT: /api/room/removeBlockDate - " + new Date().toISOString
+    );
+    console.log("Room ID: " + roomId);
+    console.log("Dates: " + dates);
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
     const success = await removeBlockDate(roomId, dates);

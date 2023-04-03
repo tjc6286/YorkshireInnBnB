@@ -5,6 +5,9 @@ import { getAllRooms } from "../../../lib/rooms";
  * @returns
  */
 export const get = async () => {
+  //SERVER LOGGING
+  console.log("Endpoint: /api/room/getAllAdmin - " + new Date().toISOString());
+
   const rooms = await getAllRooms();
 
   const blockedMap = [];

@@ -12,6 +12,12 @@ export const post: APIRoute = async ({ request }) => {
     const roomId = data.roomId;
     const price = data.price;
 
+    //SERVER LOGGING
+    console.log("ENDPOINT: /api/room/addSpecialDatePrice");
+    console.log("Room ID: " + roomId);
+    console.log("Dates: " + dates);
+    console.log("Price: " + price);
+
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
     const room = await addSpecialDatePrices(roomId, price, dates);
 
