@@ -1,4 +1,16 @@
-import { Checkbox, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -71,12 +83,61 @@ const AdminRoom: React.FC = () => {
   const handleSubmit = () => {
     if (startDate && endDate) {
       if (isBlocking || updatePrice !== "") {
+        //TODO: remove after testing
         console.log("submitting");
         console.log(startDate);
         console.log(endDate);
         console.log(updatePrice);
         console.log(isBlocking);
         console.log(selectedRoom);
+
+        //if blocking hit the block endpoint
+        if (isBlocking) {
+          fetch("/api/room/block", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              roomNumber: selectedRoom,
+              startDate: startDate,
+              endDate: endDate,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+              //reload the page
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          //hit the update price endpoint
+          fetch("/api/room/updatePrice", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              roomNumber: selectedRoom,
+              startDate: startDate,
+              endDate: endDate,
+              price: updatePrice,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+              //reload the page
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+
         // Reset all fields
         resetDates();
         setIsBlocking(false);
@@ -86,41 +147,14 @@ const AdminRoom: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch("/api/room/getAll", {
+    fetch("/api/room/getAllAdmin", {
       method: "GET",
     })
       .then((response) => response.json())
       .then((data) => {
-        setRoomList(data);
-        // Create a map of blocked rooms
-        const blockedMap: Array<any> = [];
-
-        // Create a map of blocked rooms
-        const priceMap: Array<any> = [];
-
-        //getting the blocked dates for each room
-        data.forEach((room: any) => {
-          room.unavailableDates.forEach((date: any) => {
-            blockedMap.push({
-              key: room.name + date,
-              room: room.name,
-              date: date,
-            });
-          });
-
-          room.specialPriceDates.forEach(
-            (specialPriceDates: SpecialDatePrice) => {
-              priceMap.push({
-                key: room.name + specialPriceDates.date,
-                room: room.name,
-                date: specialPriceDates.date,
-                price: specialPriceDates.price,
-              });
-            }
-          );
-        });
-        setPriceMap(priceMap);
-        setBlockMap(blockedMap);
+        setRoomList(data.rooms);
+        setPriceMap(data.priceMap);
+        setBlockMap(data.blockedMap);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -154,7 +188,7 @@ const AdminRoom: React.FC = () => {
           {/* Content */}
           <div className="h-[50%] pt-10 text-white">
             <h2 className="text-2xl font-bold mb-2">
-              Room Blocking/ Priceing Update
+              Room Blocking/ Pricing Update
             </h2>
             {/* TOP CONTROLS */}
             <div className="flex">
@@ -208,7 +242,12 @@ const AdminRoom: React.FC = () => {
                 </LocalizationProvider>
               </div>
               <button
-                disabled={!endDate}
+                disabled={
+                  !selectedRoom ||
+                  !startDate ||
+                  !endDate ||
+                  (!updatePrice && !isBlocking)
+                }
                 className="px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px"
                 style={{
                   fontFamily: "Martel",
@@ -218,7 +257,7 @@ const AdminRoom: React.FC = () => {
                   letterSpacing: "0.13em",
                 }}
                 onClick={handleSubmit}>
-                Submit
+                Update
               </button>
             </div>
             {/* ROOM SELECTION TABLE */}
@@ -237,91 +276,69 @@ const AdminRoom: React.FC = () => {
             {/* Table for Room priceing or blocked */}
             <h2 className="text-2xl font-bold my-2">Blocked Off Dates</h2>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Room Name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Blocked Date Range
-                    </th>
-                    <th scope="col" className="px-6 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {blockedMap.map((entry) => {
-                    return (
-                      <tr
-                        key={entry.key}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {entry.room}
-                        </th>
-                        <td className="px-6 py-4">
-                          {format(new Date(entry.date), "MM/dd/yyyy")}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <a
-                            href="#"
-                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            Remove Block
-                          </a>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Room Name</TableCell>
+                      <TableCell>Blocked Date Range</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {blockedMap.map((entry) => {
+                      return (
+                        <TableRow key={entry.key}>
+                          <TableCell>{entry.room}</TableCell>
+                          <TableCell>
+                            {format(new Date(entry.date), "MM/dd/yyyy")}
+                          </TableCell>
+                          <TableCell>
+                            <a href="#" style={{ textDecoration: "underline" }}>
+                              Remove Block
+                            </a>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
             <hr className="my-4" />
             {/* TABLE FOR ROOM PRICING */}
             <h2 className="text-2xl font-bold my-2">Special Price Dates</h2>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Room Name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Date Range
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price Change
-                    </th>
-                    <th scope="col" className="px-6 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {priceMap.map((entry) => {
-                    return (
-                      <tr
-                        key={entry.key}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {entry.room}
-                        </th>
-                        <td className="px-6 py-4">
-                          {format(new Date(entry.date), "MM/dd/yyyy")}
-                        </td>
-                        <td className="px-6 py-4">$ {entry.price}</td>
-                        <td className="px-6 py-4 text-right">
-                          <a
-                            href="#"
-                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            Remove Price Change
-                          </a>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow className="font-bold">
+                      <TableCell>Room Name</TableCell>
+                      <TableCell>Date Range</TableCell>
+                      <TableCell>Price Change</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {priceMap.map((entry) => {
+                      return (
+                        <TableRow key={entry.key}>
+                          <TableCell>{entry.room}</TableCell>
+                          <TableCell>
+                            {format(new Date(entry.date), "MM/dd/yyyy")}
+                          </TableCell>
+                          <TableCell>$ {entry.price}</TableCell>
+                          <TableCell>
+                            <a href="#" style={{ textDecoration: "underline" }}>
+                              Remove Price Change
+                            </a>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
         </div>
