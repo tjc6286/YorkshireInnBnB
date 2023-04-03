@@ -21,6 +21,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addDays, format } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
+import type { Customer } from "../../../types/customer";
 import type SpecialDatePrice from "../../../types/specialDatePrice";
 
 const modalStyle = {
@@ -41,7 +42,10 @@ const AdminBooking: React.FC = () => {
   const [endDate, setEndDate] = React.useState<string | null>(null);
   const [bookingList, setBookingList] = React.useState<any[]>([]);
   const [modalState, setModalState] = React.useState(false);
+  const [customerModalState, setCustomerModalState] = React.useState(false);
   const [bookingIdToCancel, setBookingIdToCancel] = React.useState("");
+  const [customerToView, setCustomerToView] = React.useState<Customer>();
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -85,6 +89,16 @@ const AdminBooking: React.FC = () => {
   const handleCloseModal = () => {
     setBookingIdToCancel("");
     setModalState(false);
+  };
+
+  const handleOpenCustomerModal = (customer: Customer) => {
+    setCustomerModalState(true);
+    setCustomerToView(customer);
+  };
+
+  const handleCloseCustomerModal = () => {
+    setCustomerModalState(false);
+    setCustomerToView(undefined);
   };
 
   const handleCancelBooking = (bookingId: string) => {
@@ -226,6 +240,7 @@ const AdminBooking: React.FC = () => {
                       <TableCell>Is Third Party</TableCell>
                       <TableCell>Total Price</TableCell>
                       <TableCell></TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -246,6 +261,20 @@ const AdminBooking: React.FC = () => {
                             {entry.booking.isThirdParty ? "True" : "False"}
                           </TableCell>
                           <TableCell>${entry.booking.totalPrice}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                handleOpenCustomerModal(entry.customer);
+                              }}
+                              style={{
+                                backgroundColor: "blue",
+                                color: "white",
+                              }}>
+                              Customer
+                            </Button>
+                          </TableCell>
                           <TableCell>
                             {entry.booking.isCancelled ? (
                               <p>Cancelled</p>
@@ -274,6 +303,7 @@ const AdminBooking: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* CANCELATION MODAL */}
       <Modal
         open={modalState}
         onClose={handleCloseModal}
@@ -308,6 +338,40 @@ const AdminBooking: React.FC = () => {
               color: "white",
             }}>
             Stop Cancel
+          </Button>
+        </Box>
+      </Modal>
+      {/* CUSTOMER INFO MODAL */}
+      <Modal
+        open={customerModalState}
+        onClose={handleCloseCustomerModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Customer Information:
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {`Name: ${customerToView?.firstName} ${customerToView?.lastName}`}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {`Email: ${customerToView?.email}`}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {`Phone: ${customerToView?.phone}`}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {`id: ${customerToView?._id} `}
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleCloseCustomerModal}
+            style={{
+              backgroundColor: "red",
+              color: "white",
+            }}>
+            Close
           </Button>
         </Box>
       </Modal>
