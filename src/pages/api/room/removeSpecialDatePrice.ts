@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { addHoldDates } from "../../../lib/rooms.js";
+import { removeSpecialDatePrice } from "../../../lib/rooms.js";
 
 /**
  *
@@ -8,16 +8,19 @@ import { addHoldDates } from "../../../lib/rooms.js";
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
+    const date = data.date;
     const roomId = data.roomId;
-    const dates = data.dates;
 
     //SERVER LOGGING
-    console.log("ENDPOINT: /api/room/addHoldDates");
+    console.log(
+      "ENDPOINT: /api/room/removeSpecialDatePrice - " + new Date().toISOString
+    );
     console.log("Room ID: " + roomId);
-    console.log("Dates: " + dates);
+    console.log("Date: " + date);
 
-    //VALIDATION NEEDED
-    const room = await addHoldDates(roomId, dates);
+    //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
+    const room = await removeSpecialDatePrice(roomId, date);
+
     return new Response(JSON.stringify(room), {
       status: 200,
     });

@@ -1,14 +1,19 @@
 import { ObjectId } from "mongodb";
 import isDateInArray from "../helpers/isDateInArray";
 import type { RoomAvailability } from "../types/room";
-import { RoomsCollection } from "./mongodb";
+import type SpecialDatePrice from "../types/specialDatePrice";
+import { RoomsCollection, disconnectDB } from "./mongodb";
 
 /**
  * Method to get all rooms from the Rooms collection
  * @returns Array of room objects
  */
 export const getAllRooms = async () => {
+  //SERVER LOGGING
+  console.log("Method: getAllRooms");
+
   const rooms = await (await RoomsCollection()).find({}).toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -18,9 +23,13 @@ export const getAllRooms = async () => {
  * @returns Array containing the Bolero room object
  */
 export const getBoleroRoom = async () => {
+  //SERVER LOGGING
+  console.log("Method: getBoleroRoom");
+
   const rooms = await (await RoomsCollection())
     .find({ name: "Bolero" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -30,9 +39,13 @@ export const getBoleroRoom = async () => {
  * @returns Array containing The Rose Suit room object
  */
 export const getRoseRoom = async () => {
+  //SERVER LOGGING
+  console.log("Method: getRoseRoom");
+
   const rooms = await (await RoomsCollection())
     .find({ name: "The Rose Suite" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -42,9 +55,13 @@ export const getRoseRoom = async () => {
  * @returns Array containing The Lodge Suit room object
  */
 export const getLodgeRoom = async () => {
+  //SERVER LOGGING
+  console.log("Method: getLodgeRoom");
+
   const rooms = await (await RoomsCollection())
     .find({ name: "Lodge Suite" })
     .toArray();
+  disconnectDB();
   return rooms;
 };
 
@@ -54,10 +71,31 @@ export const getLodgeRoom = async () => {
  * @returns Array containing The Blue room object
  */
 export const getBlueRoom = async () => {
+  //SERVER LOGGING
+  console.log("Method: getBlueRoom");
+
   const rooms = await (await RoomsCollection())
     .find({ name: "Blue Room" })
     .toArray();
+  disconnectDB();
   return rooms;
+};
+
+/**
+ * Method to get the special price dates for a room from the Rooms collection by its ID.
+ *
+ * @param roomId ID of the room to get from the Rooms collection
+ * @returns Array of special date price objects for the room id passed in.
+ */
+export const getSpecialDatePrice = async (roomId: string) => {
+  //SERVER LOGGING
+  console.log("Method: getSpecialDatePrice - roomId: ", roomId);
+
+  const room = await (await RoomsCollection())
+    .find({ _id: new ObjectId(roomId) })
+    .toArray();
+  disconnectDB();
+  return room[0].specialPriceDates;
 };
 
 /**
@@ -67,9 +105,13 @@ export const getBlueRoom = async () => {
  * @returns Room object
  */
 export const getRoomById = async (roomId: string) => {
+  //SERVER LOGGING
+  console.log("Method: getRoomById - roomId: ", roomId);
+
   const room = await (await RoomsCollection())
     .find({ _id: new ObjectId(roomId) })
     .toArray();
+  disconnectDB();
   return room;
 };
 
@@ -81,6 +123,12 @@ export const getRoomById = async (roomId: string) => {
 export const getRoomsAvailabilityByDateRange = async (
   dateArray: Array<string>
 ) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: getRoomsAvailabilityByDateRange - dateArray: ",
+    dateArray
+  );
+
   let formattedDates: Array<Date> = [];
   dateArray.forEach((date) => {
     formattedDates.push(new Date(date));
@@ -106,7 +154,7 @@ export const getRoomsAvailabilityByDateRange = async (
       room.isAvailable = true;
     }
   });
-
+  disconnectDB();
   return rooms;
 };
 
@@ -120,6 +168,14 @@ export const addHoldDates = async (
   roomId: string | Array<string>,
   dateArray: Array<string>
 ) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: addHoldDates - roomId: ",
+    roomId,
+    " - dateArray: ",
+    dateArray
+  );
+
   const roomsCollection = await RoomsCollection();
 
   try {
@@ -146,6 +202,172 @@ export const addHoldDates = async (
     return false;
   } finally {
   }
+  disconnectDB();
+  return true;
+};
+
+/**
+ * Method to add an array of dates to a room's unavailableDates array.
+ * @param roomId ID of the room to add the dates to
+ * @param dateArray Array of dates to add to the room's unavailableDates array
+ * @returns Boolean indicating success or failure
+ */
+export const addBlockDates = async (
+  roomId: string | Array<string>,
+  dateArray: Array<string>
+) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: addBlockDates - roomId: ",
+    roomId,
+    " - dateArray: ",
+    dateArray
+  );
+
+  const roomsCollection = await RoomsCollection();
+  try {
+    if (roomId instanceof Array) {
+      //write an updateMany query to update all the rooms
+      const objs = roomId.map((id) => new ObjectId(id));
+      //console.log(objs, "about to update");
+      await roomsCollection.updateMany(
+        { _id: { $in: objs } },
+        {
+          $push: { unavailableDates: { $each: dateArray } },
+        }
+      );
+    } else {
+      //console.log(roomId, "about to update");
+      await roomsCollection.updateOne(
+        { _id: new ObjectId(roomId) },
+        {
+          $push: { unavailableDates: { $each: dateArray } },
+        }
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  } finally {
+    disconnectDB();
+  }
 
   return true;
+};
+
+/**
+ * Method to removea date from a room's unavailableDates array.
+ *
+ * @param roomId ID of the room to remove the date from
+ * @param date Date to remove from the room's unavailableDates array
+ * @returns Boolean indicating success or failure
+ */
+export const removeBlockDate = async (roomId: string, date: string) => {
+  //SERVER LOGGING
+  console.log("Method: removeBlockDate - roomId: ", roomId, " - date: ", date);
+
+  const roomsCollection = await RoomsCollection();
+  // check if roomId is a valid ObjectId
+  if (!ObjectId.isValid(roomId)) {
+    console.log(`Invalid ObjectId: ${roomId}`);
+    return false;
+  }
+
+  try {
+    await roomsCollection.updateOne(
+      { _id: new ObjectId(roomId) },
+      { $pull: { unavailableDates: date } }
+    );
+  } catch (error) {
+    console.log(error);
+    return false;
+  } finally {
+    disconnectDB();
+  }
+  return true;
+};
+
+/**
+ * Method to add a SpecialDatePrice object to a room's specialPriceDates array.
+ *
+ * @param roomId ID of the room to add the SpecialDatePrice object to
+ * @param updatedPrice Price to update the room to
+ * @param dates Array of dates to add to the room's specialPriceDates array
+ * @returns Boolean indicating success or failure
+ */
+export const addSpecialDatePrices = async (
+  roomId: string,
+  updatedPrice: number,
+  dates: string[]
+) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: addSpecialDatePrices - roomId: ",
+    roomId,
+    " - updatedPrice: ",
+    updatedPrice,
+    " - dates: ",
+    dates
+  );
+
+  const roomsCollection = await RoomsCollection();
+
+  try {
+    const specialDatePrices: SpecialDatePrice[] = dates.map((date) => ({
+      date,
+      price: updatedPrice,
+    }));
+
+    await roomsCollection.updateOne(
+      { _id: new ObjectId(roomId) },
+      { $push: { specialPriceDates: { $each: specialDatePrices } } }
+    );
+
+    console.log(`Added special date prices for room with ID: ${roomId}`);
+  } catch (error) {
+    console.error("Error adding special date prices", error);
+  } finally {
+    disconnectDB();
+  }
+};
+
+/**
+ * Method to remove a SpecialDatePrice object from a room's specialPriceDates array by a given date.
+ *
+ * @param roomId ID of the room to remove the SpecialDatePrice object from
+ * @param dateToRemove Date to remove from the room's specialPriceDates array
+ * @returns Boolean indicating success or failure
+ */
+export const removeSpecialDatePrice = async (
+  roomId: string,
+  dateToRemove: string
+) => {
+  //SERVER LOGGING
+  console.log(
+    "Method: removeSpecialDatePrice - roomId: ",
+    roomId,
+    " - dateToRemove: ",
+    dateToRemove
+  );
+
+  const roomsCollection = await RoomsCollection();
+
+  try {
+    const result = await roomsCollection.findOneAndUpdate(
+      { _id: new ObjectId(roomId) },
+      { $pull: { specialPriceDates: { date: dateToRemove } } },
+      { returnDocument: "after" }
+    );
+
+    console.log(
+      `Removed special date price for ${dateToRemove} in room with ID: ${roomId}`
+    );
+
+    return result.value;
+  } catch (error) {
+    console.error("Error removing special date price", error);
+    return null;
+  } finally {
+    disconnectDB();
+  }
 };

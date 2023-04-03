@@ -1,24 +1,27 @@
 import type { APIRoute } from "astro";
-import { addHoldDates } from "../../../lib/rooms.js";
-
+import { removeBlockDate } from "../../../lib/rooms.js";
 /**
  *
  * @returns
  */
 export const post: APIRoute = async ({ request }) => {
+  console.log("WORKING");
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
     const roomId = data.roomId;
-    const dates = data.dates;
+    const dates = data.date;
 
     //SERVER LOGGING
-    console.log("ENDPOINT: /api/room/addHoldDates");
+    console.log(
+      "ENDPOINT: /api/room/removeBlockDate - " + new Date().toISOString
+    );
     console.log("Room ID: " + roomId);
     console.log("Dates: " + dates);
 
-    //VALIDATION NEEDED
-    const room = await addHoldDates(roomId, dates);
-    return new Response(JSON.stringify(room), {
+    //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
+    const success = await removeBlockDate(roomId, dates);
+
+    return new Response(JSON.stringify(success), {
       status: 200,
     });
   }
