@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 import type { Booking } from "../types/Booking";
 import type { Customer } from "../types/customer";
 import type { Reservation } from "../types/reservation";
@@ -18,8 +19,7 @@ import {
  */
 export const getAllBookings = async () => {
   //SERVER LOGGING
-  console.log("Method: getAllBookings");
-
+  logMessage("Method: getAllBookings", "Getting All Bookings");
   const bookings = await (await BookingsCollection()).find({}).toArray();
   disconnectDB();
   return bookings;
@@ -32,7 +32,7 @@ export const getAllBookings = async () => {
  */
 export const getBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
-  console.log("Method: getBookingByID - ID: " + bookingId);
+  logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
 
   const bookings = await (await BookingsCollection())
     .find({ _id: bookingId })
@@ -49,7 +49,7 @@ export const getBookingByID = async (bookingId: ObjectId) => {
  */
 export const bookingLookup = async (bookingId: string) => {
   //SERVER LOGGING
-  console.log("Method: bookingLookup - ID: " + bookingId);
+  logMessage("Method: bookingLookup", "Getting Booking by ID: " + bookingId);
 
   const bookings = await (await BookingsCollection())
     .find({ _id: new ObjectId(bookingId) })
@@ -80,7 +80,7 @@ export const bookingLookup = async (bookingId: string) => {
  */
 export const insertNewbooking = async (newBooking: any) => {
   //SERVER LOGGING
-  console.log("Method: insertNewbooking - newBooking: " + newBooking);
+  logMessage("Method: insertNewbooking", "Inserting New Booking" + newBooking);
 
   const bookingcollection = await BookingsCollection();
 

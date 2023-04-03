@@ -3,7 +3,7 @@
  * https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#std-label-node-connect-to-mongodb
  */
 import { MongoClient } from "mongodb";
-
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 const uri = import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
@@ -15,10 +15,7 @@ let connectedClient;
  * @returns {Promise<MongoClient>} The mongo client
  */
 const connectToDB = async () => {
-  console.log(
-    "\x1b[36m%s\x1b[0m",
-    "[Connecting to DB] - " + new Date().toLocaleTimeString()
-  );
+  logBlue("[Connecting to DB] - " + new Date().toLocaleTimeString());
   if (!connectedClient) {
     connectedClient = await new MongoClient(uri, options);
   }
@@ -34,8 +31,7 @@ const connectToDB = async () => {
  */
 export const disconnectDB = async () => {
   if (connectedClient) {
-    console.log(
-      "\x1b[33m%s\x1b[0m",
+    logYellow(
       "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n"
     );
     await connectedClient.close();
@@ -78,7 +74,7 @@ export const getDB = async () => {
  */
 export const ReviewsCollection = async () => {
   const db = await getDB();
-  console.log("**Getting Reviews Collection**");
+  logMessage("DB Utility", "Getting Review Collection");
   return db.collection("Review");
 };
 
@@ -89,7 +85,7 @@ export const ReviewsCollection = async () => {
  */
 export const RoomsCollection = async () => {
   const db = await getDB();
-  console.log("**Getting Rooms Collection**");
+  logMessage("DB Utility", "Getting Rooms Collection");
   return db.collection("Room");
 };
 
@@ -100,7 +96,7 @@ export const RoomsCollection = async () => {
  */
 export const BookingsCollection = async () => {
   const db = await getDB();
-  console.log("**Getting Bookings Collection**");
+  logMessage("DB Utility", "Getting Bookings Collection");
   return db.collection("Booking");
 };
 
@@ -111,7 +107,7 @@ export const BookingsCollection = async () => {
  */
 export const InProcessBookingCollection = async () => {
   const db = await getDB();
-  console.log("**Getting InProcessBookings Collection**");
+  logMessage("DB Utility", "Getting InProcessBookings Collection");
   return db.collection("InProcessBooking");
 };
 
@@ -122,7 +118,7 @@ export const InProcessBookingCollection = async () => {
  */
 export const CustomersCollection = async () => {
   const db = await getDB();
-  console.log("**Getting Customer Collection**");
+  logMessage("DB Utility", "Getting Customer Collection");
   return db.collection("Customer");
 };
 
@@ -133,6 +129,6 @@ export const CustomersCollection = async () => {
  */
 export const ReservationsCollection = async () => {
   const db = await getDB();
-  console.log("**Getting Reservations Collection**");
+  logMessage("DB Utility", "Getting Reservations Collection");
   return db.collection("RoomReservation");
 };
