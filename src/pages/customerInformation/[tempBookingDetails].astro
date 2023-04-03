@@ -8,6 +8,7 @@ import { getInProcessBookingByID } from "../../lib/bookings";
 let bookingInfo: any;
 try {
   bookingInfo = await getInProcessBookingByID(tempBookingDetails!);
+  console.log(bookingInfo);
 } catch (error) {
   console.log(error);
   Astro.redirect("/404");
