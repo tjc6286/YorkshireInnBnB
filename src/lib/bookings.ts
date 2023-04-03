@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import type { Booking } from "../types/Booking";
 import type { Customer } from "../types/customer";
 import type { Reservation } from "../types/reservation";
+import { getCustomerByID } from "./customers";
 import {
   BookingsCollection,
   getMongoClient,

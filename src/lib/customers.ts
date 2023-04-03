@@ -12,6 +12,14 @@ export const getAllCustomers = async () => {
   return reviews;
 };
 
+//get customer by id
+export const getCustomerByID = async (customerID: string) => {
+  const customers = await (await CustomersCollection())
+    .find({ _id: new ObjectId(customerID) })
+    .toArray();
+  return customers[0];
+};
+
 /**
  * Method to insert a new customer into the Customers collection.
  *
