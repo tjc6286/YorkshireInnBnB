@@ -16,9 +16,12 @@ let connectedClient;
  */
 const connectToDB = async () => {
   console.log("[Connecting to DB] - " + new Date().toLocaleTimeString());
-  connectedClient = await new MongoClient(uri, options).connect();
+  if (!connectedClient) {
+    connectedClient = await new MongoClient(uri, options);
+  }
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
+  await connectedClient.connect();
   return connectedClient.db("YorkshireInnBnB");
 };
 
