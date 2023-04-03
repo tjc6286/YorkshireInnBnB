@@ -84,12 +84,12 @@ const AdminRoom: React.FC = () => {
     if (startDate && endDate) {
       if (isBlocking || updatePrice !== "") {
         //TODO: remove after testing
-        console.log("submitting");
-        console.log(startDate);
-        console.log(endDate);
-        console.log(updatePrice);
-        console.log(isBlocking);
-        console.log(selectedRoom);
+        // console.log("submitting");
+        // console.log(startDate);
+        // console.log(endDate);
+        // console.log(updatePrice);
+        // console.log(isBlocking);
+        // console.log(selectedRoom);
 
         const allDatesBetweenStartAndEndDate = eachDayOfInterval({
           start: new Date(startDate),
@@ -131,6 +131,7 @@ const AdminRoom: React.FC = () => {
             .then((response) => response.json())
             .then((data) => {
               //reload the page
+              console.log(data);
               window.location.reload();
             });
         }

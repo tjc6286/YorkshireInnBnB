@@ -23,6 +23,7 @@ export const logYellow = (text: string): void => {
 
 /**
  * Method to log a message with entrypoint and time to the console.
+ * The entrypoint is in bold in the output to make it more readable.
  */
 export const logMessage = (entryPoint: string, message: string): void => {
   console.log(

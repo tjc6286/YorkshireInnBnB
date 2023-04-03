@@ -6,7 +6,6 @@ import { logMessage } from "../../../lib/logger.js";
  * @returns
  */
 export const post: APIRoute = async ({ request }) => {
-  console.log("WORKING");
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
     const dates = data.dates;
