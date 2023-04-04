@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { addHoldDates } from "../../../lib/rooms.js";
+import { addBlockDates } from "../../../lib/rooms.js";
 import { logMessage } from "../../../lib/logger.js";
 /**
  *
@@ -12,11 +12,11 @@ export const post: APIRoute = async ({ request }) => {
     const roomId = data.roomId;
 
     //SERVER LOGGING
-    logMessage("ENDPOINT: /api/room/addHoldDates", "Room ID: " + roomId);
-    logMessage("ENDPOINT: /api/room/addHoldDates", "Dates: " + dates);
+    logMessage("ENDPOINT: /api/room/addBlockDates", "Room ID: " + roomId);
+    logMessage("ENDPOINT: /api/room/addBlockDates", "Dates: " + dates);
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE
-    const room = await addHoldDates(roomId, dates);
+    const room = await addBlockDates(roomId, dates);
 
     return new Response(JSON.stringify(room), {
       status: 200,

@@ -1,9 +1,14 @@
 import { ObjectId } from "mongodb";
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 import type { Booking } from "../types/Booking";
 import type { Customer } from "../types/customer";
 import type { Reservation } from "../types/reservation";
+import { getCustomerByID } from "./customers";
 import {
+  disconnectDB,
   BookingsCollection,
+  CustomerCollection,
+  ReservationCollection,
   getMongoClient,
   InProcessBookingCollection,
 } from "./mongodb";
@@ -13,7 +18,10 @@ import {
  * @returns Array of Booking objects
  */
 export const getAllBookings = async () => {
+  //SERVER LOGGING
+  logMessage("Method: getAllBookings", "Getting All Bookings");
   const bookings = await (await BookingsCollection()).find({}).toArray();
+  disconnectDB();
   return bookings;
 };
 
@@ -22,12 +30,47 @@ export const getAllBookings = async () => {
  * @param bookingId ID of the Booking to get from the Bookings collection
  * @returns Booking object
  */
-export const getBookingByID = async (booking: Booking) => {
-  //TODO: add the correct parameters to the find
+export const getBookingByID = async (bookingId: ObjectId) => {
+  //SERVER LOGGING
+  logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
+
   const bookings = await (await BookingsCollection())
-    .find({ _id: new ObjectId(booking._id) })
+    .find({ _id: bookingId })
     .toArray();
+  disconnectDB();
   return bookings[0];
+};
+
+/**
+ * Method to get booking by its id and returning the booking, customer, and reservations attached to it.
+ *
+ * @param bookingId ID of the Booking to get from the Bookings collection
+ * @returns Object containing the Booking, Customer, and Reservations
+ */
+export const bookingLookup = async (bookingId: string) => {
+  //SERVER LOGGING
+  logMessage("Method: bookingLookup", "Getting Booking by ID: " + bookingId);
+
+  const bookings = await (await BookingsCollection())
+    .find({ _id: new ObjectId(bookingId) })
+    .toArray();
+
+  const customer = await (await CustomerCollection())
+    .find({ _id: new ObjectId(bookings[0].customerID) })
+    .toArray();
+
+  const reservations = await (await ReservationCollection())
+    .find({ _id: { $in: bookings[0].reservationIDs } })
+    .toArray();
+
+  //create object to return using the booking, customer, and reservations
+  const bookingReturn = {
+    booking: bookings[0],
+    customer: customer[0],
+    reservations: reservations,
+  };
+  disconnectDB();
+  return bookingReturn;
 };
 
 /**
@@ -36,9 +79,13 @@ export const getBookingByID = async (booking: Booking) => {
  * @returns insertedId of the Booking Object inserted into the Bookings collection
  */
 export const insertNewbooking = async (newBooking: any) => {
+  //SERVER LOGGING
+  logMessage("Method: insertNewbooking", "Inserting New Booking" + newBooking);
+
   const bookingcollection = await BookingsCollection();
 
   const insertedBooking = await bookingcollection.insertOne(newBooking);
+  disconnectDB();
   return insertedBooking.insertedId;
 };
 
@@ -52,11 +99,17 @@ export const updateBooking = async (
   bookingID: string,
   updatedBooking: Booking
 ) => {
+  //SERVER LOGGING
+  logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
+  logMessage("Method: updateBooking", "Updated Booking: " + updatedBooking);
+
   const bookingcollection = await BookingsCollection();
-  return await bookingcollection.update(
+  const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
     updatedBooking
   );
+  disconnectDB();
+  return returnBooking;
 };
 
 /**
@@ -66,6 +119,12 @@ export const updateBooking = async (
  * @returns {bookingID} the ID of the booking that was inserted
  */
 export const insertNewInProcessBooking = async (newBooking: any) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: insertNewInProcessBooking",
+    "Inserting New Booking Obj:" + newBooking
+  );
+
   const bookingcollection = await InProcessBookingCollection();
   //TODO: validate the information
   try {
@@ -73,6 +132,8 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
     return result.insertedId;
   } catch (e) {
     console.log("Error: Problem inserting temporary booking: " + newBooking);
+  } finally {
+    disconnectDB();
   }
 };
 
@@ -83,11 +144,40 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
  * @returns InProcessBooking object
  */
 export const getInProcessBookingByID = async (bookingId: string) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: getInProcessBookingByID",
+    "Getting InProcessBooking by ID: " + bookingId
+  );
+
   //TODO: add the correct parameters to the find
   const inProcessBookings = await (await InProcessBookingCollection())
     .find({ _id: new ObjectId(bookingId) })
     .toArray();
+
+  disconnectDB();
   return inProcessBookings[0];
+};
+
+/**
+ * Remove a Booking by the passed in ID.
+ *
+ * @param bookingId ID of the Booking to remove
+ * @returns Booking object
+ */
+export const removeBookingByID = async (bookingId: ObjectId) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: removeBookingByID",
+    "Removing Booking by ID: " + bookingId
+  );
+
+  const bookingcollection = await BookingsCollection();
+  const result = await bookingcollection.findOneAndDelete({ _id: bookingId });
+
+  // result.value contains the deleted document or null if no document was found
+  disconnectDB();
+  return result.value;
 };
 
 //BOOKING TRANSACTION EXAMPLE

@@ -1,10 +1,14 @@
 import { getBoleroRoom } from "../../../lib/rooms";
+import { logMessage } from "../../../lib/logger";
 
 /**
  *
  * @returns
  */
 export const get = async () => {
+  //SERVER LOGGING
+  logMessage("ENDPOINT: /api/room/bolero", "Getting Bolero Room");
+
   const room = await getBoleroRoom();
   if (!room) {
     return new Response(null, {

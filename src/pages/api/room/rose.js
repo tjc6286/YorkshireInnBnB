@@ -1,10 +1,13 @@
 import { getRoseRoom } from "../../../lib/rooms";
-
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @returns
  */
 export const get = async () => {
+  //SERVER LOGGING
+  logMessage("ENDPOINT: /api/room/rose", "Getting Rose Room");
+
   const room = await getRoseRoom();
   if (!room) {
     return new Response(null, {

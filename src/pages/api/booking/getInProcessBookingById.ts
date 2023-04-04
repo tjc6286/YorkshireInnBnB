@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getInProcessBookingByID } from "../../../lib/bookings";
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @param { request }
@@ -8,6 +9,12 @@ import { getInProcessBookingByID } from "../../../lib/bookings";
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {
     var id = await request.json();
+
+    //SERVER LOGGING
+    logMessage(
+      "ENDPOINT: /api/booking/getInProcessBookingById",
+      "Getting InProcessBooking ID: " + id
+    );
 
     //TODO: Validate all customer | reservation | booking data coming in
     const res = await getInProcessBookingByID(id);
