@@ -1,16 +1,13 @@
 import { ObjectId } from "mongodb";
-import { logYellow, logBlue, logRed, logMessage } from "./logger";
+import type { IFormState } from "../components/organisms/customerInformationForm/CustomerInformationForm";
 import type { Booking } from "../types/Booking";
-import type { Customer } from "../types/customer";
-import type { Reservation } from "../types/reservation";
-import { getCustomerByID } from "./customers";
+import { logMessage } from "./logger";
 import {
-  disconnectDB,
   BookingsCollection,
   CustomerCollection,
-  ReservationCollection,
-  getMongoClient,
   InProcessBookingCollection,
+  ReservationCollection,
+  disconnectDB,
 } from "./mongodb";
 
 /**
@@ -97,7 +94,7 @@ export const insertNewbooking = async (newBooking: any) => {
  */
 export const updateBooking = async (
   bookingID: string,
-  updatedBooking: Booking
+  updatedBooking: Booking,
 ) => {
   //SERVER LOGGING
   logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
@@ -106,7 +103,7 @@ export const updateBooking = async (
   const bookingcollection = await BookingsCollection();
   const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
-    updatedBooking
+    updatedBooking,
   );
   disconnectDB();
   return returnBooking;
@@ -122,7 +119,7 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
   //SERVER LOGGING
   logMessage(
     "Method: insertNewInProcessBooking",
-    "Inserting New Booking Obj:" + newBooking
+    "Inserting New Booking Obj:" + newBooking,
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -138,6 +135,48 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
 };
 
 /**
+ * Inserts a new InProcessBooking into the InProcessBooking collection.
+ *
+ * @param {newbooking} id Id of the current in process booking
+ *
+ * @returns {bookingID} the ID of the booking that was inserted
+ */
+export const updateInProcessBooking = async (
+  id: string,
+  amount: number,
+  customerInformation: IFormState,
+  blockedOffDates: Array<string>,
+  confirmationCode: string,
+) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: insertNewInProcessBooking",
+    "Updating inProgressBooking Obj: " + id,
+  );
+
+  const bookingcollection = await InProcessBookingCollection();
+  //TODO: validate the information
+  try {
+    const result = await bookingcollection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          amount,
+          customerInformation,
+          blockedOffDates,
+          confirmationCode,
+        },
+      },
+    );
+    return result.acknowledged;
+  } catch (e) {
+    console.log("Error: Problem inserting temporary booking: " + id);
+  } finally {
+    disconnectDB();
+  }
+};
+
+/**
  * Gets a InProcessBooking by its ID
  *
  * @param bookingId ID of the InProcessBooking to get
@@ -147,7 +186,7 @@ export const getInProcessBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: getInProcessBookingByID",
-    "Getting InProcessBooking by ID: " + bookingId
+    "Getting InProcessBooking by ID: " + bookingId,
   );
 
   //TODO: add the correct parameters to the find
@@ -169,11 +208,34 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeBookingByID",
-    "Removing Booking by ID: " + bookingId
+    "Removing Booking by ID: " + bookingId,
   );
 
   const bookingcollection = await BookingsCollection();
   const result = await bookingcollection.findOneAndDelete({ _id: bookingId });
+
+  // result.value contains the deleted document or null if no document was found
+  disconnectDB();
+  return result.value;
+};
+
+/**
+ * Remove a Booking by the passed in ID.
+ *
+ * @param bookingId ID of the Booking to remove
+ * @returns Booking object
+ */
+export const removeTempBookingAndHoldDates = async (bookingId: string) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: removeBookingByID",
+    "Removing Booking by ID: " + bookingId,
+  );
+
+  const bookingcollection = await InProcessBookingCollection();
+  const result = await bookingcollection.findOneAndDelete({
+    _id: new ObjectId(bookingId),
+  });
 
   // result.value contains the deleted document or null if no document was found
   disconnectDB();

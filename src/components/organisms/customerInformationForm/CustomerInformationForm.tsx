@@ -6,9 +6,10 @@ import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
   bookingInfo: any;
+  id: string;
 }
 
-interface IFormState {
+export interface IFormState {
   firstName: string;
   lastName: string;
   email: string;
@@ -24,6 +25,7 @@ interface IFormState {
 
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
+  id,
 }) => {
   const calculateTotalFees = () =>
     bookingInfo.itinerary
@@ -50,7 +52,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     zip: "",
     petsDescription: "",
     allergiesDescription: "",
-    previousBookings: [],
   });
 
   const validateForm = () => {
@@ -82,6 +83,24 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     return false;
   };
 
+  const convert = (currency: string) => {
+    var temp = currency.replace(/[^0-9.-]+/g, "");
+
+    return parseFloat(temp);
+  };
+
+  const getDepositCost = () => {
+    const depositString = bookingInfo.itinerary
+      .map((room: any) => room.priceBreakdown.dailyPrices[0].price)
+      .reduce((sum: number, b: number) => sum + b, fees)
+      .toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+
+    return convert(depositString);
+  };
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -98,38 +117,31 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       return;
     }
 
-    //write a post request to the backend to create a booking
-    // try {
-    //   fetch("/api/booking/createBooking", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
+    try {
+      fetch("/api/payment/getPaymentIntent", {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
 
-    //     //TODO: HANDLE MULTIPLE RESERVATIONS
-    //     body: JSON.stringify({
-    //       customer: {
-    //         ...formState,
-    //       },
-    //       reservation: {
-    //         roomId: bookingInfo.itinerary[0].roomId,
-    //         guestCount: bookingInfo.guestCount,
-    //         isCanceled: false,
-    //         cancelReason: "",
-    //         petsIncluded: "",
-    //         petsDescription: "",
-    //         foodAllergies: "",
-    //         subtotal: getRoomsSubtotal(),
-    //       },
-    //     }),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       window.location.href = `/confirmation/${data.booking}`;
-    //     });
-    // } catch (error) {}
-
-    // alert(JSON.stringify(formState));
+        //TODO: HANDLE MULTIPLE RESERVATIONS
+        body: JSON.stringify({
+          amount: Math.round(getDepositCost() * 100),
+          bookingInfo: bookingInfo,
+          id: id,
+          customerInformation: formState,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          window.location.href = data;
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const calculateBookingPriceBreakdownField = (fieldName: string) =>
@@ -141,8 +153,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         currency: "USD",
       });
 
-  console.log("bookingInfo", bookingInfo);
-  console.log(fees);
   return loading ? (
     <div
       style={{

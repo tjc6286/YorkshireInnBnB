@@ -209,7 +209,6 @@ const RoomAvailabilityDateRangeSelector = () => {
         .then((data) => {
           console.log(data);
           window.location.href = `/customerInformation/${data}`;
-          // window.location.href = `/customerInformation/642338f4c6349787a201adb9`;
         })
         .catch((error) => {
           console.error("Error:", error);

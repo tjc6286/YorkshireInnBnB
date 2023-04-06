@@ -6,9 +6,12 @@ import CustomerInformationForm from "../../components/organisms/customerInformat
 import { getInProcessBookingByID } from "../../lib/bookings";
 
 let bookingInfo: any;
+let id: any;
 try {
   bookingInfo = await getInProcessBookingByID(tempBookingDetails!);
-  console.log(bookingInfo);
+  id = bookingInfo._id.toString();
+  console.log(bookingInfo._id);
+  console.log(bookingInfo._id.toString());
 } catch (error) {
   console.log(error);
   Astro.redirect("/404");
@@ -16,5 +19,5 @@ try {
 ---
 
 <MainLayout title="Yorkshire Inn" heroImgPath={heroImg}>
-  <CustomerInformationForm client:only bookingInfo={bookingInfo!} />
+  <CustomerInformationForm client:only bookingInfo={bookingInfo!} id={id!} />
 </MainLayout>
