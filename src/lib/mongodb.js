@@ -56,7 +56,7 @@ export const getDB = async () => {
   // Text above copied from :
   // https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/lib/mongodb.ts
   const enviroment = process.env.NODE_ENV || import.meta.env.NODE_ENV;
-  if (process.env.NODE_ENV === "development") {
+  if (enviroment === "development") {
     if (!global._mongoConnection) {
       global._mongoConnection = await connectToDB();
       cachedMongo = global._mongoConnection;
