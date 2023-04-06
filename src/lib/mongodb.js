@@ -4,7 +4,7 @@
  */
 import { MongoClient } from "mongodb";
 import { logYellow, logBlue, logRed, logMessage } from "./logger";
-const uri = import.meta.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
 
@@ -56,7 +56,7 @@ export const getDB = async () => {
   // Text above copied from :
   // https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/lib/mongodb.ts
 
-  if (import.meta.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development") {
     if (!global._mongoConnection) {
       global._mongoConnection = await connectToDB();
       cachedMongo = global._mongoConnection;
