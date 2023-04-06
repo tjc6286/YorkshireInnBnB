@@ -7,7 +7,7 @@ import { getCustomerByID } from "./customers";
 import {
   disconnectDB,
   BookingsCollection,
-  CustomerCollection,
+  CustomersCollection,
   ReservationCollection,
   getMongoClient,
   InProcessBookingCollection,
@@ -55,7 +55,7 @@ export const bookingLookup = async (bookingId: string) => {
     .find({ _id: new ObjectId(bookingId) })
     .toArray();
 
-  const customer = await (await CustomerCollection())
+  const customer = await (await CustomersCollection())
     .find({ _id: new ObjectId(bookings[0].customerID) })
     .toArray();
 
