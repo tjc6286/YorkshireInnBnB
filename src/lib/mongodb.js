@@ -4,7 +4,7 @@
  */
 import { MongoClient } from "mongodb";
 import { logYellow, logBlue, logRed, logMessage } from "./logger";
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
 
@@ -55,7 +55,7 @@ export const getDB = async () => {
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   // Text above copied from :
   // https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/lib/mongodb.ts
-
+  const enviroment = process.env.NODE_ENV || import.meta.env.NODE_ENV;
   if (process.env.NODE_ENV === "development") {
     if (!global._mongoConnection) {
       global._mongoConnection = await connectToDB();
