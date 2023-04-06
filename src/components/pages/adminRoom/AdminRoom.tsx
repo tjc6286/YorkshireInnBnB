@@ -248,6 +248,7 @@ const AdminRoom: React.FC = () => {
                 value={updatePrice}
                 onChange={handlePriceChange}
                 disabled={isBlocking}
+                type="number"
                 sx={{
                   svg: { color: "white" },
                   input: { color: "white" },
