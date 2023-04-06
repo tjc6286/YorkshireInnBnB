@@ -2,21 +2,17 @@ import { getAuth } from "firebase/auth";
 import firebase from "firebase/compat/app";
 
 const firebaseConfig = {
-  apiKey: process.env.PUBLIC_REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.PUBLIC_REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.PUBLIC_REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.PUBLIC_REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.PUBLIC_REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.PUBLIC_REACT_APP_FIREBASE_APPLICATION_ID,
-  measurementId: process.env.PUBLIC_REACT_APP_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyDe6Cx0SJ8ypa8Hc5bRgRF3AJI9E0o7r84",
+  authDomain: "yorkshirebnb-5a030.firebaseapp.com",
+  projectId: "yorkshirebnb-5a030",
+  storageBucket: "yorkshirebnb-5a030.appspot.com",
+  messagingSenderId: "417585271071",
+  appId: "1:417585271071:web:f4d66ad8355a03d708e02a",
+  measurementId: "G-8X7LY0MVXV",
 };
-
-console.log(firebaseConfig);
 
 const app = firebase.initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-console.log(firebaseConfig);
 
 const signOutUser = () => {
   console.log("Signing out! ");
