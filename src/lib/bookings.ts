@@ -8,7 +8,7 @@ import {
   disconnectDB,
   BookingsCollection,
   CustomersCollection,
-  ReservationCollection,
+  ReservationsCollection,
   getMongoClient,
   InProcessBookingCollection,
 } from "./mongodb";
@@ -59,7 +59,7 @@ export const bookingLookup = async (bookingId: string) => {
     .find({ _id: new ObjectId(bookings[0].customerID) })
     .toArray();
 
-  const reservations = await (await ReservationCollection())
+  const reservations = await (await ReservationsCollection())
     .find({ _id: { $in: bookings[0].reservationIDs } })
     .toArray();
 
@@ -207,13 +207,13 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
 //     await session.withTransaction(async () => {
 //       const bookingCollection = db.collection("Booking");
 //       const customerCollection = db.collection("Customer");
-//       const reservationCollection = db.collection("RoomReservation");
+//       const ReservationsCollection = db.collection("RoomReservation");
 
 //       ret.booking = await bookingCollection.insertOne(newBooking, { session });
 //       ret.customer = await customerCollection.insertOne(newCustomer, {
 //         session,
 //       });
-//       ret.reservation = await reservationCollection.insertOne(newReservation, {
+//       ret.reservation = await ReservationsCollection.insertOne(newReservation, {
 //         session,
 //       });
 
