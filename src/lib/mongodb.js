@@ -1,13 +1,14 @@
+import { MongoClient } from "mongodb";
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 /**
  * Documentation for the following code:
  * https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#std-label-node-connect-to-mongodb
  */
-import { MongoClient } from "mongodb";
-import { logYellow, logBlue, logRed, logMessage } from "./logger";
+
+// Server Variables for Database connection
 const uri = import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;
-
 let connectedClient;
 
 /**
