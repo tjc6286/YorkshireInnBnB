@@ -248,6 +248,7 @@ const AdminRoom: React.FC = () => {
                 value={updatePrice}
                 onChange={handlePriceChange}
                 disabled={isBlocking}
+                sx={{ color: "white" }}
               />
               <div className="mx-4">
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -260,6 +261,7 @@ const AdminRoom: React.FC = () => {
                       newValue && handleSetStartDate(newValue.toString());
                     }}
                     componentsProps={{ textField: { variant: "outlined" } }}
+                    sx={{ color: "white" }}
                   />
                 </LocalizationProvider>
               </div>
@@ -278,6 +280,7 @@ const AdminRoom: React.FC = () => {
                       newValue && handleSetEndDate(newValue.toString());
                     }}
                     componentsProps={{ textField: { variant: "outlined" } }}
+                    sx={{ color: "white" }}
                   />
                 </LocalizationProvider>
               </div>
