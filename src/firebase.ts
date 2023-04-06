@@ -14,6 +14,8 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+console.log(firebaseConfig);
+
 const signOutUser = () => {
   console.log("Signing out! ");
   auth
