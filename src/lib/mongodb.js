@@ -5,9 +5,9 @@
 import { MongoClient } from "mongodb";
 import { logYellow, logBlue, logRed, logMessage } from "./logger";
 const uri = process.env.MONGODB_URI || import.meta.env.MONGODB_URI;
+const DB_NAME = process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME;
 const options = {};
 let cachedMongo;
-
 let connectedClient;
 
 /**
@@ -22,7 +22,7 @@ const connectToDB = async () => {
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
   await connectedClient.connect();
-  return connectedClient.db("YorkshireInnBnB");
+  return connectedClient.db(DB_NAME);
 };
 
 /**
