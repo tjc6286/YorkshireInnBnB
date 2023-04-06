@@ -3,7 +3,7 @@
  * https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#std-label-node-connect-to-mongodb
  */
 import { MongoClient } from "mongodb";
-import { logYellow, logBlue, logRed, logMessage } from "./loggerTest";
+import { logYellow, logBlue, logRed, logMessage } from "./logger";
 const uri = import.meta.env.MONGODB_URI;
 const options = {};
 let cachedMongo;

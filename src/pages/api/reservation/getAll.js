@@ -1,5 +1,5 @@
 import { getAllReservations } from "../../../lib/reservations";
-import { logMessage } from "../../../lib/loggerTest";
+import { logMessage } from "../../../lib/logger";
 /**
  *
  * @returns
