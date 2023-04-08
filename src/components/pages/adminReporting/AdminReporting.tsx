@@ -237,7 +237,6 @@ const AdminReporting: React.FC = () => {
       case "bookingsPerRoom":
         updateChartLegend("Bookings per Room");
         updateChartLabels(roomList);
-        console.log(roomList);
         break;
       case "incomePerRoom":
         updateChartLegend("Dollar Amount");
@@ -248,8 +247,19 @@ const AdminReporting: React.FC = () => {
         updateChartLabels(getNext12MonthsWithYearFromToday());
         break;
       case "siteVsThirdParty":
-        updateChartLegend("Number of Bookings");
-        updateChartLabels(["Site", "Third Party"]);
+        fetch("api/reporting/getBookingSourceReport", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            updateChartData([data.nonThirdParty, data.thirdParty]);
+            updateChartLegend("Number of Bookings");
+            updateChartLabels(["Site", "Third Party"]);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
         break;
     }
 
@@ -272,7 +282,6 @@ const AdminReporting: React.FC = () => {
       .then((data) => {
         data.forEach((room: any) => {
           tempRoomList.push(room.name);
-          console.log(room.name);
         });
         setRoomList(tempRoomList);
       })
