@@ -54,6 +54,7 @@ export const options = {
     x: {
       ticks: {
         color: "white",
+        minRotation: 90, //this rotates the x-axis labels to be fully vertical
       },
     },
     y: {
@@ -77,7 +78,8 @@ const AdminReporting: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
-  const [chartSelected, setChartSelected] = React.useState("bookingsPerRoom");
+  const [chartSelected, setChartSelected] = React.useState("incomePerMonth");
+  const [roomList, setRoomList] = React.useState<string[]>([]);
   const [data, setData] = React.useState<ChartData>({
     labels: [],
     datasets: [
@@ -234,10 +236,12 @@ const AdminReporting: React.FC = () => {
     switch (event.target.value) {
       case "bookingsPerRoom":
         updateChartLegend("Bookings per Room");
-        updateChartLabels(getNext12MonthsWithYearFromToday());
+        updateChartLabels(roomList);
+        console.log(roomList);
         break;
       case "incomePerRoom":
         updateChartLegend("Dollar Amount");
+        updateChartLabels(roomList);
         break;
       case "incomePerMonth":
         updateChartLegend("Dollar Amount");
@@ -255,15 +259,30 @@ const AdminReporting: React.FC = () => {
   //COMPONENT MOUNTED
   useEffect(() => {
     //TESTING VALUES
-
+    const tempRoomList: Array<string> = [];
     const values = [
       3333.33, 4030, 3583, 9238, 400, 2383.23, 2387, 4000, 5000, 3000, 4000,
       5000,
     ];
+    //GET ROOM LIST FOR LABELS
+    fetch("/api/room/getAll", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach((room: any) => {
+          tempRoomList.push(room.name);
+          console.log(room.name);
+        });
+        setRoomList(tempRoomList);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     //UPDATE FUNCTIONS TEST
     updateChartLabels(getNext12MonthsWithYearFromToday());
     updateChartData(values);
-    updateChartLegend("Bookings per Room");
+    updateChartLegend("Dollar Amount");
   }, []);
 
   return (
@@ -320,13 +339,13 @@ const AdminReporting: React.FC = () => {
                         borderColor: "white", // Border color on focus
                       },
                     }}>
+                    <MenuItem value={"incomePerMonth"}>
+                      Total Income Per Month
+                    </MenuItem>
                     <MenuItem value={"bookingsPerRoom"}>
                       Bookings Per Room
                     </MenuItem>
                     <MenuItem value={"incomePerRoom"}>Income Per Room</MenuItem>
-                    <MenuItem value={"incomePerMonth"}>
-                      Total Income Per Month
-                    </MenuItem>
                     <MenuItem value={"siteVsThirdParty"}>
                       OnSite Vs Third Party
                     </MenuItem>
