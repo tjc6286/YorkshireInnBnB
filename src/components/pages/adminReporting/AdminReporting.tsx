@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, eachMonthOfInterval, format } from "date-fns";
+import { addDays, addMonths, eachMonthOfInterval, format } from "date-fns";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -108,7 +108,7 @@ const AdminReporting: React.FC = () => {
     }));
   };
 
-  const updateChartLabel = (label: string) => {
+  const updateChartLegend = (label: string) => {
     setData((prevData) => ({
       ...prevData,
       datasets: [
@@ -180,6 +180,27 @@ const AdminReporting: React.FC = () => {
     return monthNames;
   };
 
+  //This function returns an array of the next 12 months from today
+  const getNext12MonthsWithYearFromToday = () => {
+    // Get the current date
+    const currentDate = new Date();
+    // Calculate the end date by adding 12 months to the current date
+    const endDate = addMonths(currentDate, 12);
+
+    // Get an array of months within the date range
+    const months = eachMonthOfInterval({
+      start: currentDate,
+      end: endDate,
+    });
+
+    // Iterate over the array of months and format the month names and years
+    const monthNamesWithYear = months.map((month) =>
+      format(month, "MMMM yyyy")
+    );
+
+    return monthNamesWithYear;
+  };
+
   //EXPORTING CHART DATA TO CSV
   const handleExport = () => {
     // Extract labels and data from the chartData object
@@ -209,6 +230,24 @@ const AdminReporting: React.FC = () => {
   //Handler for chart selection
   const handleChange = (event: SelectChangeEvent) => {
     setChartSelected(event.target.value as string);
+    resetDates();
+    switch (event.target.value) {
+      case "bookingsPerRoom":
+        updateChartLegend("Bookings per Room");
+        updateChartLabels(getNext12MonthsWithYearFromToday());
+        break;
+      case "incomePerRoom":
+        updateChartLegend("Dollar Amount");
+        break;
+      case "incomePerMonth":
+        updateChartLegend("Dollar Amount");
+        updateChartLabels(getNext12MonthsWithYearFromToday());
+        break;
+      case "siteVsThirdParty":
+        updateChartLegend("Number of Bookings");
+        updateChartLabels(["Site", "Third Party"]);
+        break;
+    }
 
     //LOAD CHART LABELS AND DATA FROM ENDPOINT
   };
@@ -216,29 +255,15 @@ const AdminReporting: React.FC = () => {
   //COMPONENT MOUNTED
   useEffect(() => {
     //TESTING VALUES
-    const monthLabels = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
 
     const values = [
       3333.33, 4030, 3583, 9238, 400, 2383.23, 2387, 4000, 5000, 3000, 4000,
       5000,
     ];
     //UPDATE FUNCTIONS TEST
-    updateChartLabels(monthLabels);
+    updateChartLabels(getNext12MonthsWithYearFromToday());
     updateChartData(values);
-    updateChartLabel("Bookings per Room");
+    updateChartLegend("Bookings per Room");
   }, []);
 
   return (
@@ -272,13 +297,29 @@ const AdminReporting: React.FC = () => {
               {/* TOP CONTROLS */}
               <div className="mx-4 my-2">
                 <FormControl className="w-60">
-                  <InputLabel id="demo-simple-select-label">Report</InputLabel>
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ color: "white" }}>
+                    Report
+                  </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={chartSelected}
                     label="Charts"
-                    onChange={handleChange}>
+                    onChange={handleChange}
+                    sx={{
+                      color: "white", // Text color
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
+                    }}>
                     <MenuItem value={"bookingsPerRoom"}>
                       Bookings Per Room
                     </MenuItem>
@@ -304,6 +345,20 @@ const AdminReporting: React.FC = () => {
                         newValue && handleSetStartDate(newValue.toString());
                       }}
                       componentsProps={{ textField: { variant: "outlined" } }}
+                      sx={{
+                        svg: { color: "white" },
+                        input: { color: "white" },
+                        label: { color: "white" },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color on hover
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color on focus
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                 </div>
@@ -322,6 +377,20 @@ const AdminReporting: React.FC = () => {
                         newValue && handleSetEndDate(newValue.toString());
                       }}
                       componentsProps={{ textField: { variant: "outlined" } }}
+                      sx={{
+                        svg: { color: "white" },
+                        input: { color: "white" },
+                        label: { color: "white" },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color on hover
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "white", // Border color on focus
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                 </div>
