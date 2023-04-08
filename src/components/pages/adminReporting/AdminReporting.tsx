@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, format } from "date-fns";
+import { addDays, eachMonthOfInterval, format } from "date-fns";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,7 +43,11 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Income by Month",
+      text: "Generated Report For Yorkshire Inn",
+      color: "white",
+      font: {
+        size: 20,
+      },
     },
   },
   scales: {
@@ -73,13 +77,12 @@ const AdminReporting: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
-
   const [chartSelected, setChartSelected] = React.useState("bookingsPerRoom");
   const [data, setData] = React.useState<ChartData>({
     labels: [],
     datasets: [
       {
-        label: "Money (in Dollars)",
+        label: "",
         data: [],
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
@@ -100,6 +103,18 @@ const AdminReporting: React.FC = () => {
         {
           ...prevData.datasets[0],
           data: data,
+        },
+      ],
+    }));
+  };
+
+  const updateChartLabel = (label: string) => {
+    setData((prevData) => ({
+      ...prevData,
+      datasets: [
+        {
+          ...prevData.datasets[0],
+          label: label,
         },
       ],
     }));
@@ -148,12 +163,24 @@ const AdminReporting: React.FC = () => {
       console.log("submitting");
       console.log(startDate);
       console.log(endDate);
+      console.log("Month labels: ", getMonthNamesWithYear(startDate, endDate));
 
       // Reset all fields
       resetDates();
     }
   };
 
+  // This function returns an array of month names between the start and end dates
+  const getMonthNamesWithYear = (startDate: string, endDate: string) => {
+    const months = eachMonthOfInterval({
+      start: new Date(startDate),
+      end: new Date(endDate),
+    });
+    const monthNames = months.map((month) => format(month, "MMMM yyyy"));
+    return monthNames;
+  };
+
+  //EXPORTING CHART DATA TO CSV
   const handleExport = () => {
     // Extract labels and data from the chartData object
     const labels = data.labels;
@@ -179,35 +206,39 @@ const AdminReporting: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  //Handler for chart selection
   const handleChange = (event: SelectChangeEvent) => {
     setChartSelected(event.target.value as string);
+
+    //LOAD CHART LABELS AND DATA FROM ENDPOINT
   };
 
-  //CHART VALUES
-  //TESTING VALUES
-  const monthLabels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const values = [
-    3333.33, 4030, 3583, 9238, 400, 2383.23, 2387, 4000, 5000, 3000, 4000, 5000,
-  ];
-
+  //COMPONENT MOUNTED
   useEffect(() => {
-    //test data
+    //TESTING VALUES
+    const monthLabels = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const values = [
+      3333.33, 4030, 3583, 9238, 400, 2383.23, 2387, 4000, 5000, 3000, 4000,
+      5000,
+    ];
+    //UPDATE FUNCTIONS TEST
     updateChartLabels(monthLabels);
     updateChartData(values);
+    updateChartLabel("Bookings per Room");
   }, []);
 
   return (
@@ -239,7 +270,7 @@ const AdminReporting: React.FC = () => {
             <div className="h-[50%] pt-10 text-white">
               <h2 className="text-2xl font-bold mb-2">Generate Report</h2>
               {/* TOP CONTROLS */}
-              <div className="flex">
+              <div className="mx-4 my-2">
                 <FormControl className="w-60">
                   <InputLabel id="demo-simple-select-label">Report</InputLabel>
                   <Select
@@ -260,6 +291,8 @@ const AdminReporting: React.FC = () => {
                     </MenuItem>
                   </Select>
                 </FormControl>
+              </div>
+              <div className="flex">
                 <div className="mx-4">
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
@@ -325,7 +358,7 @@ const AdminReporting: React.FC = () => {
                 - total income per month
                 - income per room
               */}
-              <div className="w-full">
+              <div className="w-full mt-4">
                 <Bar options={options} data={data} />
               </div>
             </div>
