@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -13,7 +13,15 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 
+//CHART.js REGISTRATION
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,6 +31,7 @@ ChartJS.register(
   Legend
 );
 
+//CHART.js OPTIONS
 export const options = {
   responsive: true,
   plugins: {
@@ -51,11 +60,52 @@ export const options = {
   },
 };
 
+interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+  }[];
+}
+
 const AdminReporting: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
 
+  const [chartSelected, setChartSelected] = React.useState("bookingsPerRoom");
+  const [data, setData] = React.useState<ChartData>({
+    labels: [],
+    datasets: [
+      {
+        label: "Money (in Dollars)",
+        data: [],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  });
+
+  const updateChartLabels = (labels: string[]) => {
+    setData((prevData) => ({
+      ...prevData,
+      labels: labels,
+    }));
+  };
+
+  const updateChartData = (data: number[]) => {
+    setData((prevData) => ({
+      ...prevData,
+      datasets: [
+        {
+          ...prevData.datasets[0],
+          data: data,
+        },
+      ],
+    }));
+  };
+
+  //FIREBASE AUTHENTICATION
   auth.onAuthStateChanged((user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -71,6 +121,7 @@ const AdminReporting: React.FC = () => {
     }
   });
 
+  //DATE PICKER FUNCTIONS
   const handleSetStartDate = (newStartDate: string) => {
     if (endDate && new Date(newStartDate) > new Date(endDate)) {
       setEndDate(addDays(new Date(newStartDate), 1).toString());
@@ -103,6 +154,35 @@ const AdminReporting: React.FC = () => {
     }
   };
 
+  const handleExport = () => {
+    // Extract labels and data from the chartData object
+    const labels = data.labels;
+    const values = data.datasets[0].data;
+
+    // Create a CSV string
+    let csvContent = "Labels,Data\n";
+
+    labels.forEach((label: string, index: number) => {
+      const rowData = `${label},${values[index]}\n`;
+      csvContent += rowData;
+    });
+
+    // Create a Blob with the CSV content and download it
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${chartSelected}.csv`;
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setChartSelected(event.target.value as string);
+  };
+
   //CHART VALUES
   //TESTING VALUES
   const monthLabels = [
@@ -123,16 +203,12 @@ const AdminReporting: React.FC = () => {
   const values = [
     3333.33, 4030, 3583, 9238, 400, 2383.23, 2387, 4000, 5000, 3000, 4000, 5000,
   ];
-  const data = {
-    labels: monthLabels,
-    datasets: [
-      {
-        label: "Money (in Dollars)",
-        data: values,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
-  };
+
+  useEffect(() => {
+    //test data
+    updateChartLabels(monthLabels);
+    updateChartData(values);
+  }, []);
 
   return (
     <div>
@@ -164,6 +240,26 @@ const AdminReporting: React.FC = () => {
               <h2 className="text-2xl font-bold mb-2">Generate Report</h2>
               {/* TOP CONTROLS */}
               <div className="flex">
+                <FormControl className="w-60">
+                  <InputLabel id="demo-simple-select-label">Report</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={chartSelected}
+                    label="Charts"
+                    onChange={handleChange}>
+                    <MenuItem value={"bookingsPerRoom"}>
+                      Bookings Per Room
+                    </MenuItem>
+                    <MenuItem value={"incomePerRoom"}>Income Per Room</MenuItem>
+                    <MenuItem value={"incomePerMonth"}>
+                      Total Income Per Month
+                    </MenuItem>
+                    <MenuItem value={"siteVsThirdParty"}>
+                      OnSite Vs Third Party
+                    </MenuItem>
+                  </Select>
+                </FormControl>
                 <div className="mx-4">
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
@@ -209,12 +305,25 @@ const AdminReporting: React.FC = () => {
                   onClick={handleSubmit}>
                   Update
                 </button>
+                <button
+                  className="ml-2 px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px"
+                  style={{
+                    fontFamily: "Martel",
+                    fontWeight: "400",
+                    fontSize: "20px",
+                    lineHeight: "34px",
+                    letterSpacing: "0.13em",
+                  }}
+                  onClick={handleExport}>
+                  Export
+                </button>
               </div>
               {/* Generated Report */}
               {/* 
                 - number of stays per month
                 - on site vs thirda party bookings
                 - total income per month
+                - income per room
               */}
               <div className="w-full">
                 <Bar options={options} data={data} />
