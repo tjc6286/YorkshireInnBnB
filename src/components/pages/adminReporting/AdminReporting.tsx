@@ -75,6 +75,7 @@ interface ChartData {
 }
 
 const AdminReporting: React.FC = () => {
+  const [noneDate, setNoneDate] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
@@ -243,6 +244,7 @@ const AdminReporting: React.FC = () => {
         updateChartLabels(roomList);
         break;
       case "incomePerMonth":
+        setNoneDate(false);
         updateChartLegend("Dollar Amount");
         updateChartLabels(getNext12MonthsWithYearFromToday());
         break;
@@ -252,6 +254,7 @@ const AdminReporting: React.FC = () => {
         })
           .then((response) => response.json())
           .then((data) => {
+            setNoneDate(true);
             updateChartData([data.nonThirdParty, data.thirdParty]);
             updateChartLegend("Number of Bookings");
             updateChartLabels(["Site", "Third Party"]);
@@ -259,7 +262,6 @@ const AdminReporting: React.FC = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
-
         break;
     }
 
@@ -365,6 +367,7 @@ const AdminReporting: React.FC = () => {
                 <div className="mx-4">
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
+                      disabled={noneDate}
                       label={"Start Date"}
                       value={startDate ? new Date(startDate) : null}
                       disablePast
