@@ -144,7 +144,8 @@ export const getRoomsAvailabilityByDateRange = async (
     formattedDates.forEach((date: Date) => {
       if (
         isDateInArray(room.temporaryHoldDates, date) ||
-        isDateInArray(room.unavailableDates, date)
+        isDateInArray(room.unavailableDates, date) ||
+        isDateInArray(room.bookedDates, date)
       ) {
         dateFound = true;
       }

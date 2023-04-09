@@ -19,7 +19,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
   });
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
-    const { amount, bookingInfo, id, customerInformation } = data;
+    const { amountDue, bookingInfo, totalCost, id, customerInformation } = data;
 
     const blockedOffDates =
       bookingInfo.itinerary[0].priceBreakdown.dailyPrices.map((item: any) => {
@@ -34,13 +34,12 @@ export const post: APIRoute = async ({ request, redirect }) => {
       return new Response(null, { status: 400 });
     }
 
-    const confirmationCode = id.substring(0, 6).toUpperCase();
     const updatedTempBookingSuccess = await updateInProcessBooking(
       id,
-      amount,
+      amountDue,
+      totalCost,
       customerInformation,
       blockedOffDates,
-      confirmationCode,
     );
 
     if (!updatedTempBookingSuccess) {
@@ -59,13 +58,13 @@ export const post: APIRoute = async ({ request, redirect }) => {
                   "https://img1.wsimg.com/isteam/ip/9b26c130-cfe7-497c-921f-19fe8960b059/logo_wBevel_0322_bgGrey%20(1).jpg/:/rs=w:560,h:400,cg:true,m/cr=w:560,h:400/qt=q:95",
                 ],
               },
-              unit_amount: amount,
+              unit_amount: amountDue,
             },
             quantity: 1,
           },
         ],
         mode: "payment",
-        success_url: `http://localhost:3000/confirmation/${confirmationCode}`,
+        success_url: `http://localhost:3000/confirmation/${id}`,
         cancel_url: `http://localhost:3000/bookingError/${id}`,
       });
       return new Response(JSON.stringify(session.url), { status: 303 });

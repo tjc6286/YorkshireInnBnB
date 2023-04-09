@@ -127,10 +127,17 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 
         //TODO: HANDLE MULTIPLE RESERVATIONS
         body: JSON.stringify({
-          amount: Math.round(getDepositCost() * 100),
+          amountDue: Math.round(getDepositCost() * 100),
+          totalCost: Math.round(
+            convert(calculateBookingPriceBreakdownField("total")) * 100,
+          ),
           bookingInfo: bookingInfo,
           id: id,
-          customerInformation: formState,
+          customerInformation: {
+            ...formState,
+            petsIncluded: petCheck,
+            allergiesIncluded: allergyCheck,
+          },
         }),
       })
         .then((res) => {

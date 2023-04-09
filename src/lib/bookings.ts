@@ -4,9 +4,10 @@ import type { Booking } from "../types/Booking";
 import { logMessage } from "./logger";
 import {
   BookingsCollection,
-  CustomerCollection,
+  CustomersCollection,
   InProcessBookingCollection,
-  ReservationCollection,
+  ReservationsCollection,
+  RoomsCollection,
   disconnectDB,
 } from "./mongodb";
 
@@ -52,11 +53,11 @@ export const bookingLookup = async (bookingId: string) => {
     .find({ _id: new ObjectId(bookingId) })
     .toArray();
 
-  const customer = await (await CustomerCollection())
+  const customer = await (await CustomersCollection())
     .find({ _id: new ObjectId(bookings[0].customerID) })
     .toArray();
 
-  const reservations = await (await ReservationCollection())
+  const reservations = await (await ReservationsCollection())
     .find({ _id: { $in: bookings[0].reservationIDs } })
     .toArray();
 
@@ -144,9 +145,9 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
 export const updateInProcessBooking = async (
   id: string,
   amount: number,
+  totalCost: number,
   customerInformation: IFormState,
   blockedOffDates: Array<string>,
-  confirmationCode: string,
 ) => {
   //SERVER LOGGING
   logMessage(
@@ -162,9 +163,9 @@ export const updateInProcessBooking = async (
       {
         $set: {
           amount,
+          totalCost,
           customerInformation,
           blockedOffDates,
-          confirmationCode,
         },
       },
     );
@@ -232,8 +233,30 @@ export const removeTempBookingAndHoldDates = async (bookingId: string) => {
     "Removing Booking by ID: " + bookingId,
   );
 
-  const bookingcollection = await InProcessBookingCollection();
-  const result = await bookingcollection.findOneAndDelete({
+  const tempBookingCollection = await InProcessBookingCollection();
+
+  const tempBooking = await tempBookingCollection.findOne({
+    _id: new ObjectId(bookingId),
+  });
+
+  const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
+    (res: any) => new ObjectId(res._id),
+  );
+  const blockedOffDates = tempBooking.blockedOffDates;
+
+  if (tempBooking) {
+    const roomsCollection = await RoomsCollection();
+    const result = await roomsCollection.updateMany(
+      { _id: { $in: roomsWithTemporaryHoldDates } },
+      { $pull: { temporaryHoldDates: { $in: blockedOffDates } } },
+    );
+
+    if (result) {
+      console.log("Successfully removed blocked off dates from rooms");
+    }
+  }
+
+  const result = await tempBookingCollection.findOneAndDelete({
     _id: new ObjectId(bookingId),
   });
 
@@ -242,48 +265,102 @@ export const removeTempBookingAndHoldDates = async (bookingId: string) => {
   return result.value;
 };
 
-//BOOKING TRANSACTION EXAMPLE
-// export const bookingCreateTransaction = async (
-//   newBooking: Booking,
-//   newCustomer: Customer,
-//   newReservation: Reservation
-// ) => {
-//   const client = await getMongoClient();
-//   client.connect();
-//   const db = client.db("YorkshireInnBnB");
-//   const session = client.startSession();
+export const createCustomerBooking = async (tempBookingId: string) => {
+  const roomsCollection = await RoomsCollection();
+  const bookingCollection = await BookingsCollection();
+  const customerCollection = await CustomersCollection();
+  const reservationCollection = await ReservationsCollection();
+  const tempBookingCollection = await InProcessBookingCollection();
 
-//   const transactionOptions = {
-//     readPreference: "primary",
-//     readConcern: { level: "local" },
-//     writeConcern: { w: "majority" },
-//   };
+  const tempBooking = await tempBookingCollection.findOne({
+    _id: new ObjectId(tempBookingId),
+  });
 
-//   const ret = {
-//     booking: undefined,
-//     customer: undefined,
-//     reservation: undefined,
-//   };
+  //add dates to booked dates collection in rooms
+  const datesToBlockInRooms = tempBooking.blockedOffDates;
+  const roomsUpdate = await roomsCollection.updateMany(
+    {
+      _id: {
+        $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
+      },
+    },
+    { $push: { bookedDates: { $each: datesToBlockInRooms } } },
+  );
 
-//   try {
-//     await session.withTransaction(async () => {
-//       const bookingCollection = db.collection("Booking");
-//       const customerCollection = db.collection("Customer");
-//       const reservationCollection = db.collection("RoomReservation");
+  if (roomsUpdate) {
+    console.log("Successfully added blocked off dates to rooms");
+  }
 
-//       ret.booking = await bookingCollection.insertOne(newBooking, { session });
-//       ret.customer = await customerCollection.insertOne(newCustomer, {
-//         session,
-//       });
-//       ret.reservation = await reservationCollection.insertOne(newReservation, {
-//         session,
-//       });
+  let customer: any;
+  let customerFound = false;
+  const previousCustomer = await customerCollection.findOne({
+    email: tempBooking.customerInformation.email,
+  });
 
-//       //Add into all the collections
-//     }, transactionOptions);
-//   } finally {
-//     await session.endSession();
-//     await client.close();
-//   }
-//   return ret;
-// };
+  if (previousCustomer) {
+    customer = previousCustomer;
+    customerFound = true;
+  } else {
+    //create a new customer
+    customer = await customerCollection.insertOne({
+      firstName: tempBooking.customerInformation.firstName,
+      lastName: tempBooking.customerInformation.lastName,
+      email: tempBooking.customerInformation.email,
+      phone: tempBooking.customerInformation.phone,
+      address: tempBooking.customerInformation.address,
+      city: tempBooking.customerInformation.city,
+      state: tempBooking.customerInformation.state,
+      zip: tempBooking.customerInformation.zip,
+    });
+  }
+
+  if (customer) {
+    console.log("Successfully found or created customer");
+  }
+
+  //create a new reservation
+  const reservations = tempBooking.itinerary.map((res: any, index: number) => {
+    return {
+      roomId: new ObjectId(res._id),
+      petsIncluded: tempBooking.customerInformation.petsIncluded,
+      allergiesIncluded: tempBooking.customerInformation.allergiesIncluded,
+      petsDescription: tempBooking.customerInformation.petsDescription,
+      foodAllergies: tempBooking.customerInformation.allergiesDescription,
+      isCancelled: false,
+      subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
+      total: tempBooking.itinerary[index].priceBreakdown.total,
+      customer: new ObjectId(
+        customerFound ? customer._id : customer.insertedId,
+      ),
+    };
+  });
+  const reservationRes = await reservationCollection.insertMany(reservations);
+
+  if (reservationRes.length > 0) {
+    console.log("Successfully created reservations");
+  }
+
+  const confirmationCode = "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
+  const bookingObj = {
+    reservationIds: reservationRes.insertedIds,
+    transactionId: confirmationCode,
+    totalPrice: tempBooking.totalCost,
+    bookingDeposit: tempBooking.amount,
+    customerId: new ObjectId(
+      customerFound ? customer._id : customer.insertedId,
+    ),
+  };
+  const insertedBooking = await bookingCollection.insertOne(bookingObj);
+
+  if (insertedBooking) {
+    console.log("Successfully created booking");
+  }
+
+  const result = await removeTempBookingAndHoldDates(tempBookingId);
+
+  if (result) {
+    console.log("Successfully removed temp booking and hold dates");
+  }
+
+  return confirmationCode;
+};
