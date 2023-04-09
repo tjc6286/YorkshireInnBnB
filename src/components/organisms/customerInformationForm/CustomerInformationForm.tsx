@@ -1,13 +1,15 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
 import { states } from "../../../data/states";
+import type SpecialDatePrice from "../../../types/specialDatePrice";
 import Button from "../../atoms/button";
 
 interface CustomerInformationFormProps {
   bookingInfo: any;
+  id: string;
 }
 
-interface IFormState {
+export interface IFormState {
   firstName: string;
   lastName: string;
   email: string;
@@ -23,12 +25,21 @@ interface IFormState {
 
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
+  id,
 }) => {
+  const calculateTotalFees = () =>
+    bookingInfo.itinerary
+      .map(
+        (room: any) => room.priceBreakdown.tax + room.priceBreakdown.bookingFee,
+      )
+      .reduce((sum: number, b: number) => sum + b, 0);
+
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<string[]>([]);
+  const [fees] = React.useState<number>(calculateTotalFees());
 
   const [formState, setFormState] = React.useState<IFormState>({
     firstName: "",
@@ -41,7 +52,6 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     zip: "",
     petsDescription: "",
     allergiesDescription: "",
-    previousBookings: [],
   });
 
   const validateForm = () => {
@@ -73,6 +83,24 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     return false;
   };
 
+  const convert = (currency: string) => {
+    var temp = currency.replace(/[^0-9.-]+/g, "");
+
+    return parseFloat(temp);
+  };
+
+  const getDepositCost = () => {
+    const depositString = bookingInfo.itinerary
+      .map((room: any) => room.priceBreakdown.dailyPrices[0].price)
+      .reduce((sum: number, b: number) => sum + b, fees)
+      .toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+
+    return convert(depositString);
+  };
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -89,47 +117,48 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       return;
     }
 
-    //write a post request to the backend to create a booking
     try {
-      fetch("/api/booking/createBooking", {
+      fetch("/api/payment/getPaymentIntent", {
         method: "POST",
         headers: {
+          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
 
         //TODO: HANDLE MULTIPLE RESERVATIONS
         body: JSON.stringify({
-          customer: {
+          amountDue: Math.round(getDepositCost() * 100),
+          totalCost: Math.round(
+            convert(calculateBookingPriceBreakdownField("total")) * 100,
+          ),
+          bookingInfo: bookingInfo,
+          id: id,
+          customerInformation: {
             ...formState,
-          },
-          reservation: {
-            roomId: bookingInfo.itinerary[0].roomId,
-            guestCount: bookingInfo.guestCount,
-            isCanceled: false,
-            cancelReason: "",
-            petsIncluded: "",
-            petsDescription: "",
-            foodAllergies: "",
-            subtotal: getRoomsSubtotal(),
+            petsIncluded: petCheck,
+            allergiesIncluded: allergyCheck,
           },
         }),
       })
-        .then((response) => response.json())
+        .then((res) => {
+          return res.json();
+        })
         .then((data) => {
-          window.location.href = `/confirmation/${data.booking}`;
+          window.location.href = data;
         });
-    } catch (error) {}
-
-    // alert(JSON.stringify(formState));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getRoomsSubtotal = () => {
-    let subtotal = 0;
-    bookingInfo.itinerary.forEach((room: any) => {
-      subtotal += room.subtotal;
-    });
-    return subtotal;
-  };
+  const calculateBookingPriceBreakdownField = (fieldName: string) =>
+    bookingInfo.itinerary
+      .map((room: any) => room.priceBreakdown[fieldName])
+      .reduce((sum: number, b: number) => sum + b, 0)
+      .toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
 
   return loading ? (
     <div
@@ -149,7 +178,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       style={{
         display: "flex",
         width: "100%",
-        height: "140dvh",
+        height: "100%",
         justifyContent: "center",
       }}
     >
@@ -157,7 +186,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         style={{
           display: "flex",
           flexDirection: "row",
-          width: "90%",
+          width: "100%",
         }}
       >
         <div
@@ -242,69 +271,80 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     paddingTop: "1rem",
                   }}
                 >
-                  Price
+                  Dates/Price
                 </h2>
               </div>
 
               {bookingInfo.itinerary.map((room: any) => (
                 <div className="flex flex-row w-full justify-between mb-4">
-                  <p className="mt-2 text-xl">{room.roomName}</p>
-                  <p className="mt-2  text-xl">{room.guestCount}</p>
-                  <p className="mt-2 text-xl">
-                    {room.subtotal.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </p>
+                  <p className="mt-2 w-[200px] text-xl">{room.roomName}</p>
+                  <p className="mt-2 text-xl">{room.guestCount}</p>
+                  <div className="flex flex-col mt-2 text-xl">
+                    {room.priceBreakdown.dailyPrices.map(
+                      (obj: SpecialDatePrice) => (
+                        <>
+                          <div>
+                            <span>{obj.date} - </span>
+                            <span>
+                              {obj.price.toLocaleString("en-US", {
+                                style: "currency",
+                                currency: "USD",
+                              })}
+                            </span>
+                          </div>
+                        </>
+                      ),
+                    )}
+                  </div>
                 </div>
               ))}
               <hr className="pv-4" />
               <div className="flex flex-row w-full justify-between">
                 <p className="mt-4 font-semibold text-xl">Room Subtotal:</p>
                 <p className="mt-4 font-semibold text-xl">
-                  {getRoomsSubtotal().toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  {calculateBookingPriceBreakdownField("subtotal")}
                 </p>
               </div>
               <div className="flex flex-row w-full justify-between">
                 <p className="mt-2 font-semibold text-xl">Taxes:</p>
                 <p className="mt-2 font-semibold text-xl">
-                  {(getRoomsSubtotal() * 0.08).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  {calculateBookingPriceBreakdownField("tax")}
                 </p>
               </div>
               <div className="flex flex-row w-full justify-between">
                 <p className="mt-2 font-semibold text-xl">Booking Tax:</p>
                 <p className="mt-2 font-semibold text-xl">
-                  {(getRoomsSubtotal() * 0.03).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  {calculateBookingPriceBreakdownField("bookingFee")}
                 </p>
               </div>
               <hr />
               <div className="flex flex-row w-full justify-between">
                 <p className="mt-8 font-semibold text-2xl">Booking Total:</p>
                 <p className="mt-8 font-semibold text-2xl">
-                  {(
-                    getRoomsSubtotal() +
-                    getRoomsSubtotal() * 0.08 +
-                    getRoomsSubtotal() * 0.03
-                  ).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  {calculateBookingPriceBreakdownField("total")}
+                </p>
+              </div>
+              <div className="flex flex-row w-full justify-between">
+                <p className="mt-8 font-semibold text-2xl">
+                  Deposit due at checkout:
+                </p>
+                <p className="mt-8 font-semibold text-2xl">
+                  {bookingInfo.itinerary
+                    .map(
+                      (room: any) => room.priceBreakdown.dailyPrices[0].price,
+                    )
+                    .reduce((sum: number, b: number) => sum + b, fees)
+                    .toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
                 </p>
               </div>
             </div>
             <div
               style={{
                 display: "flex",
-                flex: 8,
+                flex: 6,
                 flexDirection: "column",
                 alignItems: "center",
               }}

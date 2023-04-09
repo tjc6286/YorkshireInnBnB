@@ -1,8 +1,4 @@
 import type { APIRoute } from "astro";
-import { ObjectId } from "mongodb";
-import { insertNewbooking } from "../../../lib/bookings";
-import { insertNewCustomer } from "../../../lib/customers";
-import { insertNewReservations } from "../../../lib/reservations";
 /**
  *
  * @param { request }
@@ -19,27 +15,27 @@ export const post: APIRoute = async ({ request }) => {
     //   data.reservation
     // );
 
-    const customer = await insertNewCustomer(data.customer);
+    // const customer = await insertNewCustomer(data.customer);
 
-    if (!customer) {
-      return new Response(null, { status: 400 });
-    }
+    // if (!customer) {
+    //   return new Response(null, { status: 400 });
+    // }
 
-    const reservations = await insertNewReservations(data.reservation);
+    // const reservations = await insertNewReservations(data.reservation);
 
-    if (!reservations) {
-      return new Response(null, { status: 400 });
-    }
+    // if (!reservations) {
+    //   return new Response(null, { status: 400 });
+    // }
 
-    const bookingObj = {
-      reservationIds: [...reservations],
-      transactionId: "100232",
-      totalPrice: 238.65,
-      isThirdParty: false,
-      customerId: new ObjectId(customer),
-    };
+    // const bookingObj = {
+    //   reservationIds: [...reservations],
+    //   transactionId: "100232",
+    //   totalPrice: 238.65,
+    //   isThirdParty: false,
+    //   customerId: new ObjectId(customer),
+    // };
 
-    const booking = await insertNewbooking(bookingObj);
+    // const booking = await insertNewbooking(bookingObj);
 
     return new Response(JSON.stringify({ booking }), {
       status: 200,

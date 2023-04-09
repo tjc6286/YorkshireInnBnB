@@ -1,8 +1,8 @@
 import type React from "react";
-import type { TempReservation } from "../../../types/reservation";
+import type { ReservationWithPriceBreakdown } from "../../../types/reservation";
 
 interface IReservationTableProps {
-  reservations: Array<TempReservation>;
+  reservations: Array<ReservationWithPriceBreakdown>;
   onRemove: (id: string) => void;
   unaccountedGuests?: number;
 }
@@ -30,27 +30,31 @@ const ReservationsTable: React.FC<IReservationTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {reservations.map((reservation: TempReservation, index: number) => (
-            <tr key={`index-${index}`} className="border-b">
-              <th
-                scope="row"
-                className="whitespace-nowrap px-6 py-4 font-medium"
-              >
-                {reservation.roomName}
-              </th>
-              <td className="px-6 py-4">{reservation.guestCount} Guests</td>
-              <td className="px-6 py-4">${reservation.subtotal}</td>
-              <td className="px-6 py-4 flex justify-end">
-                <button
-                  type="button"
-                  className="mr-2 mb-2 rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none"
-                  onClick={() => onRemove(reservation._id)}
+          {reservations.map(
+            (reservation: ReservationWithPriceBreakdown, index: number) => (
+              <tr key={`index-${index}`} className="border-b">
+                <th
+                  scope="row"
+                  className="whitespace-nowrap px-6 py-4 font-medium"
                 >
-                  Remove
-                </button>
-              </td>
-            </tr>
-          ))}
+                  {reservation.roomName}
+                </th>
+                <td className="px-6 py-4">{reservation.guestCount} Guests</td>
+                <td className="px-6 py-4">
+                  ${reservation.priceBreakdown.subtotal}
+                </td>
+                <td className="px-6 py-4 flex justify-end">
+                  <button
+                    type="button"
+                    className="mr-2 mb-2 rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none"
+                    onClick={() => onRemove(reservation._id)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ),
+          )}
         </tbody>
       </table>
       {unaccountedGuests !== 0 && (
