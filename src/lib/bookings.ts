@@ -1,16 +1,14 @@
 import { ObjectId } from "mongodb";
-import { logYellow, logBlue, logRed, logMessage } from "./logger";
+import type { IFormState } from "../components/organisms/customerInformationForm/CustomerInformationForm";
 import type { Booking } from "../types/Booking";
-import type { Customer } from "../types/customer";
-import type { Reservation } from "../types/reservation";
-import { getCustomerByID } from "./customers";
+import { logMessage } from "./logger";
 import {
-  disconnectDB,
   BookingsCollection,
   CustomersCollection,
-  ReservationsCollection,
-  getMongoClient,
   InProcessBookingCollection,
+  ReservationsCollection,
+  RoomsCollection,
+  disconnectDB,
 } from "./mongodb";
 
 /**
@@ -138,6 +136,48 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
 };
 
 /**
+ * Inserts a new InProcessBooking into the InProcessBooking collection.
+ *
+ * @param {newbooking} id Id of the current in process booking
+ *
+ * @returns {bookingID} the ID of the booking that was inserted
+ */
+export const updateInProcessBooking = async (
+  id: string,
+  amount: number,
+  totalCost: number,
+  customerInformation: IFormState,
+  blockedOffDates: Array<string>
+) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: updateInProcessBooking",
+    "Updating inProgressBooking Obj: " + id
+  );
+
+  const bookingcollection = await InProcessBookingCollection();
+  //TODO: validate the information
+  try {
+    const result = await bookingcollection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          amount,
+          totalCost,
+          customerInformation,
+          blockedOffDates,
+        },
+      }
+    );
+    return result.acknowledged;
+  } catch (e) {
+    console.log("Error: Problem inserting temporary booking: " + id);
+  } finally {
+    disconnectDB();
+  }
+};
+
+/**
  * Gets a InProcessBooking by its ID
  *
  * @param bookingId ID of the InProcessBooking to get
@@ -180,48 +220,153 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   return result.value;
 };
 
-//BOOKING TRANSACTION EXAMPLE
-// export const bookingCreateTransaction = async (
-//   newBooking: Booking,
-//   newCustomer: Customer,
-//   newReservation: Reservation
-// ) => {
-//   const client = await getMongoClient();
-//   client.connect();
-//   const db = client.db("YorkshireInnBnB");
-//   const session = client.startSession();
+/**
+ * Remove a Booking by the passed in ID.
+ *
+ * @param bookingId ID of the Booking to remove
+ * @returns Booking object
+ */
+export const removeTempBookingAndHoldDates = async (bookingId: string) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: removeTempBookingAndHoldDates",
+    "Removing Booking by ID: " + bookingId
+  );
 
-//   const transactionOptions = {
-//     readPreference: "primary",
-//     readConcern: { level: "local" },
-//     writeConcern: { w: "majority" },
-//   };
+  const tempBookingCollection = await InProcessBookingCollection();
 
-//   const ret = {
-//     booking: undefined,
-//     customer: undefined,
-//     reservation: undefined,
-//   };
+  const tempBooking = await tempBookingCollection.findOne({
+    _id: new ObjectId(bookingId),
+  });
 
-//   try {
-//     await session.withTransaction(async () => {
-//       const bookingCollection = db.collection("Booking");
-//       const customerCollection = db.collection("Customer");
-//       const ReservationsCollection = db.collection("RoomReservation");
+  const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
+    (res: any) => new ObjectId(res._id)
+  );
+  const blockedOffDates = tempBooking.blockedOffDates;
 
-//       ret.booking = await bookingCollection.insertOne(newBooking, { session });
-//       ret.customer = await customerCollection.insertOne(newCustomer, {
-//         session,
-//       });
-//       ret.reservation = await ReservationsCollection.insertOne(newReservation, {
-//         session,
-//       });
+  if (tempBooking) {
+    const roomsCollection = await RoomsCollection();
+    const result = await roomsCollection.updateMany(
+      { _id: { $in: roomsWithTemporaryHoldDates } },
+      { $pull: { temporaryHoldDates: { $in: blockedOffDates } } }
+    );
 
-//       //Add into all the collections
-//     }, transactionOptions);
-//   } finally {
-//     await session.endSession();
-//     await client.close();
-//   }
-//   return ret;
-// };
+    if (result) {
+      console.log("Successfully removed blocked off dates from rooms");
+    }
+  }
+
+  const result = await tempBookingCollection.findOneAndDelete({
+    _id: new ObjectId(bookingId),
+  });
+
+  // result.value contains the deleted document or null if no document was found
+  disconnectDB();
+  return result.value;
+};
+
+export const createCustomerBooking = async (tempBookingId: string) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: createCustomerBooking",
+    "Creating Customer From InProcessBooking by ID: " + tempBookingId
+  );
+
+  const roomsCollection = await RoomsCollection();
+  const bookingCollection = await BookingsCollection();
+  const customerCollection = await CustomersCollection();
+  const reservationCollection = await ReservationsCollection();
+  const tempBookingCollection = await InProcessBookingCollection();
+
+  const tempBooking = await tempBookingCollection.findOne({
+    _id: new ObjectId(tempBookingId),
+  });
+
+  //add dates to booked dates collection in rooms
+  const datesToBlockInRooms = tempBooking.blockedOffDates;
+  const roomsUpdate = await roomsCollection.updateMany(
+    {
+      _id: {
+        $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
+      },
+    },
+    { $push: { bookedDates: { $each: datesToBlockInRooms } } }
+  );
+
+  if (roomsUpdate) {
+    console.log("Successfully added blocked off dates to rooms");
+  }
+
+  let customer: any;
+  let customerFound = false;
+  const previousCustomer = await customerCollection.findOne({
+    email: tempBooking.customerInformation.email,
+  });
+
+  if (previousCustomer) {
+    customer = previousCustomer;
+    customerFound = true;
+  } else {
+    //create a new customer
+    customer = await customerCollection.insertOne({
+      firstName: tempBooking.customerInformation.firstName,
+      lastName: tempBooking.customerInformation.lastName,
+      email: tempBooking.customerInformation.email,
+      phone: tempBooking.customerInformation.phone,
+      address: tempBooking.customerInformation.address,
+      city: tempBooking.customerInformation.city,
+      state: tempBooking.customerInformation.state,
+      zip: tempBooking.customerInformation.zip,
+    });
+  }
+
+  if (customer) {
+    console.log("Successfully found or created customer");
+  }
+
+  //create a new reservation
+  const reservations = tempBooking.itinerary.map((res: any, index: number) => {
+    return {
+      roomId: new ObjectId(res._id),
+      petsIncluded: tempBooking.customerInformation.petsIncluded,
+      allergiesIncluded: tempBooking.customerInformation.allergiesIncluded,
+      petsDescription: tempBooking.customerInformation.petsDescription,
+      foodAllergies: tempBooking.customerInformation.allergiesDescription,
+      isCancelled: false,
+      subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
+      total: tempBooking.itinerary[index].priceBreakdown.total,
+      customer: new ObjectId(
+        customerFound ? customer._id : customer.insertedId
+      ),
+    };
+  });
+  const reservationRes = await reservationCollection.insertMany(reservations);
+
+  if (reservationRes.length > 0) {
+    console.log("Successfully created reservations");
+  }
+
+  const confirmationCode = "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
+  const bookingObj = {
+    reservationIds: reservationRes.insertedIds,
+    transactionId: confirmationCode,
+    totalPrice: tempBooking.totalCost,
+    bookingDeposit: tempBooking.amount,
+    customerId: new ObjectId(
+      customerFound ? customer._id : customer.insertedId
+    ),
+  };
+  const insertedBooking = await bookingCollection.insertOne(bookingObj);
+
+  if (insertedBooking) {
+    console.log("Successfully created booking");
+  }
+
+  const result = await removeTempBookingAndHoldDates(tempBookingId);
+
+  if (result) {
+    console.log("Successfully removed temp booking and hold dates");
+  }
+
+  return confirmationCode;
+};

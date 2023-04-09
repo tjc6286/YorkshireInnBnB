@@ -34,14 +34,14 @@ import MainLayout from "../layouts/MainLayout.astro";
     >
       <!-- Hero Section Content -->
       <div class="flex-1 flex items-center">
-        <div class="text-center mx-auto">
-          <h1
-            style="font-family:'Playfair Display', serif; font-size: 32pt; text-transform: uppercase; letter-spacing:0.13em"
+        <div class="text-center mx-auto px-10">
+          <h1 class="text-2xl md:text-4xl lg:text-4xl"
+            style="font-family:'Playfair Display', serif; text-transform: uppercase; letter-spacing:0.13em"
           >
             The
           </h1>
-          <h1
-            style="font-family:'Playfair Display', serif; font-size: 64pt; letter-spacing:0.13em"
+          <h1 class="text-5xl md:text-8xl lg:text-8xl"
+            style="font-family:'Playfair Display', serif; letter-spacing:0.13em"
           >
             Yorkshire Inn
           </h1>
@@ -109,12 +109,12 @@ import MainLayout from "../layouts/MainLayout.astro";
         </div>
       </div>
       <div class="flex-1 items-center mx-auto">
-        <h2
+        <div class="text-center justify-center">
+          <h2
           style="font-family: 'Playfair Display', serif; font-size:25px; font-weight: 500; letter-spacing: 0.035em;"
         >
           Amenities for those staying with us
         </h2>
-        <div class="text-center justify-center">
           <div class="px-2 py-2 flex mb-4">
             <div class="w-1/2">
               <img class="mx-auto" src="assets/image 6.png" />
@@ -195,8 +195,7 @@ import MainLayout from "../layouts/MainLayout.astro";
               </h2>
       
               <p class="mt-4 text-gray-500">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptas
-                veritatis illo placeat harum porro optio fugit a culpa sunt id!
+                Rooms available at The Yorkshire Inn
               </p>
       
               <div class="hidden lg:mt-8 lg:flex lg:gap-4">
@@ -242,7 +241,7 @@ import MainLayout from "../layouts/MainLayout.astro";
               </div>
             </div>
       
-            <div class="-mx-6 lg:col-span-2 lg:mx-0">
+            <div class="lg:col-span-2 lg:mx-0">
               <div class="swiper-container !overflow-hidden">
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
@@ -321,6 +320,48 @@ import MainLayout from "../layouts/MainLayout.astro";
                   </div>
                 </div>
               </div>
+              <div class="flex justify-center gap-4 lg:hidden">
+                <button
+                  aria-label="Previous slide"
+                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
+                >
+                  <svg
+                    class="h-5 w-5 -rotate-180 transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+          
+                <button
+                  aria-label="Next slide"
+                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+
               <div class="mx-auto text-center items-center">
               <a
               class="px-5 py-2 inline-block bg-transparent outline outline-1 hover:bg-gray-600 hover:text-white transition-colors mt-10 mx-px"
@@ -340,48 +381,6 @@ import MainLayout from "../layouts/MainLayout.astro";
               </div>
 
             </div>
-          </div>
-      
-          <div class="mt-8 flex justify-center gap-4 lg:hidden">
-            <button
-              aria-label="Previous slide"
-              class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-            >
-              <svg
-                class="h-5 w-5 -rotate-180 transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 5l7 7-7 7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                />
-              </svg>
-            </button>
-      
-            <button
-              aria-label="Next slide"
-              class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-            >
-              <svg
-                class="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 5l7 7-7 7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                />
-              </svg>
-            </button>
           </div>
         </div>
       </section>
@@ -416,7 +415,7 @@ import MainLayout from "../layouts/MainLayout.astro";
     <!-- Gallery Section -->
     <section
       id="gallery"
-      class="bg-[#F4F7FA] min-h-screen text-black justify-items-center text-center scroll-mt-10"
+      class="hidden lg:block bg-[#F4F7FA] min-h-screen text-black justify-items-center text-center scroll-mt-10"
     >
       <div class="container lg:px-32 px-4 py-8 mx-auto items-center">
         <h2
@@ -486,6 +485,179 @@ import MainLayout from "../layouts/MainLayout.astro";
         </div>
       </div>
     </section>
+    <!-- Mobile Room Section -->
+    <section id="gallery" class="px-4">
+      <section>
+        <div
+          class="lg:hidden mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0"
+        >
+          <div
+            class="grid grid-cols-1 gap-y-8 lg:grid-rows-1 lg:items-center lg:gap-x-16"
+          >
+            <div class="text-black max-w-xl text-center sm:text-left">
+              <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                Gallery
+              </h2>
+      
+              <div class="hidden lg:mt-8 lg:flex lg:gap-4">
+                <button
+                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
+                >
+                  <span class="sr-only">Previous Slide</span>
+                  <svg
+                    class="h-5 w-5 -rotate-180 transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+      
+                <button
+                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
+                >
+                  <span class="sr-only">Next Slide</span>
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+      
+            <div class="lg:col-span-2 lg:mx-0">
+              <div class="swiper-container !overflow-hidden">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12"
+                    >
+                      <div>
+                        <img src="assets/Gallery/mainliving.png" alt="Main Living Room" />
+                      </div>
+                    </blockquote>
+                  </div>
+      
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12"
+                    >
+                      <div>
+                        <img src="assets/Gallery/mainhall.png" alt="Picture of Inn's Main Hall" />
+                      </div>
+                    </blockquote>
+                  </div>
+      
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12"
+                    >
+                      <div>
+                        <img src="assets/Gallery/bar.png" alt="Picture of the Bar" />
+                      </div>
+                    </blockquote>
+                  </div>
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12"
+                    >
+                      <div>
+                        <img src="assets/Rooms/rosesuite 1.png" alt="Picture of Rose Suite" />
+                      </div>
+                    </blockquote>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-center mt-6 gap-4 lg:hidden">
+                <button
+                  aria-label="Previous slide"
+                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
+                >
+                  <svg
+                    class="h-5 w-5 -rotate-180 transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+          
+                <button
+                  aria-label="Next slide"
+                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          new Swiper('.swiper-container', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 32,
+            autoplay: {
+              delay: 8000,
+            },
+            breakpoints: {
+              640: {
+                centeredSlides: true,
+                slidesPerView: 1.25,
+              },
+              1024: {
+                centeredSlides: false,
+                slidesPerView: 1.25,
+                autoResize: false,
+              },
+            },
+            navigation: {
+              nextEl: '.next-button',
+              prevEl: '.prev-button',
+            },
+          })
+        })
+      </script>
+    </section>
     <!-- Review Section -->
     <section id="reviews" class="scroll-mt-10">
       <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -506,8 +678,7 @@ import MainLayout from "../layouts/MainLayout.astro";
         </h2>
 
         <p class="mt-4 text-gray-500">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptas
-          veritatis illo placeat harum porro optio fugit a culpa sunt id!
+          We love to hear your feedback and how you enjoyed your stay!
         </p>
 
         <div class="hidden lg:mt-8 lg:flex lg:gap-4">
@@ -620,20 +791,17 @@ import MainLayout from "../layouts/MainLayout.astro";
 
                   <div class="mt-4">
                     <p class="text-2xl font-bold text-black sm:text-3xl">
-                      Stayin' Alive 1
+                      A wonderful, memorable experience
                     </p>
 
                     <p class="mt-4 leading-relaxed text-gray-500">
-                      No, Rose, they are not breathing. And they have no arms or
-                      legs … Where are they? You know what? If we come across
-                      somebody with no arms or legs, do we bother resuscitating
-                      them? I mean, what quality of life do we have there?
+                      After a long day of driving, it was nice to arrive at the Yorkshire Inn. Everything felt homey and relaxing, not like our usual cookie cutter hotel stays.
                     </p>
                   </div>
                 </div>
 
                 <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Michael Scott
+                  &mdash; Nathan Temple
                 </footer>
               </blockquote>
             </div>
@@ -702,20 +870,17 @@ import MainLayout from "../layouts/MainLayout.astro";
 
                   <div class="mt-4">
                     <p class="text-2xl font-bold text-black sm:text-3xl">
-                      Stayin' Alive 2
+                      We will be back again and look forward to another visit.
                     </p>
 
                     <p class="mt-4 leading-relaxed text-gray-500">
-                      No, Rose, they are not breathing. And they have no arms or
-                      legs … Where are they? You know what? If we come across
-                      somebody with no arms or legs, do we bother resuscitating
-                      them? I mean, what quality of life do we have there?
+                      This charming and historic brick inn is a very comfortable place, with cozy and well-appointed bedrooms and en-suite bathrooms. The room rates are extremely good.
                     </p>
                   </div>
                 </div>
 
                 <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Michael Scott
+                  &mdash; Kevin Quinlan
                 </footer>
               </blockquote>
             </div>
@@ -784,20 +949,17 @@ import MainLayout from "../layouts/MainLayout.astro";
 
                   <div class="mt-4">
                     <p class="text-2xl font-bold text-black sm:text-3xl">
-                      Stayin' Alive 3
+                      Would definitely stay here again.
                     </p>
 
                     <p class="mt-4 leading-relaxed text-gray-500">
-                      No, Rose, they are not breathing. And they have no arms or
-                      legs … Where are they? You know what? If we come across
-                      somebody with no arms or legs, do we bother resuscitating
-                      them? I mean, what quality of life do we have there?
+                      We stayed for one night while in the area for a for a wedding. Hosts were very welcoming. The house is beautifully decorated, and our room was spacious and clean. Breakfast was very tasty. Also, it has a great central location- a short drive to the outlets and several wineries.
                     </p>
                   </div>
                 </div>
 
                 <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Michael Scott
+                  &mdash; Alicia Dziak
                 </footer>
               </blockquote>
             </div>
