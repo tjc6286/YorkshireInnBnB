@@ -4,10 +4,10 @@
  */
 import { MongoClient } from "mongodb";
 import { logYellow, logBlue, logRed, logMessage } from "./logger";
-const uri = import.meta.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || import.meta.env.MONGODB_URI;
+const DB_NAME = process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME;
 const options = {};
 let cachedMongo;
-
 let connectedClient;
 
 /**
@@ -22,7 +22,7 @@ const connectToDB = async () => {
   // Change this to your own DB name of course.
   // Or better yet, put it in your .env
   await connectedClient.connect();
-  return connectedClient.db("YorkshireInnBnB");
+  return connectedClient.db(DB_NAME);
 };
 
 /**
@@ -55,8 +55,8 @@ export const getDB = async () => {
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   // Text above copied from :
   // https://github.com/vercel/next.js/blob/canary/examples/with-mongodb/lib/mongodb.ts
-
-  if (import.meta.env.NODE_ENV === "development") {
+  const enviroment = process.env.NODE_ENV || import.meta.env.NODE_ENV;
+  if (enviroment === "development") {
     if (!global._mongoConnection) {
       global._mongoConnection = await connectToDB();
       cachedMongo = global._mongoConnection;
