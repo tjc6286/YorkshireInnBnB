@@ -1,0 +1,360 @@
+---
+/**
+ * MainLayoutBooking.astro
+ *
+ * Wrapper layout with meta data and global page functionality.
+ *
+ * Funtionality:
+ * - Nav-bar active page link
+ * - Mobile nav-bar toggle
+ * - Page load animation
+ * - Background canvas animation logic and html elem
+ */
+
+//COMPONENT PROPS
+const { title, activePage, heroImgPath } = Astro.props;
+
+//STYLES FOR NAV ITEMS
+let activeNavCss =
+  "block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
+let navCSS =
+  "block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
+
+//STYLES REFERENCE VARIABLE
+var homeCSS = "";
+var amenitiesCSS = "";
+var reviewsCSS = "";
+var roomsCSS = "";
+var galleryCSS = "";
+var contactCSS = "";
+
+// Apply the styles to navigation elements | apply different active style to active page.
+if (activePage === "home") {
+  homeCSS = activeNavCss;
+  amenitiesCSS = navCSS;
+  reviewsCSS = navCSS;
+  roomsCSS = navCSS;
+  galleryCSS = navCSS;
+  contactCSS = navCSS;
+} else if (activePage === "amenities") {
+  homeCSS = navCSS;
+  amenitiesCSS = activeNavCss;
+  reviewsCSS = navCSS;
+  roomsCSS = navCSS;
+  galleryCSS = navCSS;
+  contactCSS = navCSS;
+} else if (activePage === "reviews") {
+  homeCSS = navCSS;
+  amenitiesCSS = navCSS;
+  reviewsCSS = activeNavCss;
+  roomsCSS = navCSS;
+  galleryCSS = navCSS;
+  contactCSS = navCSS;
+} else if (activePage === "rooms") {
+  homeCSS = navCSS;
+  amenitiesCSS = navCSS;
+  reviewsCSS = navCSS;
+  roomsCSS = activeNavCss;
+  galleryCSS = navCSS;
+  contactCSS = navCSS;
+} else if (activePage === "gallery") {
+  homeCSS = navCSS;
+  amenitiesCSS = navCSS;
+  reviewsCSS = navCSS;
+  roomsCSS = navCSS;
+  galleryCSS = activeNavCss;
+  contactCSS = navCSS;
+} else if (activePage === "contact") {
+  homeCSS = navCSS;
+  amenitiesCSS = navCSS;
+  reviewsCSS = navCSS;
+  roomsCSS = navCSS;
+  galleryCSS = navCSS;
+  contactCSS = activeNavCss;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Discover the exceptional software development skills of Francisco Paliouras,
+		 showcasing a diverse portfolio of innovative projects. Explore thier commitment to excellence in every project. 
+		 Please feel free to reach out with opportunities or any other inqueries."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-[#F4F7FA]">
+    <nav class="sticky top-0 z-50 flex bg-[#36353A] items-center h-20">
+      <div class="container flex flex-wrap items-center justify-end mx-auto">
+        <a href="/index#home" class="mx-auto md:hidden">
+          <img src={heroImgPath} alt="Yorkshire Inn Logo" />
+        </a>
+        <!-- Hamburger Menu -->
+        <button
+          id="nav_btn"
+          data-collapse-toggle="navbar-default"
+          type="button"
+          class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          aria-controls="navbar-default"
+          aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="w-6 h-6"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            ><path
+              fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd"></path></svg
+          >
+        </button>
+        <!-- ----DEFAULT WEB NAVIGATION---- -->
+        <div
+          class="hidden w-full md:block md:w-auto mx-auto relative px-5 max-w-screen-xl items-center justify-end"
+          id="navbar-default">
+          <ul
+            class="flex flex-col md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 bg-[#36353A] items-center">
+            <li>
+              <a
+                href="/index#home"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="/index#amenities"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Amenities</a
+              >
+            </li>
+            <li>
+              <a
+                href="/index#reviews"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Reviews</a
+              >
+            </li>
+            <li>
+              <!-- Navbar Logo -->
+              <a href="/index#home"
+                ><img src={heroImgPath} alt="Yorkshire Inn Logo" /></a
+              >
+            </li>
+            <li>
+              <a
+                href="/index#room"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Rooms</a
+              >
+            </li>
+            <li>
+              <a
+                href="/index#gallery"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Gallery</a
+              >
+            </li>
+            <li>
+              <a
+                href="/index#contact"
+                class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
+                style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
+                >Contact</a
+              >
+            </li>
+          </ul>
+        </div>
+        <!-- ----DEFAULT MOBILE NAVIGATION---- -->
+        <div
+          class="md:hidden transition-transform w-[90%] overflow-hidden scale-y-0 absolute top-10 mx-5 z-10"
+          id="navbar-mobile">
+          <ul
+            class="flex flex-col p-4 mt-4 border border-[#262b29] bg-[#36353A] md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
+            <li>
+              <a href="/index" class={homeCSS} aria-current="page">Home</a>
+            </li>
+            <li>
+              <a href="/index#amenities" class={amenitiesCSS}>Amenities</a>
+            </li>
+            <li>
+              <a href="/index#reviews" class={reviewsCSS}>Reviews</a>
+            </li>
+            <li>
+              <a href="/index#room" class={roomsCSS}>Rooms</a>
+            </li>
+            <li>
+              <a href="/index#gallery" class={galleryCSS}>Gallery</a>
+            </li>
+            <li>
+              <a href="#contact" class={contactCSS}>Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END NAVBAR -->
+    <div style="display: block; min-height: max-content;">
+      <slot />
+    </div>
+    <!-- FOOTER -->
+    <footer
+      class="text-gray-800 bg-[#F4F7FA]"
+      style="position: relative; bottom: 0">
+      <div class="bg-[#36353A]">
+        <div class="max-w-2xl mx-auto text-white py-10">
+          <div class="text-center">
+            <h3 class="text-3xl mb-3">Enjoy Your Stay With Us</h3>
+            <div class="order-1 md:order-2">
+              <a href="/index#home" class="hover:text-neutral-400 px-2">Home</a>
+              <a
+                href="/index#amenities"
+                class="hover:text-neutral-400 px-2 border-l">Amenities</a
+              >
+              <a
+                href="/index#reviews"
+                class="hover:text-neutral-400 px-2 border-l">Reviews</a
+              >
+              <a
+                href="/index#rooms"
+                class="hover:text-neutral-400 px-2 border-l">Rooms</a
+              >
+              <a
+                href="/index#gallery"
+                class="hover:text-neutral-400 px-2 border-l">Gallery</a
+              >
+              <a
+                href="/index#contact"
+                class="hover:text-neutral-400 px-2 border-l">Contact</a
+              >
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 my-10">
+              <a href="https://www.facebook.com/theyorkshireinn/">
+                <div
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="40"
+                    height="40"
+                    data-ux="IconSocial"
+                    class="x-el x-el-svg c1-1 c1-2 c1-23 c1-27 c1-28 c1-c6 c1-c7 c1-5c c1-b c1-c c1-c8 c1-c9 c1-d c1-ca c1-cb c1-cc c1-cd c1-ce c1-cf c1-cg c1-ch c1-e c1-f c1-g"
+                    ><path
+                      d="M20 12.047C20 7.603 16.418 4 12 4s-8 3.603-8 8.047c0 4.017 2.925 7.346 6.75 7.95v-5.624H8.719v-2.326h2.031v-1.773c0-2.017 1.194-3.13 3.022-3.13.875 0 1.79.157 1.79.157v1.98h-1.008c-.994 0-1.304.62-1.304 1.257v1.51h2.219l-.355 2.325H13.25v5.624c3.825-.604 6.75-3.933 6.75-7.95z"
+                    ></path></svg
+                  >
+                  <div class="text-left ml-3">
+                    <p class="text-xs text-gray-200">Reach Us</p>
+                    <p class="text-sm md:text-base">On Facebook</p>
+                  </div>
+                </div>
+              </a>
+              <a href="https://www.instagram.com/the_yorkshire_inn/">
+                <div
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="40"
+                    height="40"
+                    data-ux="IconSocial"
+                    class="x-el x-el-svg c1-1 c1-2 c1-23 c1-27 c1-28 c1-c6 c1-c7 c1-5c c1-b c1-c c1-c8 c1-c9 c1-d c1-ca c1-cb c1-cc c1-cd c1-ce c1-cf c1-cg c1-ch c1-e c1-f c1-g"
+                    ><path
+                      d="M14.667 12a2.57 2.57 0 0 0-.782-1.885A2.57 2.57 0 0 0 12 9.333a2.57 2.57 0 0 0-1.885.782A2.57 2.57 0 0 0 9.333 12c0 .736.26 1.365.782 1.885.52.521 1.149.782 1.885.782a2.57 2.57 0 0 0 1.885-.782c.521-.52.782-1.149.782-1.885zm1.437 0c0 1.139-.4 2.108-1.198 2.906-.798.799-1.767 1.198-2.906 1.198-1.139 0-2.108-.4-2.906-1.198-.799-.798-1.198-1.767-1.198-2.906 0-1.139.4-2.108 1.198-2.906.798-.799 1.767-1.198 2.906-1.198 1.139 0 2.108.4 2.906 1.198.799.798 1.198 1.767 1.198 2.906zm1.125-4.27c0 .263-.094.489-.281.676a.923.923 0 0 1-.677.282.923.923 0 0 1-.677-.282.923.923 0 0 1-.281-.677c0-.264.093-.49.28-.677a.923.923 0 0 1 .678-.281c.264 0 .49.094.677.281a.923.923 0 0 1 .281.677zM12 5.437l-.797-.006a56.514 56.514 0 0 0-1.099 0c-.25.004-.585.014-1.005.032-.42.017-.778.052-1.073.104a4.177 4.177 0 0 0-.745.192c-.347.14-.653.34-.916.605-.264.263-.466.569-.605.916-.076.202-.14.45-.192.745a8.255 8.255 0 0 0-.104 1.073c-.018.42-.028.755-.032 1.005-.003.25-.003.616 0 1.1l.006.796-.006.797c-.003.483-.003.849 0 1.099.004.25.014.585.032 1.005.017.42.052.778.104 1.073.052.295.116.543.192.745.14.347.34.653.605.916.263.264.569.466.916.605.202.076.45.14.745.192.295.052.653.087 1.073.104.42.018.755.028 1.005.032.25.003.616.003 1.1 0l.796-.005.797.005c.483.003.849.003 1.099 0 .25-.004.585-.014 1.005-.032.42-.017.778-.052 1.073-.104.295-.052.543-.116.745-.192.347-.14.653-.34.916-.605.264-.263.466-.569.605-.916.076-.202.14-.45.192-.745.052-.295.087-.653.104-1.073.018-.42.028-.755.032-1.005.003-.25.003-.616 0-1.1L18.562 12l.006-.797c.003-.483.003-.849 0-1.099a38.59 38.59 0 0 0-.032-1.005 8.255 8.255 0 0 0-.104-1.073 4.177 4.177 0 0 0-.192-.745 2.703 2.703 0 0 0-.605-.916 2.703 2.703 0 0 0-.916-.605 4.177 4.177 0 0 0-.745-.192 8.255 8.255 0 0 0-1.073-.104c-.42-.018-.755-.028-1.005-.032-.25-.003-.616-.003-1.1 0L12 5.438zM20 12c0 1.59-.017 2.691-.052 3.302-.07 1.445-.5 2.563-1.292 3.354-.791.792-1.91 1.222-3.354 1.292-.611.035-1.712.052-3.302.052s-2.691-.017-3.302-.052c-1.445-.07-2.563-.5-3.354-1.292-.792-.791-1.222-1.91-1.292-3.354C4.017 14.691 4 13.59 4 12s.017-2.691.052-3.302c.07-1.445.5-2.563 1.292-3.354.791-.792 1.91-1.222 3.354-1.292C9.309 4.017 10.41 4 12 4s2.691.017 3.302.052c1.445.07 2.563.5 3.354 1.292.792.791 1.222 1.91 1.292 3.354.035.611.052 1.712.052 3.302z"
+                    ></path></svg
+                  >
+                  <div class="text-left ml-3">
+                    <p class="text-xs text-gray-200">Reach Us</p>
+                    <p class="text-sm md:text-base">On Instagram</p>
+                  </div>
+                </div>
+              </a>
+              <a
+                href="https://www.yelp.com/biz/the-yorkshire-inn-phelps?osq=THE+YORKSHIRE+INN">
+                <div
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="40"
+                    height="40"
+                    data-ux="IconSocial"
+                    class="x-el x-el-svg c1-1 c1-2 c1-23 c1-27 c1-28 c1-c6 c1-c7 c1-5c c1-b c1-c c1-c8 c1-c9 c1-d c1-ca c1-cb c1-cc c1-cd c1-ce c1-cf c1-cg c1-ch c1-e c1-f c1-g"
+                    ><path
+                      d="M9.988 14.158c-.037.01-3.983 1.134-4.224 1.134-.554-.029-.674-.515-.726-.99a6.35 6.35 0 0 1 .011-1.487c.07-.596.201-1.431.883-1.396.175 0 2.447.822 4.11 1.41.624.215.679 1.136-.054 1.33zm2.112-3.616c.065 1.213-.93 1.54-1.722.454L6.501 5.663c-.055-.21.011-.394.193-.553.57-.523 3.626-1.263 4.432-1.082.273.06.441.194.503.4.048.263.42 5.314.47 6.114zm-.051 5.232c0 .146.007 3.696-.062 3.857-.084.19-.256.308-.522.356-.368.054-.988-.06-1.86-.34-.803-.257-2.068-.682-1.798-1.349.102-.219 1.874-1.994 2.82-2.971.437-.483 1.45-.175 1.422.447zm6.572-3.74c-.204.118-4.041.896-4.307.972l.01-.02c-.66.15-1.29-.586-.85-1.098.136-.117 2.404-2.933 2.656-3.08.19-.113.412-.12.667-.018.671.28 2.01 2.003 2.094 2.686-.004.092.044.371-.27.558zm.368 4.15c-.098.654-1.623 2.33-2.327 2.571-.251.083-.47.064-.645-.063-.183-.111-2.254-3.083-2.367-3.248-.398-.514.248-1.263.933-1.054 0 0 4.03 1.133 4.184 1.25.19.131.262.312.222.544z"
+                    ></path></svg
+                  >
+                  <div class="text-left ml-3">
+                    <p class="text-xs text-gray-200">Reach Us</p>
+                    <p class="text-sm md:text-base">On Yelp</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div
+            class="px-10 mt-16 lg:mt-28 flex flex-col md:flex-row md:justify-between items-center text-sm text-gray-300">
+            <p class="order-2 md:order-1 mt-8 md:mt-0">
+              &copy; COPYRIGHT © 2022 THE YORKSHIRE INN - ALL RIGHTS RESERVED.
+              DESIGNED BY TEAM INFINITY.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+<script>
+  /**
+   * HAMBURGER Menu Logic for Mobile menu
+   */
+  var navBtn = document.getElementById("nav_btn");
+  var menu = document.getElementById("navbar-mobile");
+  navBtn?.addEventListener("click", () => {
+    menu?.classList.toggle("scale-y-0");
+    menu?.classList.toggle("scale-y-100");
+  });
+</script>
+
+<style is:global>
+  #canvas {
+    display: block;
+    margin: 0 auto;
+    position: fixed;
+    z-index: -100;
+    background-color: #081710;
+    height: 100%;
+  }
+  /* *************************************** */
+  /* GLOBAL LOADING ANIMATION FOR ALL PAGES */
+  /* *************************************** */
+  .load {
+    animation-duration: 2s;
+    animation-name: fade-in-load;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  @keyframes fade-in-load {
+    from {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

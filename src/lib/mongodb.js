@@ -132,3 +132,14 @@ export const ReservationsCollection = async () => {
   logMessage("DB Utility", "Getting Reservations Collection");
   return db.collection("RoomReservation");
 };
+
+/**
+ * Method to connect to db and pass the Vendor collection
+ *
+ * @returns The Vendor Collection
+ */
+export const VendorsCollection = async () => {
+  const db = await getDB();
+  logMessage("DB Utility", "Getting Vendors Collection");
+  return db.collection("Vendor");
+};

@@ -235,11 +235,20 @@ const AdminReporting: React.FC = () => {
     setChartSelected(event.target.value as string);
     resetDates();
     switch (event.target.value) {
-      case "bookingsPerRoom":
-        updateChartLegend("Bookings per Room");
-        updateChartLabels(roomList);
-        break;
       case "incomePerRoom":
+        fetch("api/reporting/getEarningsPerRoom", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setNoneDate(true);
+            updateChartData(data.map((room: any) => room.totalSum));
+            updateChartLabels(data.map((room: any) => room.roomName));
+            updateChartLegend("Dollars($)");
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
         updateChartLegend("Dollar Amount");
         updateChartLabels(roomList);
         break;
@@ -352,9 +361,6 @@ const AdminReporting: React.FC = () => {
                     }}>
                     <MenuItem value={"incomePerMonth"}>
                       Total Income Per Month
-                    </MenuItem>
-                    <MenuItem value={"bookingsPerRoom"}>
-                      Bookings Per Room
                     </MenuItem>
                     <MenuItem value={"incomePerRoom"}>Income Per Room</MenuItem>
                     <MenuItem value={"siteVsThirdParty"}>

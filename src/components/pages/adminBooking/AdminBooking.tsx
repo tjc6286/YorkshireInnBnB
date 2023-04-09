@@ -1,12 +1,8 @@
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
   Modal,
   Paper,
-  Radio,
-  RadioGroup,
   Table,
   TableBody,
   TableCell,

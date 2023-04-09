@@ -1,6 +1,7 @@
 import { logMessage } from "./logger";
 import {
   BookingsCollection,
+  RoomsCollection,
   ReservationsCollection,
   disconnectDB,
 } from "./mongodb";
@@ -53,47 +54,55 @@ export const countReservationsPerRoom = async () => {
   }
 };
 
-export const sumSubtotalPerRoom = async () => {
+export const sumTotalPerRoom = async () => {
   //SERVER LOGGING
-  logMessage("Method: sumSubtotalPerRoom", "Summing Subtotals");
+  logMessage("Method: sumTotalPerRoom", "Summing Totals");
 
   try {
-    const reservationCollection = await await ReservationsCollection();
+    const reservationCollection = await ReservationsCollection();
+    const roomCollection = await RoomsCollection();
 
     const pipeline = [
       {
-        $group: {
-          _id: "$roomId",
-          subtotalSum: { $sum: "$subtotal" },
-        },
-      },
-      {
         $lookup: {
-          from: "Room",
-          localField: "_id",
-          foreignField: "_id",
-          as: "room",
+          from: reservationCollection.collectionName,
+          let: { roomId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$roomId", "$$roomId"] },
+              },
+            },
+            {
+              $group: {
+                _id: "$roomId",
+                totalSum: { $sum: "$total" }, // Change this line
+              },
+            },
+          ],
+          as: "reservations",
         },
       },
       {
-        $unwind: "$room",
+        $unwind: {
+          path: "$reservations",
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $project: {
           _id: 0,
           roomId: "$_id",
-          roomName: "$room.name",
-          subtotalSum: 1,
+          roomName: "$name",
+          totalSum: { $ifNull: ["$reservations.totalSum", 0] }, // Change this line
         },
       },
     ];
 
-    const subtotalPerRoom = await reservationCollection
-      .aggregate(pipeline)
-      .toArray();
-    return subtotalPerRoom;
+    const totalPerRoom = await roomCollection.aggregate(pipeline).toArray(); // Rename the variable
+    return totalPerRoom;
   } catch (error) {
-    console.error("Error calculating sum of subtotals per room:", error);
+    console.error("Error calculating sum of totals per room:", error);
     return null;
   } finally {
     disconnectDB();
@@ -102,14 +111,17 @@ export const sumSubtotalPerRoom = async () => {
 
 export const countBookingSource = async () => {
   try {
-    const bookingCollection = await await BookingsCollection();
+    const bookingCollection = await BookingsCollection();
 
     const pipeline = [
       {
         $facet: {
-          thirdParty: [{ $match: { isThirdParty: true } }, { $count: "count" }],
+          thirdParty: [
+            { $match: { vendor: { $exists: true } } },
+            { $count: "count" },
+          ],
           nonThirdParty: [
-            { $match: { isThirdParty: false } },
+            { $match: { vendor: { $exists: false } } },
             { $count: "count" },
           ],
         },
