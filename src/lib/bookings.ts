@@ -95,7 +95,7 @@ export const insertNewbooking = async (newBooking: any) => {
  */
 export const updateBooking = async (
   bookingID: string,
-  updatedBooking: Booking,
+  updatedBooking: Booking
 ) => {
   //SERVER LOGGING
   logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
@@ -104,7 +104,7 @@ export const updateBooking = async (
   const bookingcollection = await BookingsCollection();
   const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
-    updatedBooking,
+    updatedBooking
   );
   disconnectDB();
   return returnBooking;
@@ -120,7 +120,7 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
   //SERVER LOGGING
   logMessage(
     "Method: insertNewInProcessBooking",
-    "Inserting New Booking Obj:" + newBooking,
+    "Inserting New Booking Obj:" + newBooking
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -147,12 +147,12 @@ export const updateInProcessBooking = async (
   amount: number,
   totalCost: number,
   customerInformation: IFormState,
-  blockedOffDates: Array<string>,
+  blockedOffDates: Array<string>
 ) => {
   //SERVER LOGGING
   logMessage(
-    "Method: insertNewInProcessBooking",
-    "Updating inProgressBooking Obj: " + id,
+    "Method: updateInProcessBooking",
+    "Updating inProgressBooking Obj: " + id
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -167,7 +167,7 @@ export const updateInProcessBooking = async (
           customerInformation,
           blockedOffDates,
         },
-      },
+      }
     );
     return result.acknowledged;
   } catch (e) {
@@ -187,7 +187,7 @@ export const getInProcessBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: getInProcessBookingByID",
-    "Getting InProcessBooking by ID: " + bookingId,
+    "Getting InProcessBooking by ID: " + bookingId
   );
 
   //TODO: add the correct parameters to the find
@@ -209,7 +209,7 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeBookingByID",
-    "Removing Booking by ID: " + bookingId,
+    "Removing Booking by ID: " + bookingId
   );
 
   const bookingcollection = await BookingsCollection();
@@ -229,8 +229,8 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
 export const removeTempBookingAndHoldDates = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage(
-    "Method: removeBookingByID",
-    "Removing Booking by ID: " + bookingId,
+    "Method: removeTempBookingAndHoldDates",
+    "Removing Booking by ID: " + bookingId
   );
 
   const tempBookingCollection = await InProcessBookingCollection();
@@ -240,7 +240,7 @@ export const removeTempBookingAndHoldDates = async (bookingId: string) => {
   });
 
   const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
-    (res: any) => new ObjectId(res._id),
+    (res: any) => new ObjectId(res._id)
   );
   const blockedOffDates = tempBooking.blockedOffDates;
 
@@ -248,7 +248,7 @@ export const removeTempBookingAndHoldDates = async (bookingId: string) => {
     const roomsCollection = await RoomsCollection();
     const result = await roomsCollection.updateMany(
       { _id: { $in: roomsWithTemporaryHoldDates } },
-      { $pull: { temporaryHoldDates: { $in: blockedOffDates } } },
+      { $pull: { temporaryHoldDates: { $in: blockedOffDates } } }
     );
 
     if (result) {
@@ -266,6 +266,12 @@ export const removeTempBookingAndHoldDates = async (bookingId: string) => {
 };
 
 export const createCustomerBooking = async (tempBookingId: string) => {
+  //SERVER LOGGING
+  logMessage(
+    "Method: createCustomerBooking",
+    "Creating Customer From InProcessBooking by ID: " + tempBookingId
+  );
+
   const roomsCollection = await RoomsCollection();
   const bookingCollection = await BookingsCollection();
   const customerCollection = await CustomersCollection();
@@ -284,7 +290,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
         $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
       },
     },
-    { $push: { bookedDates: { $each: datesToBlockInRooms } } },
+    { $push: { bookedDates: { $each: datesToBlockInRooms } } }
   );
 
   if (roomsUpdate) {
@@ -330,7 +336,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
       subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
       total: tempBooking.itinerary[index].priceBreakdown.total,
       customer: new ObjectId(
-        customerFound ? customer._id : customer.insertedId,
+        customerFound ? customer._id : customer.insertedId
       ),
     };
   });
@@ -347,7 +353,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     totalPrice: tempBooking.totalCost,
     bookingDeposit: tempBooking.amount,
     customerId: new ObjectId(
-      customerFound ? customer._id : customer.insertedId,
+      customerFound ? customer._id : customer.insertedId
     ),
   };
   const insertedBooking = await bookingCollection.insertOne(bookingObj);
