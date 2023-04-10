@@ -101,20 +101,26 @@ export const updateReservation = async (
  * @returns void
  */
 export const cancelReservations = async (reservations: Array<Reservation>) => {
-  //SERVER LOGGING
-  logMessage(
-    "Method: cancelReservations",
-    "Cancelling Reservations: " + reservations
-  );
-
-  const reservationsCollection = await ReservationsCollection();
-  //loop through all reservations and update the reservation status to "cancelled"
-  for (const reservation of reservations) {
-    await reservationsCollection.update(
-      { _id: new ObjectId(reservation._id) },
-      { $set: { isCanceled: true } }
+  try {
+    //SERVER LOGGING
+    logMessage(
+      "Method: cancelReservations",
+      "Cancelling Reservations: " + reservations
     );
+    console.log(reservations);
+
+    const reservationsCollection = await ReservationsCollection();
+    //loop through all reservations and update the reservation status to "cancelled"
+    for (const reservation of reservations) {
+      await reservationsCollection.updateOne(
+        { _id: new ObjectId(reservation._id) },
+        { $set: { isCancelled: true } }
+      );
+    }
+    return true;
+  } catch (error) {
+    logRed("Method: cancelReservations - Error: " + error);
+  } finally {
+    disconnectDB();
   }
-  disconnectDB();
-  return true;
 };

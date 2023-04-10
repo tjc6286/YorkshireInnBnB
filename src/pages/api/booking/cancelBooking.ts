@@ -9,7 +9,7 @@ import { insertNewCustomer } from "../../../lib/customers";
 import { logMessage } from "../../../lib/logger";
 import {
   cancelReservations,
-  insertNewReservations,
+  getReservationByID,
 } from "../../../lib/reservations";
 
 /**
@@ -33,7 +33,12 @@ export const post: APIRoute = async ({ request }) => {
     if (!booking) {
       return new Response(null, { status: 400 });
     } else {
-      await cancelReservations(booking.reservationIds);
+      const reservations = [];
+      for (const [key, value] of Object.entries(booking.reservationIds)) {
+        const reservation = await getReservationByID(value);
+        reservations.push(reservation);
+      }
+      await cancelReservations(reservations);
       var deletedBooking = await removeBookingByID(bookingId);
 
       if (deletedBooking === undefined) {

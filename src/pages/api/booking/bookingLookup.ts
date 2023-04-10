@@ -34,7 +34,6 @@ export const post: APIRoute = async ({ request }) => {
       const customer = await getCustomerByID(booking.customerId);
       //get reservations
       const reservations = [];
-
       for (const [key, value] of Object.entries(booking.reservationIds)) {
         const reservation = await getReservationByID(value);
         reservations.push(reservation);

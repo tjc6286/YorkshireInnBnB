@@ -21,15 +21,15 @@ export const get = async () => {
   //iterate over bookings and add customer data to customerList use the getCustomerById function
   for (const booking of bookings) {
     const customer = await getCustomerByID(booking.customerId);
-    const reservationData = [];
-    for (const reservationID of booking.reservationIds) {
-      const reservation = await getReservationByID(reservationID);
-      reservationData.push(reservation);
+    const reservations = [];
+    for (const [key, value] of Object.entries(booking.reservationIds)) {
+      const reservation = await getReservationByID(value);
+      reservations.push(reservation);
     }
     newBookingList.push({
       booking: booking,
       customer: customer,
-      reservation: reservationData,
+      reservation: reservations,
     });
   }
 

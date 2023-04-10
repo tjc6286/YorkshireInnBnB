@@ -7,6 +7,7 @@ const BookingLookup = () => {
   const [booking, setBooking] = React.useState<{}>();
   const [bookingId, setBookingId] = React.useState("");
   const [roomList, setRoomList] = React.useState<any>([]);
+  const [bookingNotFound, setBookingNotFound] = React.useState(false);
 
   const handleSubmit = () => {
     fetch("/api/booking/bookingLookup", {
@@ -37,15 +38,19 @@ const BookingLookup = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        setBookingNotFound(false);
         setBooking(data);
+        //reload window
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        setBookingNotFound(true);
       });
   };
 
   //get room name from the room list by room id
   const getRoomName = (roomId: string) => {
-    console.log(roomId);
-    console.log(roomList);
     const room = roomList.find((room: any) => room._id === roomId);
     return room?.name;
   };
@@ -56,7 +61,6 @@ const BookingLookup = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        //console.log(data);
         setRoomList(data);
       });
   }, []);
@@ -121,6 +125,12 @@ const BookingLookup = () => {
             }}>
             Cancel Booking
           </Button>
+        </div>
+      )}
+      {/* booking not found */}
+      {bookingNotFound && (
+        <div className="rounded-sm border-2 border-black p-4 mt-2">
+          <Typography>Booking not found</Typography>
         </div>
       )}
     </div>
