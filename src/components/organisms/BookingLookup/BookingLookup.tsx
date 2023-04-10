@@ -1,11 +1,9 @@
+import { TextField, Typography } from "@mui/material";
+import { format, max, min, parse } from "date-fns";
 import React, { useEffect } from "react";
-import { Button, TextField } from "@mui/material";
-import type { Booking } from "../../../types/Booking";
-import { Typography, Box, Grid } from "@mui/material";
-import { min, max, format, parse } from "date-fns";
 
 const BookingLookup = () => {
-  const [booking, setBooking] = React.useState<{}>();
+  const [booking, setBooking] = React.useState<any>();
   const [bookingId, setBookingId] = React.useState("");
   const [roomList, setRoomList] = React.useState<any>([]);
   const [bookingNotFound, setBookingNotFound] = React.useState(false);
@@ -27,29 +25,6 @@ const BookingLookup = () => {
       });
   };
 
-  const cancelBooking = (bookingId: string) => {
-    fetch("/api/booking/cancelBooking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        bookingId: bookingId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setBookingNotFound(false);
-        setBooking(data);
-        //reload window
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        setBookingNotFound(true);
-      });
-  };
-
   //get room name from the room list by room id
   const getRoomName = (roomId: string) => {
     const room = roomList.find((room: any) => room._id === roomId);
@@ -59,7 +34,7 @@ const BookingLookup = () => {
   const getDateRange = (dates: Array<string>) => {
     const dateFormat = "MM/dd/yyyy";
     const dateObjects = dates.map((dateString) =>
-      parse(dateString, dateFormat, new Date())
+      parse(dateString, dateFormat, new Date()),
     );
 
     const minDate = min(dateObjects);
@@ -108,7 +83,8 @@ const BookingLookup = () => {
             lineHeight: "34px",
             letterSpacing: "0.13em",
           }}
-          onClick={handleSubmit}>
+          onClick={handleSubmit}
+        >
           Look up Booking
         </button>
       </div>
@@ -120,7 +96,7 @@ const BookingLookup = () => {
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
-            booking?.booking?.dates
+            booking?.booking?.dates,
           )}`}</Typography>
           <Typography className="mt-2 underline font-semibold">
             Reservations:
@@ -129,7 +105,7 @@ const BookingLookup = () => {
             return (
               <div className="my-2" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
-                  reservation.roomId
+                  reservation.roomId,
                 )}`}</Typography>
                 {reservation.allergiesIncluded && (
                   <Typography>{`Allergies: ${reservation.allergies}`}</Typography>
@@ -140,25 +116,13 @@ const BookingLookup = () => {
               </div>
             );
           })}
-          {booking?.booking?.isCancelled ? (
+          {booking?.booking?.isCancelled && (
             <Typography
               style={{ fontSize: "24px" }}
-              className="mt-2 font-semibold text-center text-red-600 text-2xl">
+              className="mt-2 font-semibold text-center text-red-600 text-2xl"
+            >
               Booking Has Been Cancelled
             </Typography>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                cancelBooking(booking.booking._id);
-              }}
-              style={{
-                backgroundColor: "red",
-                color: "white",
-              }}>
-              Cancel Booking
-            </Button>
           )}
         </div>
       )}
