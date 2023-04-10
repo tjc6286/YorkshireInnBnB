@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { ObjectId } from "mongodb";
-import { getBookingByID } from "../../../lib/bookings";
+import { getBookingByTransactionID } from "../../../lib/bookings";
 import { getCustomerByID } from "../../../lib/customers";
 import { getReservationByID } from "../../../lib/reservations";
 import { logMessage } from "../../../lib/logger";
@@ -25,7 +25,7 @@ export const post: APIRoute = async ({ request }) => {
       "Booking ID: " + bookingId
     );
 
-    var booking = await getBookingByID(bookingId);
+    var booking = await getBookingByTransactionID(bookingId);
 
     if (!booking) {
       return new Response(null, { status: 400 });

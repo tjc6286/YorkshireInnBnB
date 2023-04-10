@@ -115,8 +115,8 @@ const BookingLookup = () => {
       {/* booking lookup  */}
       {booking && (
         <div className="rounded-sm border-2 border-black p-4 mt-2">
-          <Typography>{`Confirmation Num: ${booking?.booking?.transactionId}`}</Typography>
-          <Typography>{`Price: $${booking?.booking?.totalPrice}`}</Typography>
+          <Typography>{`Confirmation Number: ${booking?.booking?.transactionId}`}</Typography>
+          <Typography>{`Price of Stay: $${booking?.booking?.totalPrice}`}</Typography>
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
@@ -140,18 +140,26 @@ const BookingLookup = () => {
               </div>
             );
           })}
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              cancelBooking(booking.booking._id);
-            }}
-            style={{
-              backgroundColor: "red",
-              color: "white",
-            }}>
-            Cancel Booking
-          </Button>
+          {booking?.booking?.isCancelled ? (
+            <Typography
+              style={{ fontSize: "24px" }}
+              className="mt-2 font-semibold text-center text-red-600 text-2xl">
+              Booking Has Been Cancelled
+            </Typography>
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                cancelBooking(booking.booking._id);
+              }}
+              style={{
+                backgroundColor: "red",
+                color: "white",
+              }}>
+              Cancel Booking
+            </Button>
+          )}
         </div>
       )}
       {/* booking not found */}

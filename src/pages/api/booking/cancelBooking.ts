@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { ObjectId } from "mongodb";
 import {
+  cancelBooking,
   getBookingByID,
   insertNewbooking,
   removeBookingByID,
@@ -39,7 +40,7 @@ export const post: APIRoute = async ({ request }) => {
         reservations.push(reservation);
       }
       await cancelReservations(reservations);
-      var deletedBooking = await removeBookingByID(bookingId);
+      var deletedBooking = await cancelBooking(bookingId);
 
       if (deletedBooking === undefined) {
         return new Response(null, { status: 400 });

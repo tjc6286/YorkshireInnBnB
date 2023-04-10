@@ -28,7 +28,18 @@ export const getAllBookings = async () => {
  * @param bookingId ID of the Booking to get from the Bookings collection
  * @returns Booking object
  */
-export const getBookingByID = async (bookingId: string) => {
+export const getBookingByID = async (bookingId: ObjectId) => {
+  //SERVER LOGGING
+  logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
+
+  const bookings = await (await BookingsCollection())
+    .find({ _id: bookingId })
+    .toArray();
+  disconnectDB();
+  return bookings[0];
+};
+
+export const getBookingByTransactionID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
 
@@ -218,6 +229,32 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   // result.value contains the deleted document or null if no document was found
   disconnectDB();
   return result.value;
+};
+
+export const cancelBooking = async (bookingId: ObjectId) => {
+  try {
+    //SERVER LOGGING
+    logMessage(
+      "Method: cancelBooking",
+      "Cancelling Booking by ID: " + bookingId
+    );
+
+    const bookingcollection = await BookingsCollection();
+    const result = await bookingcollection.updateOne(
+      { _id: bookingId },
+      { $set: { isCancelled: true } }
+    );
+
+    if (result.modifiedCount === 1) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.log("Error: Problem cancelling booking: " + bookingId);
+  } finally {
+    disconnectDB();
+  }
 };
 
 /**
