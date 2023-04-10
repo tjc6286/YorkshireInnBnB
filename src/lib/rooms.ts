@@ -13,7 +13,8 @@ export const getAllRooms = async () => {
   logMessage("Method: getAllRooms", "Getting All Rooms");
 
   const rooms = await (await RoomsCollection()).find({}).toArray();
-  disconnectDB();
+  console.log(rooms);
+  // disconnectDB();
   return rooms;
 };
 
@@ -138,6 +139,7 @@ export const getRoomsAvailabilityByDateRange = async (
   });
 
   const rooms = await (await RoomsCollection()).find({}).toArray();
+  console.log(rooms);
 
   rooms.forEach((room: RoomAvailability) => {
     let dateFound = false;

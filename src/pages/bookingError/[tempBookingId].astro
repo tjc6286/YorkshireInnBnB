@@ -4,7 +4,7 @@ const { tempBookingId } = Astro.params;
 import { removeTempBookingAndHoldDates } from "../../lib/bookings";
 
 try {
-  removeTempBookingAndHoldDates(tempBookingId!);
+  removeTempBookingAndHoldDates(tempBookingId!, true);
 } catch (error) {
   console.log(error);
   Astro.redirect("/404");

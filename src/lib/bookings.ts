@@ -95,7 +95,7 @@ export const insertNewbooking = async (newBooking: any) => {
  */
 export const updateBooking = async (
   bookingID: string,
-  updatedBooking: Booking
+  updatedBooking: Booking,
 ) => {
   //SERVER LOGGING
   logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
@@ -104,7 +104,7 @@ export const updateBooking = async (
   const bookingcollection = await BookingsCollection();
   const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
-    updatedBooking
+    updatedBooking,
   );
   disconnectDB();
   return returnBooking;
@@ -120,7 +120,7 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
   //SERVER LOGGING
   logMessage(
     "Method: insertNewInProcessBooking",
-    "Inserting New Booking Obj:" + newBooking
+    "Inserting New Booking Obj:" + newBooking,
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -147,12 +147,12 @@ export const updateInProcessBooking = async (
   amount: number,
   totalCost: number,
   customerInformation: IFormState,
-  blockedOffDates: Array<string>
+  blockedOffDates: Array<string>,
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: updateInProcessBooking",
-    "Updating inProgressBooking Obj: " + id
+    "Updating inProgressBooking Obj: " + id,
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -167,7 +167,7 @@ export const updateInProcessBooking = async (
           customerInformation,
           blockedOffDates,
         },
-      }
+      },
     );
     return result.acknowledged;
   } catch (e) {
@@ -187,7 +187,7 @@ export const getInProcessBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: getInProcessBookingByID",
-    "Getting InProcessBooking by ID: " + bookingId
+    "Getting InProcessBooking by ID: " + bookingId,
   );
 
   //TODO: add the correct parameters to the find
@@ -209,7 +209,7 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeBookingByID",
-    "Removing Booking by ID: " + bookingId
+    "Removing Booking by ID: " + bookingId,
   );
 
   const bookingcollection = await BookingsCollection();
@@ -226,43 +226,53 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
  * @param bookingId ID of the Booking to remove
  * @returns Booking object
  */
-export const removeTempBookingAndHoldDates = async (bookingId: string) => {
+export const removeTempBookingAndHoldDates = async (
+  bookingId: string,
+  needToDisconnect: boolean,
+) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeTempBookingAndHoldDates",
-    "Removing Booking by ID: " + bookingId
+    "Removing Booking by ID: " + bookingId,
   );
 
-  const tempBookingCollection = await InProcessBookingCollection();
+  try {
+    const tempBookingCollection = await InProcessBookingCollection();
 
-  const tempBooking = await tempBookingCollection.findOne({
-    _id: new ObjectId(bookingId),
-  });
+    const tempBooking = await tempBookingCollection.findOne({
+      _id: new ObjectId(bookingId),
+    });
 
-  const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
-    (res: any) => new ObjectId(res._id)
-  );
-  const blockedOffDates = tempBooking.blockedOffDates;
-
-  if (tempBooking) {
-    const roomsCollection = await RoomsCollection();
-    const result = await roomsCollection.updateMany(
-      { _id: { $in: roomsWithTemporaryHoldDates } },
-      { $pull: { temporaryHoldDates: { $in: blockedOffDates } } }
+    const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
+      (res: any) => new ObjectId(res._id),
     );
+    const blockedOffDates = tempBooking.blockedOffDates;
 
-    if (result) {
-      console.log("Successfully removed blocked off dates from rooms");
+    if (tempBooking) {
+      const roomsCollection = await RoomsCollection();
+      const result = await roomsCollection.updateMany(
+        { _id: { $in: roomsWithTemporaryHoldDates } },
+        { $pull: { temporaryHoldDates: { $in: blockedOffDates } } },
+      );
+
+      if (result) {
+        console.log("Successfully removed blocked off dates from rooms");
+      }
+    }
+
+    const result = await tempBookingCollection.findOneAndDelete({
+      _id: new ObjectId(bookingId),
+    });
+
+    return result.value;
+  } catch (error) {
+    console.log("there was an error removing the temp booking and hold dates");
+    console.log(error);
+  } finally {
+    if (needToDisconnect) {
+      disconnectDB();
     }
   }
-
-  const result = await tempBookingCollection.findOneAndDelete({
-    _id: new ObjectId(bookingId),
-  });
-
-  // result.value contains the deleted document or null if no document was found
-  disconnectDB();
-  return result.value;
 };
 
 export const createCustomerBooking = async (tempBookingId: string) => {
@@ -270,7 +280,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     //SERVER LOGGING
     logMessage(
       "Method: createCustomerBooking",
-      "Creating Customer From InProcessBooking by ID: " + tempBookingId
+      "Creating Customer From InProcessBooking by ID: " + tempBookingId,
     );
 
     const roomsCollection = await RoomsCollection();
@@ -291,7 +301,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
           $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
         },
       },
-      { $push: { bookedDates: { $each: datesToBlockInRooms } } }
+      { $push: { bookedDates: { $each: datesToBlockInRooms } } },
     );
 
     if (roomsUpdate) {
@@ -338,10 +348,10 @@ export const createCustomerBooking = async (tempBookingId: string) => {
           subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
           total: tempBooking.itinerary[index].priceBreakdown.total,
           customer: new ObjectId(
-            customerFound ? customer._id : customer.insertedId
+            customerFound ? customer._id : customer.insertedId,
           ),
         };
-      }
+      },
     );
     const reservationRes = await reservationCollection.insertMany(reservations);
 
@@ -357,7 +367,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
       totalPrice: tempBooking.totalCost,
       bookingDeposit: tempBooking.amount,
       customerId: new ObjectId(
-        customerFound ? customer._id : customer.insertedId
+        customerFound ? customer._id : customer.insertedId,
       ),
     };
     const insertedBooking = await bookingCollection.insertOne(bookingObj);
@@ -366,7 +376,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
       console.log("Successfully created booking");
     }
 
-    const result = await removeTempBookingAndHoldDates(tempBookingId);
+    const result = await removeTempBookingAndHoldDates(tempBookingId, false);
 
     if (result) {
       console.log("Successfully removed temp booking and hold dates");
@@ -378,113 +388,113 @@ export const createCustomerBooking = async (tempBookingId: string) => {
   }
 };
 
-/**
- * Method to create a booking from a third party
- * @param incomingBoking Booking Object from Third Party
- * @returns returns the confirmation code
- */
-export const createBookingViaThirdParty = async (incomingBoking: any) => {
-  //SERVER LOGGING
-  logMessage(
-    "Method: createBookingViaThirdParty",
-    "Creating Booking From Third Party"
-  );
+// /**
+//  * Method to create a booking from a third party
+//  * @param incomingBooking Booking Object from Third Party
+//  * @returns returns the confirmation code
+//  */
+// export const createBookingViaThirdParty = async (incomingBoking: any) => {
+//   //SERVER LOGGING
+//   logMessage(
+//     "Method: createBookingViaThirdParty",
+//     "Creating Booking From Third Party",
+//   );
 
-  const roomsCollection = await RoomsCollection();
-  const bookingCollection = await BookingsCollection();
-  const customerCollection = await CustomersCollection();
-  const reservationCollection = await ReservationsCollection();
-  const tempBookingCollection = await InProcessBookingCollection();
+//   const roomsCollection = await RoomsCollection();
+//   const bookingCollection = await BookingsCollection();
+//   const customerCollection = await CustomersCollection();
+//   const reservationCollection = await ReservationsCollection();
+//   const tempBookingCollection = await InProcessBookingCollection();
 
-  const tempBooking = await tempBookingCollection.findOne({
-    _id: new ObjectId(tempBookingId),
-  });
+//   const tempBooking = await tempBookingCollection.findOne({
+//     _id: new ObjectId(tempBookingId),
+//   });
 
-  //add dates to booked dates collection in rooms
-  const datesToBlockInRooms = tempBooking.blockedOffDates;
-  const roomsUpdate = await roomsCollection.updateMany(
-    {
-      _id: {
-        $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
-      },
-    },
-    { $push: { bookedDates: { $each: datesToBlockInRooms } } }
-  );
+//   //add dates to booked dates collection in rooms
+//   const datesToBlockInRooms = tempBooking.blockedOffDates;
+//   const roomsUpdate = await roomsCollection.updateMany(
+//     {
+//       _id: {
+//         $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
+//       },
+//     },
+//     { $push: { bookedDates: { $each: datesToBlockInRooms } } },
+//   );
 
-  if (roomsUpdate) {
-    console.log("Successfully added blocked off dates to rooms");
-  }
+//   if (roomsUpdate) {
+//     console.log("Successfully added blocked off dates to rooms");
+//   }
 
-  let customer: any;
-  let customerFound = false;
-  const previousCustomer = await customerCollection.findOne({
-    email: tempBooking.customerInformation.email,
-  });
+//   let customer: any;
+//   let customerFound = false;
+//   const previousCustomer = await customerCollection.findOne({
+//     email: tempBooking.customerInformation.email,
+//   });
 
-  if (previousCustomer) {
-    customer = previousCustomer;
-    customerFound = true;
-  } else {
-    //create a new customer
-    customer = await customerCollection.insertOne({
-      firstName: tempBooking.customerInformation.firstName,
-      lastName: tempBooking.customerInformation.lastName,
-      email: tempBooking.customerInformation.email,
-      phone: tempBooking.customerInformation.phone,
-      address: tempBooking.customerInformation.address,
-      city: tempBooking.customerInformation.city,
-      state: tempBooking.customerInformation.state,
-      zip: tempBooking.customerInformation.zip,
-    });
-  }
+//   if (previousCustomer) {
+//     customer = previousCustomer;
+//     customerFound = true;
+//   } else {
+//     //create a new customer
+//     customer = await customerCollection.insertOne({
+//       firstName: tempBooking.customerInformation.firstName,
+//       lastName: tempBooking.customerInformation.lastName,
+//       email: tempBooking.customerInformation.email,
+//       phone: tempBooking.customerInformation.phone,
+//       address: tempBooking.customerInformation.address,
+//       city: tempBooking.customerInformation.city,
+//       state: tempBooking.customerInformation.state,
+//       zip: tempBooking.customerInformation.zip,
+//     });
+//   }
 
-  if (customer) {
-    console.log("Successfully found or created customer");
-  }
+//   if (customer) {
+//     console.log("Successfully found or created customer");
+//   }
 
-  //create a new reservation
-  const reservations = tempBooking.itinerary.map((res: any, index: number) => {
-    return {
-      roomId: new ObjectId(res._id),
-      petsIncluded: tempBooking.customerInformation.petsIncluded,
-      allergiesIncluded: tempBooking.customerInformation.allergiesIncluded,
-      petsDescription: tempBooking.customerInformation.petsDescription,
-      foodAllergies: tempBooking.customerInformation.allergiesDescription,
-      isCancelled: false,
-      subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
-      total: tempBooking.itinerary[index].priceBreakdown.total,
-      customer: new ObjectId(
-        customerFound ? customer._id : customer.insertedId
-      ),
-    };
-  });
-  const reservationRes = await reservationCollection.insertMany(reservations);
+//   //create a new reservation
+//   const reservations = tempBooking.itinerary.map((res: any, index: number) => {
+//     return {
+//       roomId: new ObjectId(res._id),
+//       petsIncluded: tempBooking.customerInformation.petsIncluded,
+//       allergiesIncluded: tempBooking.customerInformation.allergiesIncluded,
+//       petsDescription: tempBooking.customerInformation.petsDescription,
+//       foodAllergies: tempBooking.customerInformation.allergiesDescription,
+//       isCancelled: false,
+//       subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
+//       total: tempBooking.itinerary[index].priceBreakdown.total,
+//       customer: new ObjectId(
+//         customerFound ? customer._id : customer.insertedId,
+//       ),
+//     };
+//   });
+//   const reservationRes = await reservationCollection.insertMany(reservations);
 
-  if (reservationRes.length > 0) {
-    console.log("Successfully created reservations");
-  }
+//   if (reservationRes.length > 0) {
+//     console.log("Successfully created reservations");
+//   }
 
-  const confirmationCode = "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
-  const bookingObj = {
-    reservationIds: reservationRes.insertedIds,
-    transactionId: confirmationCode,
-    totalPrice: tempBooking.totalCost,
-    bookingDeposit: tempBooking.amount,
-    customerId: new ObjectId(
-      customerFound ? customer._id : customer.insertedId
-    ),
-  };
-  const insertedBooking = await bookingCollection.insertOne(bookingObj);
+//   const confirmationCode = "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
+//   const bookingObj = {
+//     reservationIds: reservationRes.insertedIds,
+//     transactionId: confirmationCode,
+//     totalPrice: tempBooking.totalCost,
+//     bookingDeposit: tempBooking.amount,
+//     customerId: new ObjectId(
+//       customerFound ? customer._id : customer.insertedId,
+//     ),
+//   };
+//   const insertedBooking = await bookingCollection.insertOne(bookingObj);
 
-  if (insertedBooking) {
-    console.log("Successfully created booking");
-  }
+//   if (insertedBooking) {
+//     console.log("Successfully created booking");
+//   }
 
-  const result = await removeTempBookingAndHoldDates(tempBookingId);
+//   const result = await removeTempBookingAndHoldDates(tempBookingId, false);
 
-  if (result) {
-    console.log("Successfully removed temp booking and hold dates");
-  }
+//   if (result) {
+//     console.log("Successfully removed temp booking and hold dates");
+//   }
 
-  return confirmationCode;
-};
+//   return confirmationCode;
+// };
