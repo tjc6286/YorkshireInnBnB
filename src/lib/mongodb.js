@@ -43,7 +43,7 @@ export const disconnectDB = async () => {
  * @returns {Promise<MongoClient>} The mongo client
  */
 export const getMongoClient = async () => {
-  return await new MongoClient(uri, options);
+  return new MongoClient(uri, options);
 };
 
 /**

@@ -1,13 +1,15 @@
 import { ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import type { IFormState } from "../components/organisms/customerInformationForm/CustomerInformationForm";
 import type { Booking } from "../types/Booking";
-import { logMessage } from "./logger";
+import { logMessage, logRed } from "./logger";
 import {
   BookingsCollection,
   CustomersCollection,
   InProcessBookingCollection,
   ReservationsCollection,
   RoomsCollection,
+  getClient,
   disconnectDB,
 } from "./mongodb";
 
@@ -173,10 +175,10 @@ export const updateInProcessBooking = async (
       { _id: new ObjectId(id) },
       {
         $set: {
-          amount,
-          totalCost,
-          customerInformation,
-          blockedOffDates,
+          amount: amount,
+          totalCost: totalCost,
+          customerInformation: customerInformation,
+          blockedOffDates: blockedOffDates,
         },
       }
     );
@@ -238,8 +240,9 @@ export const cancelBooking = async (bookingId: ObjectId) => {
       "Method: cancelBooking",
       "Cancelling Booking by ID: " + bookingId
     );
-
+    logRed("PROBLEM");
     const bookingcollection = await BookingsCollection();
+    logRed("PROBLEM");
     const result = await bookingcollection.updateOne(
       { _id: bookingId },
       { $set: { isCancelled: true } }
@@ -254,6 +257,55 @@ export const cancelBooking = async (bookingId: ObjectId) => {
     console.log("Error: Problem cancelling booking: " + bookingId);
   } finally {
     disconnectDB();
+  }
+};
+
+export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
+  const client = new MongoClient(
+    process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
+    {}
+  );
+
+  try {
+    //SERVER LOGGING
+    logMessage(
+      "Method: cancelBookingAndReservations",
+      "Cancelling Booking by ID: " + bookingId
+    );
+
+    await client.connect();
+    const db = client.db(
+      process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME
+    );
+    const bookingcollection = db.collection("Booking");
+    const reservationcollection = db.collection("RoomReservation");
+
+    const booking = await bookingcollection.findOne({ _id: bookingId });
+
+    if (booking) {
+      for (const [key, value] of Object.entries(booking.reservationIds ?? {})) {
+        console.log(value);
+        await reservationcollection.updateOne(
+          { _id: value },
+          { $set: { isCancelled: true } }
+        );
+      }
+
+      const result = await bookingcollection.updateOne(
+        { _id: bookingId },
+        { $set: { isCancelled: true } }
+      );
+
+      return result.modifiedCount === 1;
+    } else {
+      console.log("Error: Booking not found: " + bookingId);
+      return false;
+    }
+  } catch (e) {
+    console.log("Error: Problem cancelling booking: " + bookingId);
+    console.log(e);
+  } finally {
+    await client.close();
   }
 };
 

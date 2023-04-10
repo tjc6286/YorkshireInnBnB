@@ -98,24 +98,25 @@ const AdminBooking: React.FC = () => {
   };
 
   const handleCancelBooking = (bookingId: string) => {
-    // fetch("/api/booking/cancelBooking", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     bookingId: bookingIdToCancel,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setBookingList(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
-    alert("Booking cancelled");
+    fetch("/api/booking/cancelBooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bookingId: bookingIdToCancel,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setBookingList(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    //reload window
+    window.location.reload();
     handleCloseModal();
   };
 

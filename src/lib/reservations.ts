@@ -20,17 +20,21 @@ export const getAllReservations = async () => {
 
 //get reservation by id
 export const getReservationByID = async (reservationID: string) => {
-  //SERVER LOGGING
-  logMessage(
-    "Method: getReservationByID",
-    "Getting Reservation by ID: " + reservationID
-  );
+  try {
+    //SERVER LOGGING
+    logMessage(
+      "Method: getReservationByID",
+      "Getting Reservation by ID: " + reservationID
+    );
 
-  const reservations = await (await ReservationsCollection())
-    .find({ _id: new ObjectId(reservationID) })
-    .toArray();
-  disconnectDB();
-  return reservations[0];
+    const reservations = await (await ReservationsCollection())
+      .find({ _id: new ObjectId(reservationID) })
+      .toArray();
+
+    return reservations[0];
+  } finally {
+    disconnectDB();
+  }
 };
 
 /**
