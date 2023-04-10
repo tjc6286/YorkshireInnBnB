@@ -1,13 +1,8 @@
 import type { APIRoute } from "astro";
-import { ObjectId } from "mongodb";
 import { getBookingByTransactionID } from "../../../lib/bookings";
 import { getCustomerByID } from "../../../lib/customers";
-import { getReservationByID } from "../../../lib/reservations";
 import { logMessage } from "../../../lib/logger";
-import {
-  cancelReservations,
-  insertNewReservations,
-} from "../../../lib/reservations";
+import { getMultipleReservations } from "../../../lib/reservations";
 
 /**
  *
@@ -22,7 +17,7 @@ export const post: APIRoute = async ({ request }) => {
     //SERVER LOGGING
     logMessage(
       "ENDPOINT: /api/booking/bookingLookup",
-      "Booking ID: " + bookingId
+      "Booking ID: " + bookingId,
     );
 
     var booking = await getBookingByTransactionID(bookingId);
@@ -33,11 +28,10 @@ export const post: APIRoute = async ({ request }) => {
       //create an object holding the booking and customer data
       const customer = await getCustomerByID(booking.customerId);
       //get reservations
-      const reservations = [];
-      for (const [key, value] of Object.entries(booking.reservationIds)) {
-        const reservation = await getReservationByID(value);
-        reservations.push(reservation);
-      }
+
+      const reservations = await getMultipleReservations(
+        Object.values(booking.reservationIds),
+      );
 
       const retObj = {
         booking: booking,

@@ -11,14 +11,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import type { Customer } from "../../../types/customer";
-import type SpecialDatePrice from "../../../types/specialDatePrice";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -116,7 +114,7 @@ const AdminBooking: React.FC = () => {
         console.error("Error:", error);
       });
     //reload window
-    window.location.reload();
+    // window.location.reload();
     handleCloseModal();
   };
 
@@ -144,7 +142,7 @@ const AdminBooking: React.FC = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, []);
+  }, [setBookingList]);
 
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center">
@@ -154,7 +152,8 @@ const AdminBooking: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+            >
               {" "}
               Return Home
             </a>
@@ -165,7 +164,8 @@ const AdminBooking: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#">
+                href="#"
+              >
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -219,7 +219,8 @@ const AdminBooking: React.FC = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleSubmit}>
+                onClick={handleSubmit}
+              >
                 Update
               </button>
             </div>
@@ -231,10 +232,10 @@ const AdminBooking: React.FC = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Booking ID</TableCell>
-                      <TableCell>transactionID</TableCell>
+                      <TableCell>Confirmation Code</TableCell>
                       <TableCell>Customer Name</TableCell>
                       <TableCell># of Reservations</TableCell>
-                      <TableCell>Is Third Party</TableCell>
+                      <TableCell>Third Party</TableCell>
                       <TableCell>Total Price</TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
@@ -256,7 +257,15 @@ const AdminBooking: React.FC = () => {
                           <TableCell>
                             {entry.booking.vendor ? "True" : "False"}
                           </TableCell>
-                          <TableCell>${entry.booking.totalPrice}</TableCell>
+                          <TableCell>
+                            {(entry.booking.totalPrice / 100).toLocaleString(
+                              "en-US",
+                              {
+                                style: "currency",
+                                currency: "USD",
+                              },
+                            )}
+                          </TableCell>
                           <TableCell>
                             <Button
                               variant="contained"
@@ -267,7 +276,8 @@ const AdminBooking: React.FC = () => {
                               style={{
                                 backgroundColor: "blue",
                                 color: "white",
-                              }}>
+                              }}
+                            >
                               Customer
                             </Button>
                           </TableCell>
@@ -284,7 +294,8 @@ const AdminBooking: React.FC = () => {
                                 style={{
                                   backgroundColor: "red",
                                   color: "white",
-                                }}>
+                                }}
+                              >
                                 Cancel
                               </Button>
                             )}
@@ -304,7 +315,8 @@ const AdminBooking: React.FC = () => {
         open={modalState}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Cancelling a Booking
@@ -322,7 +334,8 @@ const AdminBooking: React.FC = () => {
               backgroundColor: "#2196f3",
               color: "white",
               marginRight: "10px",
-            }}>
+            }}
+          >
             Cancel Booking
           </Button>
           <Button
@@ -332,7 +345,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Stop Cancel
           </Button>
         </Box>
@@ -342,7 +356,8 @@ const AdminBooking: React.FC = () => {
         open={customerModalState}
         onClose={handleCloseCustomerModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Customer Information:
@@ -366,7 +381,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Close
           </Button>
         </Box>
