@@ -28,12 +28,12 @@ export const getAllBookings = async () => {
  * @param bookingId ID of the Booking to get from the Bookings collection
  * @returns Booking object
  */
-export const getBookingByID = async (bookingId: ObjectId) => {
+export const getBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
 
   const bookings = await (await BookingsCollection())
-    .find({ _id: bookingId })
+    .find({ transactionId: bookingId })
     .toArray();
   disconnectDB();
   return bookings[0];

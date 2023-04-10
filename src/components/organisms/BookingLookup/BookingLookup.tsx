@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 import type { Booking } from "../../../types/Booking";
 import { Typography, Box, Grid } from "@mui/material";
+import { min, max, format, parse } from "date-fns";
 
 const BookingLookup = () => {
   const [booking, setBooking] = React.useState<{}>();
@@ -55,6 +56,21 @@ const BookingLookup = () => {
     return room?.name;
   };
 
+  const getDateRange = (dates: Array<string>) => {
+    const dateFormat = "MM/dd/yyyy";
+    const dateObjects = dates.map((dateString) =>
+      parse(dateString, dateFormat, new Date())
+    );
+
+    const minDate = min(dateObjects);
+    const maxDate = max(dateObjects);
+
+    const minDateString = format(minDate, "MM/dd/yyyy");
+    const maxDateString = format(maxDate, "MM/dd/yyyy");
+
+    return `${minDateString} - ${maxDateString}`;
+  };
+
   useEffect(() => {
     fetch("/api/room/getAll", {
       method: "GET",
@@ -99,17 +115,28 @@ const BookingLookup = () => {
       {/* booking lookup  */}
       {booking && (
         <div className="rounded-sm border-2 border-black p-4 mt-2">
-          <Typography>{`Booking ID: ${booking?.booking?._id}`}</Typography>
+          <Typography>{`Confirmation Num: ${booking?.booking?.transactionId}`}</Typography>
           <Typography>{`Price: $${booking?.booking?.totalPrice}`}</Typography>
-          <Typography>{`CustomerName: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
+          <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
+          <Typography>{`Stay: ${getDateRange(
+            booking?.booking?.dates
+          )}`}</Typography>
+          <Typography className="mt-2 underline font-semibold">
+            Reservations:
+          </Typography>
           {booking?.reservations?.map((reservation: any) => {
             return (
-              <div className="mt-2" key={reservation._id}>
-                <Typography>{`Reservation ID:${reservation._id}`}</Typography>
+              <div className="my-2" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
                   reservation.roomId
                 )}`}</Typography>
+                {reservation.allergiesIncluded && (
+                  <Typography>{`Allergies: ${reservation.allergies}`}</Typography>
+                )}
+                {reservation.petsIncluded && (
+                  <Typography>{`Pet: ${reservation.pet}`}</Typography>
+                )}
               </div>
             );
           })}

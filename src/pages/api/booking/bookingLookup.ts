@@ -17,7 +17,7 @@ import {
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {
     var data = await request.json();
-    var bookingId = new ObjectId(data.bookingId);
+    var bookingId = data.bookingId;
 
     //SERVER LOGGING
     logMessage(
