@@ -242,6 +242,7 @@ const AdminBooking: React.FC = () => {
                   </TableHead>
                   <TableBody>
                     {bookingList.map((entry) => {
+                      console.log(entry);
                       return (
                         <TableRow key={entry.booking._id}>
                           <TableCell>{entry.booking._id}</TableCell>
@@ -251,11 +252,9 @@ const AdminBooking: React.FC = () => {
                               " " +
                               entry.customer.lastName}
                           </TableCell>
+                          <TableCell>{entry.reservation.length}</TableCell>
                           <TableCell>
-                            {entry.booking.reservationIds.length}
-                          </TableCell>
-                          <TableCell>
-                            {entry.booking.isThirdParty ? "True" : "False"}
+                            {entry.booking.vendor ? "True" : "False"}
                           </TableCell>
                           <TableCell>${entry.booking.totalPrice}</TableCell>
                           <TableCell>
