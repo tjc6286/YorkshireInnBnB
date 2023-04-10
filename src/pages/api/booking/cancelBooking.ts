@@ -29,27 +29,7 @@ export const post: APIRoute = async ({ request }) => {
       "Booking ID: " + bookingId
     );
     var results = await cancelBookingAndReservations(bookingId);
-    // var booking = await getBookingByID(bookingId);
 
-    // if (!booking) {
-    //   return new Response(null, { status: 400 });
-    // } else {
-    //   const reservations = [];
-    //   for (const [key, value] of Object.entries(booking.reservationIds)) {
-    //     const reservation = await getReservationByID(value);
-    //     console.log(key, value, reservation);
-    //     reservations.push(reservation);
-    //   }
-    //   await cancelReservations(reservations);
-    //   var deletedBooking = await cancelBooking(bookingId);
-
-    //   if (deletedBooking === undefined) {
-    //     return new Response(null, { status: 400 });
-    //   }
-    //   return new Response(JSON.stringify({ deletedBooking }), {
-    //     status: 200,
-    //   });
-    // }
     if (results) {
       return new Response(JSON.stringify({ results }), {
         status: 200,

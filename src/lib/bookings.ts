@@ -233,33 +233,12 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   return result.value;
 };
 
-export const cancelBooking = async (bookingId: ObjectId) => {
-  try {
-    //SERVER LOGGING
-    logMessage(
-      "Method: cancelBooking",
-      "Cancelling Booking by ID: " + bookingId
-    );
-    logRed("PROBLEM");
-    const bookingcollection = await BookingsCollection();
-    logRed("PROBLEM");
-    const result = await bookingcollection.updateOne(
-      { _id: bookingId },
-      { $set: { isCancelled: true } }
-    );
-
-    if (result.modifiedCount === 1) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (e) {
-    console.log("Error: Problem cancelling booking: " + bookingId);
-  } finally {
-    disconnectDB();
-  }
-};
-
+/**
+ *  Method to Cancel a Booking and all of its Reservations given a Booking ID.
+ *
+ * @param bookingId ID of the Booking to cancel
+ * @returns Boolean value indicating if the Booking was cancelled successfully
+ */
 export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
   const client = new MongoClient(
     process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
