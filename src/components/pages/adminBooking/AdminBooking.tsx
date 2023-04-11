@@ -223,6 +223,7 @@ const AdminBooking: React.FC = () => {
                         <TableCell>Booking ID</TableCell>
                         <TableCell>Confirmation Code</TableCell>
                         <TableCell>Customer Name</TableCell>
+                        <TableCell>Date</TableCell>
                         <TableCell># of Reservations</TableCell>
                         <TableCell>Third Party</TableCell>
                         <TableCell>Total Price</TableCell>
@@ -241,6 +242,7 @@ const AdminBooking: React.FC = () => {
                                 " " +
                                 entry.customer.lastName}
                             </TableCell>
+                            <TableCell>{getDateRange(entry.dates)}</TableCell>
                             <TableCell>{entry.reservations.length}</TableCell>
                             <TableCell>
                               {entry.vendor ? "True" : "False"}
