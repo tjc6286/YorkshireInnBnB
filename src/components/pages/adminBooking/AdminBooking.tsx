@@ -142,7 +142,7 @@ const AdminBooking: React.FC = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }, [setBookingList]);
+  }, []);
 
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center">

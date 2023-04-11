@@ -433,7 +433,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     const confirmationCode =
       "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
     const bookingObj = {
-      reservationIds: reservationRes.insertedIds,
+      reservationIds: Object.values(reservationRes.insertedIds),
       transactionId: confirmationCode,
       dates: tempBooking.blockedOffDates,
       isCancelled: false,
@@ -456,6 +456,62 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     }
 
     return confirmationCode;
+  } finally {
+    disconnectDB();
+  }
+};
+
+export const getAllBookingsWithCustomerAndReservation = async () => {
+  try {
+    const bookingCollection = await BookingsCollection();
+
+    const pipeline = [
+      {
+        $lookup: {
+          from: "Customer",
+          localField: "customerId",
+          foreignField: "_id",
+          as: "customer",
+        },
+      },
+      {
+        $lookup: {
+          from: "RoomReservation",
+          let: { reservationIds: "$reservationIds" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $in: ["$_id", "$$reservationIds"],
+                },
+              },
+            },
+          ],
+          as: "reservations",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          transactionId: 1,
+          totalPrice: 1,
+          customerId: 1,
+          customer: { $arrayElemAt: ["$customer", 0] },
+          reservations: 1,
+        },
+      },
+    ];
+
+    const bookingsWithCustomerAndReservation = await bookingCollection
+      .aggregate(pipeline)
+      .toArray();
+    return bookingsWithCustomerAndReservation;
+  } catch (error) {
+    console.error(
+      "Error fetching bookings with customer and reservation:",
+      error,
+    );
+    return null;
   } finally {
     disconnectDB();
   }
