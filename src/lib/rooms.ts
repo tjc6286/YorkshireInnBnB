@@ -177,7 +177,8 @@ export const getRoomsAvailabilityByDateRange = async (
         },
       },
     ];
-    const roomsCollection = db.collection("Room");
+
+    const roomsCollection = await db.collection("Room");
     const rooms = await roomsCollection.aggregate(pipeline).toArray();
     return rooms;
   } finally {
