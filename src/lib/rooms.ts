@@ -128,6 +128,7 @@ export const getRoomsAvailabilityByDateRange = async (
     process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
     {}
   );
+  console.log("dateArray: ", dateArray);
   try {
     //SERVER LOGGING
     logMessage(
@@ -184,9 +185,7 @@ export const getRoomsAvailabilityByDateRange = async (
   } catch (error) {
     console.log(error);
     throw new Error(
-      `Error getting Rooms Availability by Date Range : ${JSON.stringify(
-        dateArray
-      )}}`
+      `Error getting Rooms Availability by Date Range : ${error})}}`
     );
   } finally {
     await client.close();
