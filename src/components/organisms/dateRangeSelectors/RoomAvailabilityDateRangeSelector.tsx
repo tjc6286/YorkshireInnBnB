@@ -44,7 +44,7 @@ const RoomAvailabilityDateRangeSelector = () => {
   };
 
   const handleNumberOfGuestsChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (results.length > 0) {
       resetDates();
@@ -74,7 +74,7 @@ const RoomAvailabilityDateRangeSelector = () => {
   const createPriceBreakdown = (
     room: Partial<Room>,
     startDate: string,
-    endDate: string,
+    endDate: string
   ) => {
     const allDatesBetweenStartAndEndDate = eachDayOfInterval({
       start: new Date(startDate),
@@ -87,7 +87,7 @@ const RoomAvailabilityDateRangeSelector = () => {
       const formattedDate = format(new Date(date), "MM/dd/yyyy");
 
       const specialDatePrice = room.specialPriceDates!.find(
-        (specialDatePrice) => specialDatePrice.date === formattedDate,
+        (specialDatePrice) => specialDatePrice.date === formattedDate
       );
 
       if (specialDatePrice) {
@@ -183,6 +183,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setResults(data);
         originalResults.current = data;
         setLoading(false);
@@ -337,8 +338,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   }
                   handleSelectedDates();
                 }
-          }
-        >
+          }>
           {results.length > 0 ? "Reset" : "Search"}
         </button>
       </div>
@@ -360,8 +360,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleCreateTemporaryBooking}
-              >
+                onClick={handleCreateTemporaryBooking}>
                 Book Now!
               </button>
             </div>
@@ -373,8 +372,7 @@ const RoomAvailabilityDateRangeSelector = () => {
               className={`flex text-black rounded-md border-2 border-gray-600 my-4 ${
                 !room.isAvailable ? "opacity-40" : ""
               }`}
-              key={room._id}
-            >
+              key={room._id}>
               <img
                 style={{ width: 180, height: 180 }}
                 src={`assets/Gallery/${room.imgPathName}`}
@@ -398,8 +396,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   room.isAvailable
                     ? "hover:text-white hover:bg-gray-600 transition-colors"
                     : ""
-                }`}
-              >
+                }`}>
                 {room.isAvailable ? "Add to Itinerary" : "Unavailable"}
               </button>
             </div>
