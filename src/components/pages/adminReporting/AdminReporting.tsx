@@ -28,7 +28,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 //CHART.js OPTIONS
@@ -198,7 +198,7 @@ const AdminReporting: React.FC = () => {
 
     // Iterate over the array of months and format the month names and years
     const monthNamesWithYear = months.map((month) =>
-      format(month, "MMMM yyyy"),
+      format(month, "MMMM yyyy")
     );
 
     return monthNamesWithYear;
@@ -211,7 +211,8 @@ const AdminReporting: React.FC = () => {
     const values = data.datasets[0].data;
 
     // Create a CSV string
-    let csvContent = "Labels,Data\n";
+    const currentDate = format(new Date(), "dd-MM-yyyy");
+    let csvContent = `Report Date,${currentDate}\nLabels,Data\n`;
 
     labels.forEach((label: string, index: number) => {
       const rowData = `${label},${values[index]}\n`;
@@ -223,7 +224,7 @@ const AdminReporting: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${chartSelected}.csv`;
+    link.download = `${chartSelected}-${currentDate}.csv`;
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -314,8 +315,7 @@ const AdminReporting: React.FC = () => {
             <div className="flex justify-between items-center">
               <a
                 href="/adminHome"
-                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-              >
+                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
                 {" "}
                 Return Home
               </a>
@@ -326,8 +326,7 @@ const AdminReporting: React.FC = () => {
                 <p className="text-white">Logged in as : {userEmail}</p>
                 <a
                   className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                  href="#"
-                >
+                  href="#">
                   <button onClick={() => signOutUser()}>Logout</button>
                 </a>
               </div>
@@ -340,8 +339,7 @@ const AdminReporting: React.FC = () => {
                 <FormControl className="w-60">
                   <InputLabel
                     id="demo-simple-select-label"
-                    sx={{ color: "white" }}
-                  >
+                    sx={{ color: "white" }}>
                     Report
                   </InputLabel>
                   <Select
@@ -361,8 +359,7 @@ const AdminReporting: React.FC = () => {
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "white", // Border color on focus
                       },
-                    }}
-                  >
+                    }}>
                     <MenuItem value={"incomePerMonth"}>
                       Total Income Per Month
                     </MenuItem>
@@ -445,8 +442,7 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleSubmit}
-                >
+                  onClick={handleSubmit}>
                   Update
                 </button>
                 <button
@@ -458,8 +454,7 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleExport}
-                >
+                  onClick={handleExport}>
                   Export
                 </button>
               </div>
