@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, MongoClient } from "mongodb";
 import type SpecialDatePrice from "../types/specialDatePrice";
 import { logMessage } from "./logger";
 import { RoomsCollection, disconnectDB } from "./mongodb";
@@ -89,7 +89,7 @@ export const getSpecialDatePrice = async (roomId: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: getSpecialDatePrice",
-    "Getting Special Date Price for Room ID: " + roomId,
+    "Getting Special Date Price for Room ID: " + roomId
   );
 
   const room = await (await RoomsCollection())
@@ -122,54 +122,67 @@ export const getRoomById = async (roomId: string) => {
  * @returns Array of room objects
  */
 export const getRoomsAvailabilityByDateRange = async (
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
-  //SERVER LOGGING
-  logMessage(
-    "Method: getRoomsAvailabilityByDateRange",
-    "Getting Rooms Availability by Date Range: " + dateArray,
+  const client = new MongoClient(
+    process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
+    {}
   );
 
-  //if dateArray has more than one element, remove the last element.
-  let dates = dateArray;
-  if (dateArray.length > 1) {
-    dates.pop();
-  }
+  try {
+    //SERVER LOGGING
+    logMessage(
+      "Method: getRoomsAvailabilityByDateRange",
+      "Getting Rooms Availability by Date Range: " + dateArray
+    );
+    await client.connect();
+    //logBlue("[Connecting to DB] - " + new Date().toLocaleTimeString());
+    const db = client.db(
+      process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME
+    );
 
-  const pipeline = [
-    {
-      $project: {
-        _id: 1,
-        roomName: 1,
-        description: 1,
-        priceRange: 1,
-        specialPriceDates: 1,
-        maximumOccupancy: 1,
-        imgPathName: 1,
-        isAvailable: {
-          $not: {
-            $anyElementTrue: {
-              $map: {
-                input: dates,
-                as: "date",
-                in: {
-                  $or: [
-                    { $in: ["$$date", "$bookedDates"] },
-                    { $in: ["$$date", "$unavailableDates"] },
-                    { $in: ["$$date", "$temporaryHoldDates"] },
-                  ],
+    //if dateArray has more than one element, remove the last element.
+    let dates = dateArray;
+    if (dateArray.length > 1) {
+      dates.pop();
+    }
+
+    const pipeline = [
+      {
+        $project: {
+          _id: 1,
+          roomName: 1,
+          description: 1,
+          priceRange: 1,
+          specialPriceDates: 1,
+          maximumOccupancy: 1,
+          imgPathName: 1,
+          isAvailable: {
+            $not: {
+              $anyElementTrue: {
+                $map: {
+                  input: dates,
+                  as: "date",
+                  in: {
+                    $or: [
+                      { $in: ["$$date", "$bookedDates"] },
+                      { $in: ["$$date", "$unavailableDates"] },
+                      { $in: ["$$date", "$temporaryHoldDates"] },
+                    ],
+                  },
                 },
               },
             },
           },
         },
       },
-    },
-  ];
-
-  const rooms = await (await RoomsCollection()).aggregate(pipeline).toArray();
-  disconnectDB();
-  return rooms;
+    ];
+    const roomsCollection = db.collection("Room");
+    const rooms = await roomsCollection.aggregate(pipeline).toArray();
+    return rooms;
+  } finally {
+    await client.close();
+  }
 };
 
 /**
@@ -180,7 +193,7 @@ export const getRoomsAvailabilityByDateRange = async (
  */
 export const addHoldDates = async (
   roomId: string | Array<string>,
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
   //SERVER LOGGING
   logMessage("Method: addHoldDates", "Adding Hold Dates to Room ID: " + roomId);
@@ -197,14 +210,14 @@ export const addHoldDates = async (
         { _id: { $in: objs } },
         {
           $push: { temporaryHoldDates: { $each: dateArray } },
-        },
+        }
       );
     } else {
       await roomsCollection.updateOne(
         { _id: roomId[0] },
         {
           $push: { temporaryHoldDates: { $each: dateArray } },
-        },
+        }
       );
     }
   } catch (error) {
@@ -225,12 +238,12 @@ export const addHoldDates = async (
  */
 export const addBlockDates = async (
   roomId: string | Array<string>,
-  dateArray: Array<string>,
+  dateArray: Array<string>
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: addBlockDates",
-    "Adding Block Dates to Room ID: " + roomId,
+    "Adding Block Dates to Room ID: " + roomId
   );
   logMessage("Method: addBlockDates", "Dates to Add: " + dateArray);
 
@@ -244,7 +257,7 @@ export const addBlockDates = async (
         { _id: { $in: objs } },
         {
           $push: { unavailableDates: { $each: dateArray } },
-        },
+        }
       );
     } else {
       //console.log(roomId, "about to update");
@@ -252,7 +265,7 @@ export const addBlockDates = async (
         { _id: new ObjectId(roomId) },
         {
           $push: { unavailableDates: { $each: dateArray } },
-        },
+        }
       );
     }
   } catch (error) {
@@ -276,7 +289,7 @@ export const removeBlockDate = async (roomId: string, date: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeBlockDate",
-    "Removing Block Date from Room ID: " + roomId,
+    "Removing Block Date from Room ID: " + roomId
   );
   logMessage("Method: removeBlockDate", "Date to Remove: " + date);
 
@@ -290,7 +303,7 @@ export const removeBlockDate = async (roomId: string, date: string) => {
   try {
     await roomsCollection.updateOne(
       { _id: new ObjectId(roomId) },
-      { $pull: { unavailableDates: date } },
+      { $pull: { unavailableDates: date } }
     );
   } catch (error) {
     console.log(error);
@@ -312,12 +325,12 @@ export const removeBlockDate = async (roomId: string, date: string) => {
 export const addSpecialDatePrices = async (
   roomId: string,
   updatedPrice: number,
-  dates: string[],
+  dates: string[]
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: addSpecialDatePrices",
-    "Adding Special Date Prices to Room ID: " + roomId,
+    "Adding Special Date Prices to Room ID: " + roomId
   );
   logMessage("Method: addSpecialDatePrices", "Updated Price: " + updatedPrice);
   logMessage("Method: addSpecialDatePrices", "Dates to Add: " + dates);
@@ -332,7 +345,7 @@ export const addSpecialDatePrices = async (
 
     await roomsCollection.updateOne(
       { _id: new ObjectId(roomId) },
-      { $push: { specialPriceDates: { $each: specialDatePrices } } },
+      { $push: { specialPriceDates: { $each: specialDatePrices } } }
     );
 
     console.log(`Added special date prices for room with ID: ${roomId}`);
@@ -352,16 +365,16 @@ export const addSpecialDatePrices = async (
  */
 export const removeSpecialDatePrice = async (
   roomId: string,
-  dateToRemove: string,
+  dateToRemove: string
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeSpecialDatePrice",
-    "Removing Special Date Price from Room ID: " + roomId,
+    "Removing Special Date Price from Room ID: " + roomId
   );
   logMessage(
     "Method: removeSpecialDatePrice",
-    "Date to Remove: " + dateToRemove,
+    "Date to Remove: " + dateToRemove
   );
 
   const roomsCollection = await RoomsCollection();
@@ -370,11 +383,11 @@ export const removeSpecialDatePrice = async (
     const result = await roomsCollection.findOneAndUpdate(
       { _id: new ObjectId(roomId) },
       { $pull: { specialPriceDates: { date: dateToRemove } } },
-      { returnDocument: "after" },
+      { returnDocument: "after" }
     );
 
     console.log(
-      `Removed special date price for ${dateToRemove} in room with ID: ${roomId}`,
+      `Removed special date price for ${dateToRemove} in room with ID: ${roomId}`
     );
 
     return result.value;
