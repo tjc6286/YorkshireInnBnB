@@ -158,6 +158,9 @@ export const getRoomsAvailabilityByDateRange = async (
           basePrice: 1,
           maximumOccupancy: 1,
           imgPathName: 1,
+          bookedDates: 1,
+          unavailableDates: 1,
+          temporaryHoldDates: 1,
           isAvailable: {
             $not: {
               $anyElementTrue: {
