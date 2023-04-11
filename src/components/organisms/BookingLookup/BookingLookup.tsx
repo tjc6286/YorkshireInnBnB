@@ -58,7 +58,7 @@ const BookingLookup = () => {
     console.log(dates);
     const dateFormat = "MM/dd/yyyy";
     const dateObjects = dates.map((dateString) =>
-      parse(dateString, dateFormat, new Date()),
+      parse(dateString, dateFormat, new Date())
     );
 
     dateObjects.length === 1 &&
@@ -113,8 +113,7 @@ const BookingLookup = () => {
             lineHeight: "34px",
             letterSpacing: "0.13em",
           }}
-          onClick={handleSubmit}
-        >
+          onClick={handleSubmit}>
           Look up Booking
         </button>
       </div>
@@ -131,22 +130,23 @@ const BookingLookup = () => {
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
-            booking?.booking?.dates,
+            booking?.booking?.dates
           )}`}</Typography>
           <Typography className="mt-2 underline font-semibold">
             Reservations:
           </Typography>
           {booking?.reservations?.map((reservation: any) => {
+            console.log(reservation);
             return (
               <div className="my-2 px-4" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
-                  reservation.roomId,
+                  reservation.roomId
                 )}`}</Typography>
                 {reservation.allergiesIncluded && (
-                  <Typography>{`Allergies: ${reservation.allergies}`}</Typography>
+                  <Typography>{`Allergies: ${reservation.foodAllergies}`}</Typography>
                 )}
                 {reservation.petsIncluded && (
-                  <Typography>{`Pet: ${reservation.pet}`}</Typography>
+                  <Typography>{`Pet: ${reservation.petsDescription}`}</Typography>
                 )}
               </div>
             );
@@ -154,8 +154,7 @@ const BookingLookup = () => {
           {booking?.booking?.isCancelled && (
             <Typography
               style={{ fontSize: "24px" }}
-              className="mt-2 font-semibold text-center text-red-600 text-2xl"
-            >
+              className="mt-2 font-semibold text-center text-red-600 text-2xl">
               Booking Has Been Cancelled
             </Typography>
           )}
