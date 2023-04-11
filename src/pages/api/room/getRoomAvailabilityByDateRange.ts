@@ -10,11 +10,11 @@ export const post: APIRoute = async ({ request }) => {
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
     const dates = data;
-
+    console.log(dates);
     //SERVER LOGGING
     logMessage(
       "ENDPOINT: /api/room/getRoomAvailabilityByDateRange",
-      "Getting Rooms avialble for Dates: " + dates,
+      "Getting Rooms avialble for Dates: " + dates
     );
 
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE

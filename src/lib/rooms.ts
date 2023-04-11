@@ -141,10 +141,10 @@ export const getRoomsAvailabilityByDateRange = async (
     );
 
     //if dateArray has more than one element, remove the last element.
-    const dates =
-      dateArray?.length > 1
-        ? dateArray.slice(0, dateArray?.length - 1)
-        : dateArray;
+    // const dates =
+    //   dateArray?.length > 1
+    //     ? dateArray.slice(0, dateArray?.length - 1)
+    //     : dateArray;
 
     const pipeline = [
       {
@@ -161,7 +161,7 @@ export const getRoomsAvailabilityByDateRange = async (
             $not: {
               $anyElementTrue: {
                 $map: {
-                  input: dates,
+                  input: dateArray,
                   as: "date",
                   in: {
                     $or: [
