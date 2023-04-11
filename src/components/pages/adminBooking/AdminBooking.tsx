@@ -1,19 +1,24 @@
 import {
   Box,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays } from "date-fns";
+import { addDays, format, max, min, parse } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import type { Customer } from "../../../types/customer";
@@ -30,15 +35,38 @@ const modalStyle = {
   p: 4,
 };
 
+const textFieldStyles = {
+  "& .MuiInputLabel-root": { color: "white" },
+  "& .MuiInputBase-input": { color: "white" },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "white" },
+    "&:hover fieldset": { borderColor: "white" },
+    "&.Mui-focused fieldset": { borderColor: "white" },
+  },
+};
+
 const AdminBooking: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
-  const [startDate, setStartDate] = React.useState<string | null>(null);
-  const [endDate, setEndDate] = React.useState<string | null>(null);
   const [bookingList, setBookingList] = React.useState<any[]>([]);
   const [modalState, setModalState] = React.useState(false);
   const [customerModalState, setCustomerModalState] = React.useState(false);
   const [bookingIdToCancel, setBookingIdToCancel] = React.useState("");
   const [customerToView, setCustomerToView] = React.useState<Customer>();
+
+  //TODO all form state fields
+  const [startDate, setStartDate] = React.useState<string | null>(null);
+  const [endDate, setEndDate] = React.useState<string | null>(null);
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [room, setRoom] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [zip, setZip] = React.useState("");
+
+  const [roomList, setRoomList] = React.useState<any[]>([]);
 
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -54,26 +82,6 @@ const AdminBooking: React.FC = () => {
       window.location.replace("/login");
     }
   });
-
-  const handleSetStartDate = (newStartDate: string) => {
-    if (endDate && new Date(newStartDate) > new Date(endDate)) {
-      setEndDate(addDays(new Date(newStartDate), 1).toString());
-    }
-
-    setStartDate(newStartDate);
-  };
-
-  const handleSetEndDate = (newEndDate: string) => {
-    if (endDate && new Date(newEndDate) < new Date(endDate)) {
-      return;
-    }
-    setEndDate(newEndDate);
-  };
-
-  const resetDates = () => {
-    setStartDate(null);
-    setEndDate(null);
-  };
 
   const handleOpenModal = (bookingId: string) => {
     setBookingIdToCancel(bookingId);
@@ -93,6 +101,26 @@ const AdminBooking: React.FC = () => {
   const handleCloseCustomerModal = () => {
     setCustomerModalState(false);
     setCustomerToView(undefined);
+  };
+
+  const getDateRange = (dates: Array<string>) => {
+    console.log(dates);
+    const dateFormat = "MM/dd/yyyy";
+    const dateObjects = dates.map((dateString) =>
+      parse(dateString, dateFormat, new Date())
+    );
+
+    const minDate = min(dateObjects);
+    let maxDate = max(dateObjects);
+
+    if (minDate === maxDate) {
+      maxDate = new Date(maxDate.setDate(maxDate.getDate() + 1));
+    }
+
+    const minDateString = format(minDate, "MM/dd/yyyy");
+    const maxDateString = format(maxDate, "MM/dd/yyyy");
+
+    return `${minDateString} - ${maxDateString}`;
   };
 
   const handleCancelBooking = (bookingId: string) => {
@@ -118,15 +146,38 @@ const AdminBooking: React.FC = () => {
     handleCloseModal();
   };
 
-  const handleSubmit = () => {
-    if (startDate && endDate) {
-      //TODO: remove after testing
-      console.log("submitting");
-      console.log(startDate);
-      console.log(endDate);
+  const handleSetStartDate = (newStartDate: string) => {
+    if (endDate && new Date(newStartDate) > new Date(endDate)) {
+      setEndDate(addDays(new Date(newStartDate), 1).toString());
+    }
 
-      // Reset all fields
-      resetDates();
+    setStartDate(newStartDate);
+  };
+
+  const handleSetEndDate = (newEndDate: string) => {
+    if (endDate && new Date(newEndDate) < new Date(endDate)) {
+      return;
+    }
+    setEndDate(newEndDate);
+  };
+
+  const resetDates = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+  const handleSubmit = () => {};
+
+  const onRoomListOpen = () => {
+    if (roomList.length === 0) {
+      fetch("/api/room/getAll", {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setRoomList(data);
+        });
     }
   };
 
@@ -170,57 +221,6 @@ const AdminBooking: React.FC = () => {
           </div>
           {/* Content */}
           <div className="h-[50%] pt-10 text-white">
-            <h2 className="text-2xl font-bold mb-2">
-              Select Date Range to View Bookings
-            </h2>
-            {/* TOP CONTROLS */}
-            <div className="flex">
-              <div className="mx-4">
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label={"Start Date"}
-                    value={startDate ? new Date(startDate) : null}
-                    disablePast
-                    maxDate={addDays(new Date(), 365)}
-                    onChange={(newValue: Date | null) => {
-                      newValue && handleSetStartDate(newValue.toString());
-                    }}
-                    componentsProps={{ textField: { variant: "outlined" } }}
-                  />
-                </LocalizationProvider>
-              </div>
-              <div className="mx-4">
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label={"End Date"}
-                    value={endDate ? new Date(endDate) : null}
-                    disablePast
-                    maxDate={addDays(new Date(), 365)}
-                    minDate={startDate ? new Date(startDate) : undefined}
-                    disabled={!startDate}
-                    onChange={(newValue: Date | null) => {
-                      if (newValue && newValue <= new Date()) return;
-
-                      newValue && handleSetEndDate(newValue.toString());
-                    }}
-                    componentsProps={{ textField: { variant: "outlined" } }}
-                  />
-                </LocalizationProvider>
-              </div>
-              <button
-                disabled={!startDate || !endDate}
-                className="px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px"
-                style={{
-                  fontFamily: "Martel",
-                  fontWeight: "400",
-                  fontSize: "20px",
-                  lineHeight: "34px",
-                  letterSpacing: "0.13em",
-                }}
-                onClick={handleSubmit}>
-                Update
-              </button>
-            </div>
             {/* Booking Table */}
             <h2 className="text-2xl font-bold my-2">Existing Bookings</h2>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -297,6 +297,201 @@ const AdminBooking: React.FC = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
+            </div>
+            <h2 className="text-2xl font-bold my-2">Create New Bookings</h2>
+            <div>
+              <div className="inline-block">
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label={"Start Date"}
+                    value={startDate ? new Date(startDate) : null}
+                    disablePast
+                    maxDate={addDays(new Date(), 365)}
+                    onChange={(newValue: Date | null) => {
+                      newValue && handleSetStartDate(newValue.toString());
+                    }}
+                    componentsProps={{ textField: { variant: "outlined" } }}
+                    sx={{
+                      svg: { color: "white" },
+                      "& .MuiInputLabel-root": { color: "white" },
+                      "& .MuiInputBase-input": { color: "white" },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "white" },
+                        "&:hover fieldset": { borderColor: "white" },
+                        "&.Mui-focused fieldset": { borderColor: "white" },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </div>
+              <div className="mx-4 inline-block mb-4">
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label={"End Date"}
+                    value={endDate ? new Date(endDate) : null}
+                    disablePast
+                    maxDate={addDays(new Date(), 365)}
+                    minDate={startDate ? new Date(startDate) : undefined}
+                    disabled={!startDate}
+                    onChange={(newValue: Date | null) => {
+                      if (newValue && newValue <= new Date()) return;
+
+                      newValue && handleSetEndDate(newValue.toString());
+                    }}
+                    componentsProps={{ textField: { variant: "outlined" } }}
+                    sx={{
+                      svg: { color: "white" },
+                      "& .MuiInputLabel-root": { color: "white" },
+                      "& .MuiInputBase-input": { color: "white" },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "white" },
+                        "&:hover fieldset": { borderColor: "white" },
+                        "&.Mui-focused fieldset": { borderColor: "white" },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </div>
+              <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
+                <TextField
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="First Name"
+                  variant="outlined"
+                />
+                <TextField
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="Last Name"
+                  variant="outlined"
+                />
+                <TextField
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                />
+                <TextField
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="Phone Number"
+                  variant="outlined"
+                />
+                <TextField
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="Address"
+                  variant="outlined"
+                />
+                <FormControl className="">
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ color: "white" }}>
+                    State
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={}
+                    label="Charts"
+                    // onChange={handleChange}
+                    sx={{
+                      color: "white", // Text color
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
+                    }}>
+                    <MenuItem value={"incomePerMonth"}>New York</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                  className="col-span-2"
+                  onChange={(e) => {}}
+                  sx={textFieldStyles}
+                  id="outlined-basic"
+                  label="Zip Code"
+                  variant="outlined"
+                />
+                <FormControl className="col-span-2">
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ color: "white" }}>
+                    Rooms
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={}
+                    label="Rooms"
+                    // onChange={handleChange}
+                    onOpen={onRoomListOpen}
+                    sx={{
+                      color: "white", // Text color
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
+                    }}>
+                    {roomList.map((room) => {
+                      return (
+                        <MenuItem key={room._id} value={room._id}>
+                          {room.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <FormControl className="col-span-2">
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ color: "white" }}>
+                    Number of Guest
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={}
+                    label="Number of Guest"
+                    // onChange={handleChange}
+                    sx={{
+                      color: "white", // Text color
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
+                    }}>
+                    <MenuItem value={"1"}>1</MenuItem>
+                    <MenuItem value={"2"}>2</MenuItem>
+                    <MenuItem value={"3"}>3</MenuItem>
+                    <MenuItem value={"4"}>4</MenuItem>
+                    <MenuItem value={"5"}>5</MenuItem>
+                  </Select>
+                </FormControl>
+                <Button type="submit" variant="contained" color="primary">
+                  Create Booking
+                </Button>
+              </form>
             </div>
           </div>
         </div>
