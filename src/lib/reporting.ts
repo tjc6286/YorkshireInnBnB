@@ -1,8 +1,8 @@
 import { logMessage } from "./logger";
 import {
   BookingsCollection,
-  RoomsCollection,
   ReservationsCollection,
+  RoomsCollection,
   disconnectDB,
 } from "./mongodb";
 
@@ -117,11 +117,11 @@ export const countBookingSource = async () => {
       {
         $facet: {
           thirdParty: [
-            { $match: { vendor: { $exists: true } } },
+            { $match: { vendorKey: { $exists: true } } },
             { $count: "count" },
           ],
           nonThirdParty: [
-            { $match: { vendor: { $exists: false } } },
+            { $match: { vendorKey: { $exists: false } } },
             { $count: "count" },
           ],
         },

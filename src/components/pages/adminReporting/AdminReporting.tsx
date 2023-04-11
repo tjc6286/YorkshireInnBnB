@@ -1,18 +1,3 @@
-import React, { useEffect } from "react";
-import { auth, signOutUser } from "../../../firebase";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, addMonths, eachMonthOfInterval, format } from "date-fns";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
 import {
   FormControl,
   InputLabel,
@@ -20,6 +5,21 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { addDays, addMonths, eachMonthOfInterval, format } from "date-fns";
+import React, { useEffect } from "react";
+import { Bar } from "react-chartjs-2";
+import { auth, signOutUser } from "../../../firebase";
 
 //CHART.js REGISTRATION
 ChartJS.register(
@@ -28,7 +28,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 //CHART.js OPTIONS
@@ -198,7 +198,7 @@ const AdminReporting: React.FC = () => {
 
     // Iterate over the array of months and format the month names and years
     const monthNamesWithYear = months.map((month) =>
-      format(month, "MMMM yyyy")
+      format(month, "MMMM yyyy"),
     );
 
     return monthNamesWithYear;
@@ -314,7 +314,8 @@ const AdminReporting: React.FC = () => {
             <div className="flex justify-between items-center">
               <a
                 href="/adminHome"
-                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+              >
                 {" "}
                 Return Home
               </a>
@@ -325,7 +326,8 @@ const AdminReporting: React.FC = () => {
                 <p className="text-white">Logged in as : {userEmail}</p>
                 <a
                   className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                  href="#">
+                  href="#"
+                >
                   <button onClick={() => signOutUser()}>Logout</button>
                 </a>
               </div>
@@ -338,7 +340,8 @@ const AdminReporting: React.FC = () => {
                 <FormControl className="w-60">
                   <InputLabel
                     id="demo-simple-select-label"
-                    sx={{ color: "white" }}>
+                    sx={{ color: "white" }}
+                  >
                     Report
                   </InputLabel>
                   <Select
@@ -358,7 +361,8 @@ const AdminReporting: React.FC = () => {
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "white", // Border color on focus
                       },
-                    }}>
+                    }}
+                  >
                     <MenuItem value={"incomePerMonth"}>
                       Total Income Per Month
                     </MenuItem>
@@ -441,7 +445,8 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleSubmit}>
+                  onClick={handleSubmit}
+                >
                   Update
                 </button>
                 <button
@@ -453,7 +458,8 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleExport}>
+                  onClick={handleExport}
+                >
                   Export
                 </button>
               </div>

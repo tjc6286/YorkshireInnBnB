@@ -19,6 +19,7 @@ type VendorBooking = {
       };
     },
   ];
+  amount: number;
   datesOfStay: Array<string>;
   customerInformation: {
     firstName: string;

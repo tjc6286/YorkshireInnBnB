@@ -666,6 +666,7 @@ export const getAllBookingsWithCustomerAndReservation = async () => {
           _id: 1,
           transactionId: 1,
           dates: 1,
+          vendorKey: 1,
           totalPrice: 1,
           customerId: 1,
           isCancelled: 1,
