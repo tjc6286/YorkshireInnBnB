@@ -184,7 +184,7 @@ export const getRoomsAvailabilityByDateRange = async (
   } catch (error) {
     console.log(error);
     throw new Error(
-      `Error getting Rooms Availability by Date Range : ${dateArray}`
+      `Error getting Rooms Availability by Date Range : ${[...dateArray]}`
     );
   } finally {
     await client.close();
