@@ -23,7 +23,7 @@ export const post: APIRoute = async ({ request }) => {
     }
 
     const room = await getRoomsAvailabilityByDateRange(dates);
-    console.log(room);
+
     return new Response(JSON.stringify(room), {
       status: 200,
     });
