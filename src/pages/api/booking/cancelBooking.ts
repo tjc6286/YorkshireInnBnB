@@ -21,7 +21,13 @@ import {
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {
     var data = await request.json();
-    var bookingId = new ObjectId(data.bookingId);
+    let bookingId;
+    try {
+      bookingId = new ObjectId(data.bookingId);
+    } catch (e) {
+      console.error("Invalid ObjectId:", data.bookingId);
+      return new Response(null, { status: 400 });
+    }
 
     //SERVER LOGGING
     logMessage(
