@@ -1,5 +1,5 @@
-import { Button, TextField, Typography } from "@mui/material";
-import { format, max, min, parse } from "date-fns";
+import { TextField, Typography } from "@mui/material";
+import { addDays, format, max, min, parse } from "date-fns";
 import React, { useEffect } from "react";
 
 const BookingLookup = () => {
@@ -61,17 +61,19 @@ const BookingLookup = () => {
       parse(dateString, dateFormat, new Date()),
     );
 
+    dateObjects.length === 1 &&
+      dateObjects.push(new Date(addDays(dateObjects[0], 1)));
     const minDate = min(dateObjects);
     let maxDate = max(dateObjects);
 
-    if (minDate === maxDate) {
-      maxDate = new Date(maxDate.setDate(maxDate.getDate() + 1));
-    }
+    // if (minDate === maxDate) {
+    //   maxDate = new Date(maxDate.setDate(maxDate.getDate() + 1));
+    // }
 
     const minDateString = format(minDate, "MM/dd/yyyy");
     const maxDateString = format(maxDate, "MM/dd/yyyy");
 
-    return `${minDateString} - ${maxDateString}`;
+    return `${minDateString} - ${maxDateString} @10AM EST`;
   };
 
   useEffect(() => {
@@ -120,7 +122,12 @@ const BookingLookup = () => {
       {booking && (
         <div className="rounded-sm border-2 border-black p-4 mt-2">
           <Typography>{`Confirmation Number: ${booking?.booking?.transactionId}`}</Typography>
-          <Typography>{`Price of Stay: $${booking?.booking?.totalPrice}`}</Typography>
+          <Typography>{`Price of Stay: ${(
+            booking?.booking?.totalPrice / 100
+          ).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })}`}</Typography>
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
@@ -131,7 +138,7 @@ const BookingLookup = () => {
           </Typography>
           {booking?.reservations?.map((reservation: any) => {
             return (
-              <div className="my-2" key={reservation._id}>
+              <div className="my-2 px-4" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
                   reservation.roomId,
                 )}`}</Typography>
@@ -144,28 +151,18 @@ const BookingLookup = () => {
               </div>
             );
           })}
-          {booking?.booking?.isCancelled ? (
+          {booking?.booking?.isCancelled && (
             <Typography
               style={{ fontSize: "24px" }}
               className="mt-2 font-semibold text-center text-red-600 text-2xl"
             >
               Booking Has Been Cancelled
             </Typography>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                cancelBooking(booking.booking._id);
-              }}
-              style={{
-                backgroundColor: "red",
-                color: "white",
-              }}
-            >
-              Cancel Booking
-            </Button>
           )}
+          <Typography>
+            If you have any questions regarding your stay, please call us at
+            315-548-9675
+          </Typography>
         </div>
       )}
       {/* booking not found */}

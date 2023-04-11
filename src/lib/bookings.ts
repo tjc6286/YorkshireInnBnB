@@ -522,9 +522,9 @@ export const createVendorBooking = async (vendorBooking: VendorBooking) => {
     roomsWithBadDates.forEach((room: any) => {
       datesOfStay.forEach((date: string) => {
         if (
-          room.temporaryHoldDates.includes(date) ||
-          room.unavailableDates.includes(date) ||
-          room.bookedDates.includes(date)
+          room?.temporaryHoldDates?.includes(date) ||
+          room?.unavailableDates?.includes(date) ||
+          room?.bookedDates?.includes(date)
         ) {
           unavailableDateFound = true;
         }
