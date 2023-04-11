@@ -9,7 +9,7 @@ import { getRoomsAvailabilityByDateRange } from "../../../lib/rooms.js";
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();
   if (request.headers.get("Content-Type") === "application/json") {
-    const dates = data;
+    const dates = data.dateRange;
     console.log(dates);
     //SERVER LOGGING
     logMessage(

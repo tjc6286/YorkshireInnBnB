@@ -183,7 +183,7 @@ const RoomAvailabilityDateRangeSelector = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formattedDates),
+      body: JSON.stringify({ dateRange: formattedDates }),
     })
       .then((response) => response.json())
       .then((data) => {
