@@ -1,7 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
 import type { IFormState } from "../components/organisms/customerInformationForm/CustomerInformationForm";
 import type { Booking } from "../types/Booking";
-import { logMessage } from "./logger";
+import { logBlue, logMessage, logYellow } from "./logger";
 import {
   BookingsCollection,
   CustomersCollection,
@@ -252,6 +252,7 @@ export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
     );
 
     await client.connect();
+    logBlue("[Connecting to DB] - " + new Date().toLocaleTimeString());
     const db = client.db(
       process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME
     );
@@ -293,6 +294,9 @@ export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
     console.log("Error: Problem cancelling booking: " + bookingId);
     console.log(e);
   } finally {
+    logYellow(
+      "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n"
+    );
     await client.close();
   }
 };
@@ -507,6 +511,7 @@ export const getAllBookingsWithCustomerAndReservation = async () => {
           transactionId: 1,
           totalPrice: 1,
           customerId: 1,
+          isCancelled: 1,
           customer: { $arrayElemAt: ["$customer", 0] },
           reservations: 1,
         },

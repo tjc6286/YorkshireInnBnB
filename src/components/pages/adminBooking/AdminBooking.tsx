@@ -152,8 +152,7 @@ const AdminBooking: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-            >
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
               {" "}
               Return Home
             </a>
@@ -164,8 +163,7 @@ const AdminBooking: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#"
-              >
+                href="#">
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -219,8 +217,7 @@ const AdminBooking: React.FC = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit}>
                 Update
               </button>
             </div>
@@ -243,28 +240,24 @@ const AdminBooking: React.FC = () => {
                   </TableHead>
                   <TableBody>
                     {bookingList.map((entry) => {
-                      console.log(entry);
                       return (
-                        <TableRow key={entry.booking._id}>
-                          <TableCell>{entry.booking._id}</TableCell>
-                          <TableCell>{entry.booking.transactionId}</TableCell>
+                        <TableRow key={entry._id}>
+                          <TableCell>{entry._id}</TableCell>
+                          <TableCell>{entry.transactionId}</TableCell>
                           <TableCell>
                             {entry.customer.firstName +
                               " " +
                               entry.customer.lastName}
                           </TableCell>
-                          <TableCell>{entry.reservation.length}</TableCell>
+                          <TableCell>{entry.reservations.length}</TableCell>
                           <TableCell>
-                            {entry.booking.vendor ? "True" : "False"}
+                            {entry.vendor ? "True" : "False"}
                           </TableCell>
                           <TableCell>
-                            {(entry.booking.totalPrice / 100).toLocaleString(
-                              "en-US",
-                              {
-                                style: "currency",
-                                currency: "USD",
-                              },
-                            )}
+                            {(entry.totalPrice / 100).toLocaleString("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                            })}
                           </TableCell>
                           <TableCell>
                             <Button
@@ -276,26 +269,24 @@ const AdminBooking: React.FC = () => {
                               style={{
                                 backgroundColor: "blue",
                                 color: "white",
-                              }}
-                            >
+                              }}>
                               Customer
                             </Button>
                           </TableCell>
                           <TableCell>
-                            {entry.booking.isCancelled ? (
+                            {entry.isCancelled ? (
                               <p>Cancelled</p>
                             ) : (
                               <Button
                                 variant="contained"
                                 color="secondary"
                                 onClick={() => {
-                                  handleOpenModal(entry.booking._id.toString());
+                                  handleOpenModal(entry._id.toString());
                                 }}
                                 style={{
                                   backgroundColor: "red",
                                   color: "white",
-                                }}
-                              >
+                                }}>
                                 Cancel
                               </Button>
                             )}
@@ -315,8 +306,7 @@ const AdminBooking: React.FC = () => {
         open={modalState}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+        aria-describedby="modal-modal-description">
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Cancelling a Booking
@@ -334,8 +324,7 @@ const AdminBooking: React.FC = () => {
               backgroundColor: "#2196f3",
               color: "white",
               marginRight: "10px",
-            }}
-          >
+            }}>
             Cancel Booking
           </Button>
           <Button
@@ -345,8 +334,7 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}
-          >
+            }}>
             Stop Cancel
           </Button>
         </Box>
@@ -356,8 +344,7 @@ const AdminBooking: React.FC = () => {
         open={customerModalState}
         onClose={handleCloseCustomerModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+        aria-describedby="modal-modal-description">
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Customer Information:
@@ -381,8 +368,7 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}
-          >
+            }}>
             Close
           </Button>
         </Box>
