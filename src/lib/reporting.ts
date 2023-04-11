@@ -1,3 +1,4 @@
+import { MongoClient, ObjectId } from "mongodb";
 import { logMessage } from "./logger";
 import {
   BookingsCollection,
@@ -110,9 +111,17 @@ export const sumTotalPerRoom = async () => {
 };
 
 export const countBookingSource = async () => {
-  try {
-    const bookingCollection = await BookingsCollection();
+  const client = new MongoClient(
+    process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
+    {}
+  );
 
+  try {
+    await client.connect();
+    const db = client.db(
+      process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME
+    );
+    const bookingCollection = db.collection("Booking");
     const pipeline = [
       {
         $facet: {
@@ -146,6 +155,6 @@ export const countBookingSource = async () => {
   } catch (error) {
     console.error("Error counting bookings by type:", error);
   } finally {
-    disconnectDB();
+    await client.close();
   }
 };
