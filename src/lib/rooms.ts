@@ -128,7 +128,6 @@ export const getRoomsAvailabilityByDateRange = async (
     process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
     {},
   );
-
   try {
     //SERVER LOGGING
     logMessage(
@@ -142,10 +141,10 @@ export const getRoomsAvailabilityByDateRange = async (
     );
 
     //if dateArray has more than one element, remove the last element.
-    let dates = dateArray;
-    if (dateArray.length > 1) {
-      dates.pop();
-    }
+    const dates =
+      dateArray?.length > 1
+        ? dateArray.slice(0, dateArray?.length - 1)
+        : dateArray;
 
     const pipeline = [
       {
@@ -182,6 +181,9 @@ export const getRoomsAvailabilityByDateRange = async (
     const roomsCollection = await db.collection("Room");
     const rooms = await roomsCollection.aggregate(pipeline).toArray();
     return rooms;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error getting Rooms Availability by Date Range");
   } finally {
     await client.close();
   }
