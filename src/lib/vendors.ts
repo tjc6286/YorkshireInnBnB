@@ -1,6 +1,6 @@
-import { VendorsCollection, disconnectDB } from "./mongodb";
-import { logMessage } from "./logger";
 import { v4 as uuidv4 } from "uuid";
+import { logMessage } from "./logger";
+import { VendorsCollection, disconnectDB } from "./mongodb";
 
 export const getAllVendors = async () => {
   try {
@@ -19,7 +19,7 @@ export const createNewVendor = async (newVendorName: string) => {
     //SERVER LOGGING
     logMessage(
       "Method: createNewVendor",
-      "Creating New Vendor: " + newVendorName
+      "Creating New Vendor: " + newVendorName,
     );
 
     const vendorCollection = await VendorsCollection();
@@ -34,6 +34,26 @@ export const createNewVendor = async (newVendorName: string) => {
     return result.insertedId;
   } finally {
     disconnectDB();
+  }
+};
+
+export const checkVendorExists = async (vendorKey: string) => {
+  try {
+    //SERVER LOGGING
+    logMessage("Method: checkVendorExists", "Checking Vendor: " + vendorKey);
+
+    const vendorCollection = await VendorsCollection();
+
+    const res = vendorCollection.findOne({ vendorKey: vendorKey });
+    console.log(res);
+    if (res) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error checking vendor:", error);
+    return false;
   }
 };
 

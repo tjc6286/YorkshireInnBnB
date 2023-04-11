@@ -1,6 +1,8 @@
 import { MongoClient, ObjectId } from "mongodb";
+import { v4 as uuidv4 } from "uuid";
 import type { IFormState } from "../components/organisms/customerInformationForm/CustomerInformationForm";
 import type { Booking } from "../types/Booking";
+import type VendorBooking from "../types/VendorBooking";
 import { logBlue, logMessage, logYellow } from "./logger";
 import {
   BookingsCollection,
@@ -106,7 +108,7 @@ export const insertNewbooking = async (newBooking: any) => {
  */
 export const updateBooking = async (
   bookingID: string,
-  updatedBooking: Booking
+  updatedBooking: Booking,
 ) => {
   //SERVER LOGGING
   logMessage("Method: updateBooking", "Updating Booking by ID: " + bookingID);
@@ -115,7 +117,7 @@ export const updateBooking = async (
   const bookingcollection = await BookingsCollection();
   const returnBooking = await bookingcollection.update(
     { _id: new ObjectId(bookingID) },
-    updatedBooking
+    updatedBooking,
   );
   disconnectDB();
   return returnBooking;
@@ -131,7 +133,7 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
   //SERVER LOGGING
   logMessage(
     "Method: insertNewInProcessBooking",
-    "Inserting New Booking Obj:" + newBooking
+    "Inserting New Booking Obj:" + newBooking,
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -158,12 +160,12 @@ export const updateInProcessBooking = async (
   amount: number,
   totalCost: number,
   customerInformation: IFormState,
-  blockedOffDates: Array<string>
+  blockedOffDates: Array<string>,
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: updateInProcessBooking",
-    "Updating inProgressBooking Obj: " + id
+    "Updating inProgressBooking Obj: " + id,
   );
 
   const bookingcollection = await InProcessBookingCollection();
@@ -178,7 +180,7 @@ export const updateInProcessBooking = async (
           customerInformation: customerInformation,
           blockedOffDates: blockedOffDates,
         },
-      }
+      },
     );
     return result.acknowledged;
   } catch (e) {
@@ -198,7 +200,7 @@ export const getInProcessBookingByID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage(
     "Method: getInProcessBookingByID",
-    "Getting InProcessBooking by ID: " + bookingId
+    "Getting InProcessBooking by ID: " + bookingId,
   );
 
   //TODO: add the correct parameters to the find
@@ -220,7 +222,7 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeBookingByID",
-    "Removing Booking by ID: " + bookingId
+    "Removing Booking by ID: " + bookingId,
   );
 
   const bookingcollection = await BookingsCollection();
@@ -241,20 +243,20 @@ export const removeBookingByID = async (bookingId: ObjectId) => {
 export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
   const client = new MongoClient(
     process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
-    {}
+    {},
   );
 
   try {
     //SERVER LOGGING
     logMessage(
       "Method: cancelBookingAndReservations",
-      "Cancelling Booking by ID: " + bookingId
+      "Cancelling Booking by ID: " + bookingId,
     );
 
     await client.connect();
     logBlue("[Connecting to DB] - " + new Date().toLocaleTimeString());
     const db = client.db(
-      process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME
+      process.env.MONGODB_NAME || import.meta.env.MONGODB_NAME,
     );
     const bookingcollection = db.collection("Booking");
     const reservationcollection = db.collection("RoomReservation");
@@ -270,19 +272,19 @@ export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
 
       await reservationcollection.updateMany(
         { _id: { $in: booking.reservationIds } },
-        { $set: { isCancelled: true } }
+        { $set: { isCancelled: true } },
       );
 
       // updating the room collection to remove the booked dates
       const roomIds = reservations.map((reservation) => reservation.roomId);
       await roomCollection.updateMany(
         { _id: { $in: roomIds } },
-        { $pull: { bookedDates: { $in: booking.dates } } }
+        { $pull: { bookedDates: { $in: booking.dates } } },
       );
 
       const result = await bookingcollection.updateOne(
         { _id: bookingId },
-        { $set: { isCancelled: true } }
+        { $set: { isCancelled: true } },
       );
 
       return result.modifiedCount === 1;
@@ -295,7 +297,7 @@ export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
     console.log(e);
   } finally {
     logYellow(
-      "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n"
+      "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n",
     );
     await client.close();
   }
@@ -309,12 +311,12 @@ export const cancelBookingAndReservations = async (bookingId: ObjectId) => {
  */
 export const removeTempBookingAndHoldDates = async (
   bookingId: string,
-  needToDisconnect: boolean
+  needToDisconnect: boolean,
 ) => {
   //SERVER LOGGING
   logMessage(
     "Method: removeTempBookingAndHoldDates",
-    "Removing Booking by ID: " + bookingId
+    "Removing Booking by ID: " + bookingId,
   );
 
   try {
@@ -325,7 +327,7 @@ export const removeTempBookingAndHoldDates = async (
     });
 
     const roomsWithTemporaryHoldDates = tempBooking.itinerary.map(
-      (res: any) => new ObjectId(res._id)
+      (res: any) => new ObjectId(res._id),
     );
     const blockedOffDates = tempBooking.blockedOffDates;
 
@@ -333,7 +335,7 @@ export const removeTempBookingAndHoldDates = async (
       const roomsCollection = await RoomsCollection();
       const result = await roomsCollection.updateMany(
         { _id: { $in: roomsWithTemporaryHoldDates } },
-        { $pull: { temporaryHoldDates: { $in: blockedOffDates } } }
+        { $pull: { temporaryHoldDates: { $in: blockedOffDates } } },
       );
 
       if (result) {
@@ -361,7 +363,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     //SERVER LOGGING
     logMessage(
       "Method: createCustomerBooking",
-      "Creating Customer From InProcessBooking by ID: " + tempBookingId
+      "Creating Customer From InProcessBooking by ID: " + tempBookingId,
     );
 
     const roomsCollection = await RoomsCollection();
@@ -387,7 +389,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
           $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
         },
       },
-      { $push: { bookedDates: { $each: datesToBlockInRooms } } }
+      { $push: { bookedDates: { $each: datesToBlockInRooms } } },
     );
 
     if (roomsUpdate) {
@@ -434,10 +436,10 @@ export const createCustomerBooking = async (tempBookingId: string) => {
           subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
           total: tempBooking.itinerary[index].priceBreakdown.total,
           customer: new ObjectId(
-            customerFound ? customer._id : customer.insertedId
+            customerFound ? customer._id : customer.insertedId,
           ),
         };
-      }
+      },
     );
     const reservationRes = await reservationCollection.insertMany(reservations);
 
@@ -455,7 +457,7 @@ export const createCustomerBooking = async (tempBookingId: string) => {
       totalPrice: tempBooking.totalCost,
       bookingDeposit: tempBooking.amount,
       customerId: new ObjectId(
-        customerFound ? customer._id : customer.insertedId
+        customerFound ? customer._id : customer.insertedId,
       ),
     };
     const insertedBooking = await bookingCollection.insertOne(bookingObj);
@@ -471,6 +473,160 @@ export const createCustomerBooking = async (tempBookingId: string) => {
     }
 
     return confirmationCode;
+  } finally {
+    disconnectDB();
+  }
+};
+
+export const createVendorBooking = async (vendorBooking: VendorBooking) => {
+  try {
+    //SERVER LOGGING
+    logMessage("Method: createVendorBooking", "Creating Vendor Booking");
+
+    const roomsCollection = await RoomsCollection();
+    const bookingCollection = await BookingsCollection();
+    const customerCollection = await CustomersCollection();
+    const reservationCollection = await ReservationsCollection();
+
+    const {
+      vendorKey,
+      datesOfStay,
+      amount,
+      totalCost,
+      customerInformation,
+      itinerary,
+    } = vendorBooking;
+
+    //add dates to booked dates collection in rooms
+
+    const roomsWithBadDates = await roomsCollection
+      .find(
+        {
+          name: {
+            $in: itinerary.map((res: any) => res.roomName),
+          },
+        },
+        {
+          projection: {
+            _id: 1,
+            bookedDates: 1,
+            unavailableDates: 1,
+            temporaryHoldDates: 1,
+          },
+        },
+      )
+      .toArray();
+
+    let unavailableDateFound = false;
+
+    roomsWithBadDates.forEach((room: any) => {
+      datesOfStay.forEach((date: string) => {
+        if (
+          room.temporaryHoldDates.includes(date) ||
+          room.unavailableDates.includes(date) ||
+          room.bookedDates.includes(date)
+        ) {
+          unavailableDateFound = true;
+        }
+      });
+    });
+
+    if (unavailableDateFound) {
+      return {
+        error: true,
+        message:
+          "Booking could not be created because one or more dates was unavailable. Please try again.",
+      };
+    }
+
+    const badDateObjIds = roomsWithBadDates.map(
+      (room: any) => new ObjectId(room._id),
+    );
+
+    const roomsUpdate = await roomsCollection.updateMany(
+      {
+        _id: {
+          $in: badDateObjIds,
+        },
+      },
+      { $push: { bookedDates: { $each: datesOfStay } } },
+    );
+
+    if (roomsUpdate) {
+      console.log("Successfully added blocked off dates to rooms");
+    }
+
+    let customer: any;
+    let customerFound = false;
+    const previousCustomer = await customerCollection.findOne({
+      email: customerInformation.email,
+    });
+
+    if (previousCustomer) {
+      customer = previousCustomer;
+      customerFound = true;
+    } else {
+      //create a new customer
+      customer = await customerCollection.insertOne({
+        firstName: customerInformation.firstName,
+        lastName: customerInformation.lastName,
+        email: customerInformation.email,
+        phone: customerInformation.phone,
+        address: customerInformation.address,
+        city: customerInformation.city,
+        state: customerInformation.state,
+        zip: customerInformation.zip,
+      });
+    }
+
+    if (customer) {
+      console.log("Successfully found or created customer");
+    }
+
+    //create a new reservation
+    const reservations = itinerary.map((res: any, index: number) => {
+      return {
+        roomId: badDateObjIds[index],
+        petsIncluded: customerInformation.petsIncluded,
+        allergiesIncluded: customerInformation.allergiesIncluded,
+        petsDescription: customerInformation.petsDescription,
+        foodAllergies: customerInformation.allergiesDescription,
+        isCancelled: false,
+        subtotal: itinerary[index].priceBreakdown.subtotal,
+        total: itinerary[index].priceBreakdown.total,
+        customer: new ObjectId(
+          customerFound ? customer._id : customer.insertedId,
+        ),
+      };
+    });
+    const reservationRes = await reservationCollection.insertMany(reservations);
+
+    if (reservationRes.length > 0) {
+      console.log("Successfully created reservations");
+    }
+
+    const confirmationCode =
+      "V-" + uuidv4().replace(/-/g, "").substring(0, 10).toUpperCase();
+    const bookingObj = {
+      vendorKey,
+      confirmationCode,
+      reservationIds: Object.values(reservationRes.insertedIds),
+      transactionId: confirmationCode,
+      dates: datesOfStay,
+      isCancelled: false,
+      totalPrice: totalCost,
+      bookingDeposit: amount,
+      customerId: new ObjectId(
+        customerFound ? customer._id : customer.insertedId,
+      ),
+    };
+    const insertedBooking = await bookingCollection.insertOne(bookingObj);
+
+    if (insertedBooking) {
+      console.log("Successfully created booking");
+    }
+
+    return { confirmationCode };
   } finally {
     disconnectDB();
   }
@@ -526,7 +682,7 @@ export const getAllBookingsWithCustomerAndReservation = async () => {
   } catch (error) {
     console.error(
       "Error fetching bookings with customer and reservation:",
-      error
+      error,
     );
     return null;
   } finally {
