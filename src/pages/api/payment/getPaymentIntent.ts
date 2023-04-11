@@ -64,8 +64,12 @@ export const post: APIRoute = async ({ request, redirect }) => {
           },
         ],
         mode: "payment",
-        success_url: `http://localhost:3000/confirmation/${id}`,
-        cancel_url: `http://localhost:3000/bookingError/${id}`,
+        success_url: `${
+          process.env.SITE_DOMAIN || import.meta.env.SITE_DOMAIN
+        }/confirmation/${id}`,
+        cancel_url: `${
+          process.env.SITE_DOMAIN || import.meta.env.SITE_DOMAIN
+        }/bookingError/${id}`,
       });
       return new Response(JSON.stringify(session.url), { status: 303 });
     } catch (error) {
