@@ -169,9 +169,16 @@ export const getRoomsAvailabilityByDateRange = async (
                   as: "date",
                   in: {
                     $or: [
-                      { $in: ["$$date", "$bookedDates"] },
-                      { $in: ["$$date", "$unavailableDates"] },
-                      { $in: ["$$date", "$temporaryHoldDates"] },
+                      { $in: ["$$date", { $ifNull: ["$bookedDates", []] }] },
+                      {
+                        $in: ["$$date", { $ifNull: ["$unavailableDates", []] }],
+                      },
+                      {
+                        $in: [
+                          "$$date",
+                          { $ifNull: ["$temporaryHoldDates", []] },
+                        ],
+                      },
                     ],
                   },
                 },
