@@ -1,6 +1,6 @@
 ---
 /**
- * MainLayout.astro
+ * MainLayoutBooking.astro
  *
  * Wrapper layout with meta data and global page functionality.
  *
@@ -91,7 +91,7 @@ if (activePage === "home") {
   <body class="bg-[#F4F7FA]">
     <nav class="sticky top-0 z-50 flex bg-[#36353A] items-center h-20">
       <div class="container flex flex-wrap items-center justify-end mx-auto">
-        <a href="#home" class="mx-auto md:hidden">
+        <a href="/#home" class="mx-auto md:hidden">
           <img src={heroImgPath} alt="Yorkshire Inn Logo" />
         </a>
         <!-- Hamburger Menu -->
@@ -139,7 +139,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="#reviews"
+                href="/#reviews"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Reviews</a
@@ -153,7 +153,7 @@ if (activePage === "home") {
             </li>
             <li>
               <a
-                href="#room"
+                href="/#room"
                 class="text-neutral-100 hover:text-neutral-400 cursor-pointer"
                 style="font-family:'Inter', sans-serif; text-transform:uppercase; font-weight:900; font-size:12px; line-height:11px; letter-spacing:0.13em;"
                 >Rooms</a
@@ -177,11 +177,6 @@ if (activePage === "home") {
             </li>
           </ul>
         </div>
-        <!-- <a
-          href=""
-          class="px-5 py-2 bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px">
-          Manage Booking
-        </a> -->
         <!-- ----DEFAULT MOBILE NAVIGATION---- -->
         <div
           class="md:hidden transition-transform w-[90%] overflow-hidden scale-y-0 absolute top-10 mx-5 z-10"
@@ -192,16 +187,16 @@ if (activePage === "home") {
               <a href="/" class={homeCSS} aria-current="page">Home</a>
             </li>
             <li>
-              <a href="#amenities" class={amenitiesCSS}>Amenities</a>
+              <a href="/#amenities" class={amenitiesCSS}>Amenities</a>
             </li>
             <li>
-              <a href="#reviews" class={reviewsCSS}>Reviews</a>
+              <a href="/#reviews" class={reviewsCSS}>Reviews</a>
             </li>
             <li>
-              <a href="#room" class={roomsCSS}>Rooms</a>
+              <a href="/#room" class={roomsCSS}>Rooms</a>
             </li>
             <li>
-              <a href="#gallery" class={galleryCSS}>Gallery</a>
+              <a href="/#gallery" class={galleryCSS}>Gallery</a>
             </li>
             <li>
               <a href="#contact" class={contactCSS}>Contact</a>
@@ -223,20 +218,20 @@ if (activePage === "home") {
           <div class="text-center">
             <h3 class="text-3xl mb-3">Enjoy Your Stay With Us</h3>
             <div class="order-1 md:order-2">
-              <a href="#home" class="hover:text-neutral-400 px-2">Home</a>
-              <a href="#amenities" class="hover:text-neutral-400 px-2 border-l"
+              <a href="/#home" class="hover:text-neutral-400 px-2">Home</a>
+              <a href="/#amenities" class="hover:text-neutral-400 px-2 border-l"
                 >Amenities</a
               >
-              <a href="#reviews" class="hover:text-neutral-400 px-2 border-l"
+              <a href="/#reviews" class="hover:text-neutral-400 px-2 border-l"
                 >Reviews</a
               >
-              <a href="#rooms" class="hover:text-neutral-400 px-2 border-l"
+              <a href="/#rooms" class="hover:text-neutral-400 px-2 border-l"
                 >Rooms</a
               >
-              <a href="#gallery" class="hover:text-neutral-400 px-2 border-l"
+              <a href="/#gallery" class="hover:text-neutral-400 px-2 border-l"
                 >Gallery</a
               >
-              <a href="#contact" class="hover:text-neutral-400 px-2 border-l"
+              <a href="/#contact" class="hover:text-neutral-400 px-2 border-l"
                 >Contact</a
               >
             </div>

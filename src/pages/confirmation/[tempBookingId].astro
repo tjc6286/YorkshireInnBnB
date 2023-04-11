@@ -4,7 +4,10 @@ import { createCustomerBooking } from "../../lib/bookings";
 
 const { tempBookingId } = Astro.params;
 
-const confirmationCode = createCustomerBooking(tempBookingId!);
+const confirmationCode = await createCustomerBooking(tempBookingId!);
+if (!confirmationCode) {
+  return Astro.redirect("/");
+}
 ---
 
 <MainLayout

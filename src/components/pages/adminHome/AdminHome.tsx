@@ -79,7 +79,9 @@ const AdminHome: React.FC = () => {
                 Manage Room Availability and Pricing
               </p>
             </a>
-            <div className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
+            <a
+              href="/adminReporting"
+              className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
               <svg
                 className="text-white w-[30%]"
                 aria-hidden="true"
@@ -95,8 +97,10 @@ const AdminHome: React.FC = () => {
               </svg>
               <h4 className="text-white text-2xl font-bold capitalize text-center"></h4>
               <p className="text-white/50 text-center">Generate Reports</p>
-            </div>
-            <div className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover">
+            </a>
+            <a
+              className="relative group bg-gray-900 py-10 sm:py-20 px-4 flex flex-col space-y-2 items-center cursor-pointer rounded-md hover:bg-gray-900/80 hover:smooth-hover"
+              href="/adminVendor">
               <svg
                 className="text-white w-[30%]"
                 aria-hidden="true"
@@ -111,8 +115,8 @@ const AdminHome: React.FC = () => {
                   strokeLinejoin="round"></path>
               </svg>
               <h4 className="text-white text-2xl font-bold capitalize text-center"></h4>
-              <p className="text-white/50 text-center">Manage Reviews</p>
-            </div>
+              <p className="text-white/50 text-center">Manage Vendors</p>
+            </a>
           </div>
         </div>
       </div>

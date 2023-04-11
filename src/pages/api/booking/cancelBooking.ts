@@ -4,12 +4,13 @@ import {
   getBookingByID,
   insertNewbooking,
   removeBookingByID,
+  cancelBookingAndReservations,
 } from "../../../lib/bookings";
 import { insertNewCustomer } from "../../../lib/customers";
 import { logMessage } from "../../../lib/logger";
 import {
   cancelReservations,
-  insertNewReservations,
+  getReservationByID,
 } from "../../../lib/reservations";
 
 /**
@@ -27,19 +28,10 @@ export const post: APIRoute = async ({ request }) => {
       "ENDPOINT: /api/booking/cancelBooking",
       "Booking ID: " + bookingId
     );
+    var results = await cancelBookingAndReservations(bookingId);
 
-    var booking = await getBookingByID(bookingId);
-
-    if (!booking) {
-      return new Response(null, { status: 400 });
-    } else {
-      await cancelReservations(booking.reservationIds);
-      var deletedBooking = await removeBookingByID(bookingId);
-
-      if (deletedBooking === undefined) {
-        return new Response(null, { status: 400 });
-      }
-      return new Response(JSON.stringify({ deletedBooking }), {
+    if (results) {
+      return new Response(JSON.stringify({ results }), {
         status: 200,
       });
     }

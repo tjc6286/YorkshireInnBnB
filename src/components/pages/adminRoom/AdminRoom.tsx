@@ -17,7 +17,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addDays, eachDayOfInterval, format } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
-import type SpecialDatePrice from "../../../types/specialDatePrice";
+
+const radioStyles = {
+  color: "white",
+  "&.Mui-checked": {
+    color: "white",
+  },
+};
 
 const AdminRoom: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
@@ -29,6 +35,7 @@ const AdminRoom: React.FC = () => {
   const [roomList, setRoomList] = React.useState<any[]>([]);
   const [blockedMap, setBlockMap] = React.useState<any[]>([]);
   const [priceMap, setPriceMap] = React.useState<any[]>([]);
+  const [reload, setReload] = React.useState(false);
 
   const handlePriceChange = (event: any) => {
     setUpdatePrice(event.target.value);
@@ -96,6 +103,10 @@ const AdminRoom: React.FC = () => {
           end: new Date(endDate),
         });
 
+        const formattedDates = allDatesBetweenStartAndEndDate.map((date) =>
+          format(date, "MM/dd/yyyy"),
+        );
+
         if (isBlocking) {
           fetch("/api/room/addBlockDates", {
             method: "POST",
@@ -104,17 +115,11 @@ const AdminRoom: React.FC = () => {
             },
             body: JSON.stringify({
               roomId: selectedRoom,
-              dates: allDatesBetweenStartAndEndDate,
+              dates: formattedDates,
             }),
           })
             .then((response) => response.json())
-            .then((data) => {
-              //reload the page
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
+            .then(() => setReload(true));
         } else {
           //update the special price by hitting the addSpecialDatePrice endpoint
           fetch("/api/room/addSpecialDatePrice", {
@@ -124,22 +129,11 @@ const AdminRoom: React.FC = () => {
             },
             body: JSON.stringify({
               roomId: selectedRoom,
-              dates: allDatesBetweenStartAndEndDate,
+              dates: formattedDates,
               price: updatePrice,
             }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              //reload the page
-              console.log(data);
-              window.location.reload();
-            });
+          }).then(() => setReload(true));
         }
-
-        // Reset all fields
-        resetDates();
-        setIsBlocking(false);
-        setUpdatePrice("");
       }
     }
   };
@@ -187,6 +181,13 @@ const AdminRoom: React.FC = () => {
   };
 
   useEffect(() => {
+    if (reload) {
+      window.location.reload();
+      setReload(false);
+    }
+  }, [reload]);
+
+  useEffect(() => {
     fetch("/api/room/getAllAdmin", {
       method: "GET",
     })
@@ -209,7 +210,8 @@ const AdminRoom: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+            >
               {" "}
               Return Home
             </a>
@@ -220,7 +222,8 @@ const AdminRoom: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#">
+                href="#"
+              >
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -237,6 +240,12 @@ const AdminRoom: React.FC = () => {
                   <Checkbox
                     checked={isBlocking}
                     onChange={handleCheckboxChange}
+                    sx={{
+                      color: "white",
+                      "&.Mui-checked": {
+                        color: "white",
+                      },
+                    }}
                   />
                 }
                 label="Block Selected Room"
@@ -249,9 +258,13 @@ const AdminRoom: React.FC = () => {
                 onChange={handlePriceChange}
                 disabled={isBlocking}
                 sx={{
-                  svg: { color: "white" },
-                  input: { color: "white" },
-                  label: { color: "white" },
+                  "& .MuiInputLabel-root": { color: "white" },
+                  "& .MuiInputBase-input": { color: "white" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "white" },
+                    "&:hover fieldset": { borderColor: "white" },
+                    "&.Mui-focused fieldset": { borderColor: "white" },
+                  },
                 }}
               />
               <div className="mx-4">
@@ -269,6 +282,15 @@ const AdminRoom: React.FC = () => {
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
                     }}
                   />
                 </LocalizationProvider>
@@ -292,6 +314,15 @@ const AdminRoom: React.FC = () => {
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on hover
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "white", // Border color on focus
+                      },
                     }}
                   />
                 </LocalizationProvider>
@@ -311,7 +342,8 @@ const AdminRoom: React.FC = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleSubmit}>
+                onClick={handleSubmit}
+              >
                 Update
               </button>
             </div>
@@ -322,7 +354,7 @@ const AdminRoom: React.FC = () => {
                   <FormControlLabel
                     key={room._id}
                     value={room._id}
-                    control={<Radio />}
+                    control={<Radio sx={radioStyles} />}
                     label={room.name}
                   />
                 );
@@ -330,7 +362,7 @@ const AdminRoom: React.FC = () => {
             </RadioGroup>
             {/* Table for Room priceing or blocked */}
             <h2 className="text-2xl font-bold my-2">Blocked Off Dates</h2>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative max-h-[300px] overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
               <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
                 <Table size="small">
                   <TableHead>
@@ -354,7 +386,8 @@ const AdminRoom: React.FC = () => {
                                 console.log(entry);
                                 removeBlockDate(entry.roomId, entry.date);
                               }}
-                              className="text-red-500 hover:underline">
+                              className="text-red-500 hover:underline"
+                            >
                               Remove Block
                             </button>
                           </TableCell>
@@ -368,7 +401,7 @@ const AdminRoom: React.FC = () => {
             <hr className="my-4" />
             {/* TABLE FOR ROOM PRICING */}
             <h2 className="text-2xl font-bold my-2">Special Price Dates</h2>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative max-h-[300px] overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg">
               <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
                 <Table size="small">
                   <TableHead>
@@ -394,10 +427,11 @@ const AdminRoom: React.FC = () => {
                                 console.log(entry);
                                 removeSpecialDatePrice(
                                   entry.roomId,
-                                  entry.date
+                                  entry.date,
                                 );
                               }}
-                              className="text-red-500 hover:underline">
+                              className="text-red-500 hover:underline"
+                            >
                               Remove Price Change
                             </button>
                           </TableCell>

@@ -1,12 +1,9 @@
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
+  CircularProgress,
   Modal,
   Paper,
-  Radio,
-  RadioGroup,
   Table,
   TableBody,
   TableCell,
@@ -15,14 +12,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { addDays, format } from "date-fns";
+import { format, max, min, parse } from "date-fns";
 import React, { useEffect } from "react";
 import { auth, signOutUser } from "../../../firebase";
 import type { Customer } from "../../../types/customer";
-import type SpecialDatePrice from "../../../types/specialDatePrice";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -36,15 +29,25 @@ const modalStyle = {
   p: 4,
 };
 
+const textFieldStyles = {
+  "& .MuiInputLabel-root": { color: "white" },
+  "& .MuiInputBase-input": { color: "white" },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "white" },
+    "&:hover fieldset": { borderColor: "white" },
+    "&.Mui-focused fieldset": { borderColor: "white" },
+  },
+};
+
 const AdminBooking: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
-  const [startDate, setStartDate] = React.useState<string | null>(null);
-  const [endDate, setEndDate] = React.useState<string | null>(null);
   const [bookingList, setBookingList] = React.useState<any[]>([]);
   const [modalState, setModalState] = React.useState(false);
   const [customerModalState, setCustomerModalState] = React.useState(false);
   const [bookingIdToCancel, setBookingIdToCancel] = React.useState("");
   const [customerToView, setCustomerToView] = React.useState<Customer>();
+
+  const [loading, setLoading] = React.useState(true);
 
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -60,26 +63,6 @@ const AdminBooking: React.FC = () => {
       window.location.replace("/login");
     }
   });
-
-  const handleSetStartDate = (newStartDate: string) => {
-    if (endDate && new Date(newStartDate) > new Date(endDate)) {
-      setEndDate(addDays(new Date(newStartDate), 1).toString());
-    }
-
-    setStartDate(newStartDate);
-  };
-
-  const handleSetEndDate = (newEndDate: string) => {
-    if (endDate && new Date(newEndDate) < new Date(endDate)) {
-      return;
-    }
-    setEndDate(newEndDate);
-  };
-
-  const resetDates = () => {
-    setStartDate(null);
-    setEndDate(null);
-  };
 
   const handleOpenModal = (bookingId: string) => {
     setBookingIdToCancel(bookingId);
@@ -101,41 +84,46 @@ const AdminBooking: React.FC = () => {
     setCustomerToView(undefined);
   };
 
+  const getDateRange = (dates: Array<string>) => {
+    console.log(dates);
+    const dateFormat = "MM/dd/yyyy";
+    const dateObjects = dates.map((dateString) =>
+      parse(dateString, dateFormat, new Date()),
+    );
+
+    const minDate = min(dateObjects);
+    let maxDate = max(dateObjects);
+
+    if (minDate === maxDate) {
+      maxDate = new Date(maxDate.setDate(maxDate.getDate() + 1));
+    }
+
+    const minDateString = format(minDate, "MM/dd/yyyy");
+    const maxDateString = format(maxDate, "MM/dd/yyyy");
+
+    return `${minDateString} - ${maxDateString}`;
+  };
+
+  const handleNewBooking = () => {
+    window.location.replace("/startBooking");
+  };
+
   const handleCancelBooking = (bookingId: string) => {
-    // fetch("/api/booking/cancelBooking", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     bookingId: bookingIdToCancel,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setBookingList(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
-    alert("Booking cancelled");
+    fetch("/api/booking/cancelBooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bookingId: bookingIdToCancel,
+      }),
+    });
+    //reload window
+    window.location.reload();
     handleCloseModal();
   };
 
-  const handleSubmit = () => {
-    if (startDate && endDate) {
-      //TODO: remove after testing
-      console.log("submitting");
-      console.log(startDate);
-      console.log(endDate);
-
-      // Reset all fields
-      resetDates();
-    }
-  };
-
-  useEffect(() => {
+  const fetchBookings = () => {
     fetch("/api/booking/getAllAdmin", {
       method: "GET",
     })
@@ -143,10 +131,15 @@ const AdminBooking: React.FC = () => {
       .then((data) => {
         console.log(data);
         setBookingList(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchBookings();
   }, []);
 
   return (
@@ -157,7 +150,8 @@ const AdminBooking: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+            >
               {" "}
               Return Home
             </a>
@@ -168,137 +162,116 @@ const AdminBooking: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#">
+                href="#"
+              >
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
           </div>
           {/* Content */}
           <div className="h-[50%] pt-10 text-white">
-            <h2 className="text-2xl font-bold mb-2">
-              Select Date Range to View Bookings
-            </h2>
-            {/* TOP CONTROLS */}
-            <div className="flex">
-              <div className="mx-4">
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label={"Start Date"}
-                    value={startDate ? new Date(startDate) : null}
-                    disablePast
-                    maxDate={addDays(new Date(), 365)}
-                    onChange={(newValue: Date | null) => {
-                      newValue && handleSetStartDate(newValue.toString());
-                    }}
-                    componentsProps={{ textField: { variant: "outlined" } }}
-                  />
-                </LocalizationProvider>
-              </div>
-              <div className="mx-4">
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label={"End Date"}
-                    value={endDate ? new Date(endDate) : null}
-                    disablePast
-                    maxDate={addDays(new Date(), 365)}
-                    minDate={startDate ? new Date(startDate) : undefined}
-                    disabled={!startDate}
-                    onChange={(newValue: Date | null) => {
-                      if (newValue && newValue <= new Date()) return;
-
-                      newValue && handleSetEndDate(newValue.toString());
-                    }}
-                    componentsProps={{ textField: { variant: "outlined" } }}
-                  />
-                </LocalizationProvider>
-              </div>
-              <button
-                disabled={!startDate || !endDate}
-                className="px-5 py-2 inline-block bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px"
-                style={{
-                  fontFamily: "Martel",
-                  fontWeight: "400",
-                  fontSize: "20px",
-                  lineHeight: "34px",
-                  letterSpacing: "0.13em",
-                }}
-                onClick={handleSubmit}>
-                Update
-              </button>
-            </div>
             {/* Booking Table */}
-            <h2 className="text-2xl font-bold my-2">Existing Bookings</h2>
+            <div className="flex gap-x-2 mb-4">
+              <h2 className="text-2xl font-bold my-2">Existing Bookings</h2>
+              <Button
+                onClick={handleNewBooking}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Create New Booking
+              </Button>
+            </div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Booking ID</TableCell>
-                      <TableCell>transactionID</TableCell>
-                      <TableCell>Customer Name</TableCell>
-                      <TableCell># of Reservations</TableCell>
-                      <TableCell>Is Third Party</TableCell>
-                      <TableCell>Total Price</TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {bookingList.map((entry) => {
-                      return (
-                        <TableRow key={entry.booking._id}>
-                          <TableCell>{entry.booking._id}</TableCell>
-                          <TableCell>{entry.booking.transactionId}</TableCell>
-                          <TableCell>
-                            {entry.customer.firstName +
-                              " " +
-                              entry.customer.lastName}
-                          </TableCell>
-                          <TableCell>
-                            {entry.booking.reservationIds.length}
-                          </TableCell>
-                          <TableCell>
-                            {entry.booking.isThirdParty ? "True" : "False"}
-                          </TableCell>
-                          <TableCell>${entry.booking.totalPrice}</TableCell>
-                          <TableCell>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => {
-                                handleOpenCustomerModal(entry.customer);
-                              }}
-                              style={{
-                                backgroundColor: "blue",
-                                color: "white",
-                              }}>
-                              Customer
-                            </Button>
-                          </TableCell>
-                          <TableCell>
-                            {entry.booking.isCancelled ? (
-                              <p>Cancelled</p>
-                            ) : (
+              {loading ? (
+                <div className="flex justify-center">
+                  <CircularProgress />
+                </div>
+              ) : (
+                <TableContainer
+                  component={Paper}
+                  style={{ maxHeight: "400px" }}
+                >
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Booking ID</TableCell>
+                        <TableCell>Confirmation Code</TableCell>
+                        <TableCell>Customer Name</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell># of Rooms</TableCell>
+                        <TableCell>Third Party</TableCell>
+                        <TableCell>Total Price</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {bookingList.map((entry) => {
+                        return (
+                          <TableRow key={entry._id}>
+                            <TableCell>{entry._id}</TableCell>
+                            <TableCell>{entry.transactionId}</TableCell>
+                            <TableCell>
+                              {entry.customer.firstName +
+                                " " +
+                                entry.customer.lastName}
+                            </TableCell>
+                            <TableCell>{getDateRange(entry.dates)}</TableCell>
+                            <TableCell>{entry.reservations.length}</TableCell>
+                            <TableCell>
+                              {entry?.vendorKey ? "True" : "False"}
+                            </TableCell>
+                            <TableCell>
+                              {(entry.totalPrice / 100).toLocaleString(
+                                "en-US",
+                                {
+                                  style: "currency",
+                                  currency: "USD",
+                                },
+                              )}
+                            </TableCell>
+                            <TableCell>
                               <Button
                                 variant="contained"
                                 color="secondary"
                                 onClick={() => {
-                                  handleOpenModal(entry.booking._id.toString());
+                                  handleOpenCustomerModal(entry.customer);
                                 }}
                                 style={{
-                                  backgroundColor: "red",
+                                  backgroundColor: "blue",
                                   color: "white",
-                                }}>
-                                Cancel
+                                }}
+                              >
+                                Customer
                               </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                            </TableCell>
+                            <TableCell>
+                              {entry.isCancelled ? (
+                                <p>Cancelled</p>
+                              ) : (
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => {
+                                    handleOpenModal(entry._id.toString());
+                                  }}
+                                  style={{
+                                    backgroundColor: "red",
+                                    color: "white",
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </div>
           </div>
         </div>
@@ -308,7 +281,8 @@ const AdminBooking: React.FC = () => {
         open={modalState}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Cancelling a Booking
@@ -326,7 +300,8 @@ const AdminBooking: React.FC = () => {
               backgroundColor: "#2196f3",
               color: "white",
               marginRight: "10px",
-            }}>
+            }}
+          >
             Cancel Booking
           </Button>
           <Button
@@ -336,7 +311,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Stop Cancel
           </Button>
         </Box>
@@ -346,7 +322,8 @@ const AdminBooking: React.FC = () => {
         open={customerModalState}
         onClose={handleCloseCustomerModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Customer Information:
@@ -370,7 +347,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Close
           </Button>
         </Box>
