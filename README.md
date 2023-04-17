@@ -77,7 +77,7 @@ Inside of your project, you'll see the following folders and files holding both 
 
 ## Third-Party API
 
-This API endpoint allows vendors to create a booking for their customers. The request must include a valid vendorKey and the booking details.
+This API endpoint allows vendors to create a booking for their customers. The request must include a valid vendorKey and the booking details. At the moment there is no current process to request for an admin to generate a vendor key.
 
 ### Endpoint 
 
@@ -127,6 +127,7 @@ The response will be in JSON format and will include the following parameters:
 ### Example Request
 
 ```javascript
+// Request Object Structure
 const bookingData = {
   "vendorKey": "9d69f9bb-0cba-4be7-93b1-be2623e",
   "itinerary": [
@@ -160,6 +161,7 @@ const bookingData = {
   "totalCost": 335
 };
 
+//Example Query
 fetch('www.yorkshireinnteaminfinity.com/api/vendor/createBooking', {
   method: 'POST',
   headers: {
