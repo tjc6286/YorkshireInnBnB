@@ -1,8 +1,8 @@
 import { ReviewsCollection } from "./mongodb";
 
 /**
- *
- * @returns
+ * Method to get all reviews
+ * @returns All reviews
  */
 export const getAllReviews = async () => {
   const reviews = await (await ReviewsCollection()).find({}).toArray();
@@ -10,8 +10,9 @@ export const getAllReviews = async () => {
 };
 
 /**
- *
- * @param {id, rating, authorName, reviewText, date, isPublic, isApproved} review
+ * Method to insert a review to the database Review collection
+ * @param {*} incomingReview The review to be inserted
+ * @returns The inserted review
  */
 export const addReview = async (incomingReview) => {
   const reviews = await ReviewsCollection();

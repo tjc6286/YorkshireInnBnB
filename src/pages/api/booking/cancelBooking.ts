@@ -14,7 +14,7 @@ import {
 } from "../../../lib/reservations";
 
 /**
- *
+ * API endpoint to cancel a booking and its reservations
  * @param { request }
  * @returns
  */

@@ -15,6 +15,7 @@ import {
 
 /**
  * Method to get all bookings from the Bookings collection
+ *
  * @returns Array of Booking objects
  */
 export const getAllBookings = async () => {
@@ -27,6 +28,7 @@ export const getAllBookings = async () => {
 
 /**
  * Method to get a booking by its ID from the Bookings collection.
+ *
  * @param bookingId ID of the Booking to get from the Bookings collection
  * @returns Booking object
  */
@@ -41,10 +43,15 @@ export const getBookingByID = async (bookingId: ObjectId) => {
   return bookings[0];
 };
 
+/**
+ * Method to get a booking by its transaction ID from the Bookings collection.
+ *
+ * @param bookingId ID of the Booking to get from the Bookings collection
+ * @returns Booking object
+ */
 export const getBookingByTransactionID = async (bookingId: string) => {
   //SERVER LOGGING
   logMessage("Method: getBookingByID", "Getting Booking by ID: " + bookingId);
-
   const bookings = await (await BookingsCollection())
     .find({ transactionId: bookingId })
     .toArray();
@@ -86,6 +93,7 @@ export const bookingLookup = async (bookingId: string) => {
 
 /**
  * Method to insert a new booking into the Bookings collection.
+ *
  * @param newBooking Booking object to insert into the Bookings collection
  * @returns insertedId of the Booking Object inserted into the Bookings collection
  */
@@ -102,6 +110,7 @@ export const insertNewbooking = async (newBooking: any) => {
 
 /**
  * Method to update a booking by its ID and update it with the updatedBooking object.
+ *
  * @param bookingID ID of the Booking to update
  * @param updatedBooking Updated Booking object
  * @returns Booking object
@@ -152,7 +161,6 @@ export const insertNewInProcessBooking = async (newBooking: any) => {
  * Inserts a new InProcessBooking into the InProcessBooking collection.
  *
  * @param {newbooking} id Id of the current in process booking
- *
  * @returns {bookingID} the ID of the booking that was inserted
  */
 export const updateInProcessBooking = async (
@@ -357,7 +365,13 @@ export const removeTempBookingAndHoldDates = async (
     }
   }
 };
-
+/**
+ * Creates The booking , reservations, and customer from the InProcessBooking
+ * and removes the InProcessBooking
+ *
+ * @param tempBookingId  ID of the InProcessBooking to create a Customer from
+ * @returns Confirmation Number of the newly created Customer Booking
+ */
 export const createCustomerBooking = async (tempBookingId: string) => {
   try {
     //SERVER LOGGING
@@ -478,6 +492,13 @@ export const createCustomerBooking = async (tempBookingId: string) => {
   }
 };
 
+/**
+ * Creates the Booking, Reservations, and Customer from the VendorBooking
+ * object passed in from API call.
+ *
+ * @param vendorBooking VendorBooking object from API call
+ * @returns Confirmation Number of the newly created Booking
+ */
 export const createVendorBooking = async (vendorBooking: VendorBooking) => {
   try {
     //SERVER LOGGING
@@ -634,6 +655,12 @@ export const createVendorBooking = async (vendorBooking: VendorBooking) => {
   }
 };
 
+/**
+ * Gets all bookings with the customer and reservation information
+ * populated.
+ *
+ * @returns Array of all bookings with customer and reservation information
+ */
 export const getAllBookingsWithCustomerAndReservation = async () => {
   try {
     const bookingCollection = await BookingsCollection();
@@ -692,114 +719,3 @@ export const getAllBookingsWithCustomerAndReservation = async () => {
     disconnectDB();
   }
 };
-
-// /**
-//  * Method to create a booking from a third party
-//  * @param incomingBooking Booking Object from Third Party
-//  * @returns returns the confirmation code
-//  */
-// export const createBookingViaThirdParty = async (incomingBoking: any) => {
-//   //SERVER LOGGING
-//   logMessage(
-//     "Method: createBookingViaThirdParty",
-//     "Creating Booking From Third Party",
-//   );
-
-//   const roomsCollection = await RoomsCollection();
-//   const bookingCollection = await BookingsCollection();
-//   const customerCollection = await CustomersCollection();
-//   const reservationCollection = await ReservationsCollection();
-//   const tempBookingCollection = await InProcessBookingCollection();
-
-//   const tempBooking = await tempBookingCollection.findOne({
-//     _id: new ObjectId(tempBookingId),
-//   });
-
-//   //add dates to booked dates collection in rooms
-//   const datesToBlockInRooms = tempBooking.blockedOffDates;
-//   const roomsUpdate = await roomsCollection.updateMany(
-//     {
-//       _id: {
-//         $in: tempBooking.itinerary.map((res: any) => new ObjectId(res._id)),
-//       },
-//     },
-//     { $push: { bookedDates: { $each: datesToBlockInRooms } } },
-//   );
-
-//   if (roomsUpdate) {
-//     console.log("Successfully added blocked off dates to rooms");
-//   }
-
-//   let customer: any;
-//   let customerFound = false;
-//   const previousCustomer = await customerCollection.findOne({
-//     email: tempBooking.customerInformation.email,
-//   });
-
-//   if (previousCustomer) {
-//     customer = previousCustomer;
-//     customerFound = true;
-//   } else {
-//     //create a new customer
-//     customer = await customerCollection.insertOne({
-//       firstName: tempBooking.customerInformation.firstName,
-//       lastName: tempBooking.customerInformation.lastName,
-//       email: tempBooking.customerInformation.email,
-//       phone: tempBooking.customerInformation.phone,
-//       address: tempBooking.customerInformation.address,
-//       city: tempBooking.customerInformation.city,
-//       state: tempBooking.customerInformation.state,
-//       zip: tempBooking.customerInformation.zip,
-//     });
-//   }
-
-//   if (customer) {
-//     console.log("Successfully found or created customer");
-//   }
-
-//   //create a new reservation
-//   const reservations = tempBooking.itinerary.map((res: any, index: number) => {
-//     return {
-//       roomId: new ObjectId(res._id),
-//       petsIncluded: tempBooking.customerInformation.petsIncluded,
-//       allergiesIncluded: tempBooking.customerInformation.allergiesIncluded,
-//       petsDescription: tempBooking.customerInformation.petsDescription,
-//       foodAllergies: tempBooking.customerInformation.allergiesDescription,
-//       isCancelled: false,
-//       subtotal: tempBooking.itinerary[index].priceBreakdown.subtotal,
-//       total: tempBooking.itinerary[index].priceBreakdown.total,
-//       customer: new ObjectId(
-//         customerFound ? customer._id : customer.insertedId,
-//       ),
-//     };
-//   });
-//   const reservationRes = await reservationCollection.insertMany(reservations);
-
-//   if (reservationRes.length > 0) {
-//     console.log("Successfully created reservations");
-//   }
-
-//   const confirmationCode = "YI-" + tempBookingId!.substring(0, 8).toUpperCase();
-//   const bookingObj = {
-//     reservationIds: reservationRes.insertedIds,
-//     transactionId: confirmationCode,
-//     totalPrice: tempBooking.totalCost,
-//     bookingDeposit: tempBooking.amount,
-//     customerId: new ObjectId(
-//       customerFound ? customer._id : customer.insertedId,
-//     ),
-//   };
-//   const insertedBooking = await bookingCollection.insertOne(bookingObj);
-
-//   if (insertedBooking) {
-//     console.log("Successfully created booking");
-//   }
-
-//   const result = await removeTempBookingAndHoldDates(tempBookingId, false);
-
-//   if (result) {
-//     console.log("Successfully removed temp booking and hold dates");
-//   }
-
-//   return confirmationCode;
-// };

@@ -5,8 +5,8 @@ import { logMessage } from "../../../lib/logger";
 import { getMultipleReservations } from "../../../lib/reservations";
 
 /**
- *
- * @param { request }
+ * API endpoint to get a booking by its transaction ID with the customer and reservation data
+ * @param { request } holds the request object with incoming booking ID
  * @returns
  */
 export const post: APIRoute = async ({ request }) => {
@@ -17,7 +17,7 @@ export const post: APIRoute = async ({ request }) => {
     //SERVER LOGGING
     logMessage(
       "ENDPOINT: /api/booking/bookingLookup",
-      "Booking ID: " + bookingId,
+      "Booking ID: " + bookingId
     );
 
     var booking = await getBookingByTransactionID(bookingId);
@@ -30,7 +30,7 @@ export const post: APIRoute = async ({ request }) => {
       //get reservations
 
       const reservations = await getMultipleReservations(
-        Object.values(booking.reservationIds),
+        Object.values(booking.reservationIds)
       );
 
       const retObj = {

@@ -2,6 +2,10 @@ import { v4 as uuidv4 } from "uuid";
 import { logMessage } from "./logger";
 import { VendorsCollection, disconnectDB } from "./mongodb";
 
+/**
+ * Method to get all vendors from the database
+ * @returns All vendors in the database
+ */
 export const getAllVendors = async () => {
   try {
     //SERVER LOGGING
@@ -14,12 +18,17 @@ export const getAllVendors = async () => {
   }
 };
 
+/**
+ * Method to create a new vendor in the database
+ * @param newVendorName Given name of the new vendor
+ * @returns insertedId of the new vendor
+ */
 export const createNewVendor = async (newVendorName: string) => {
   try {
     //SERVER LOGGING
     logMessage(
       "Method: createNewVendor",
-      "Creating New Vendor: " + newVendorName,
+      "Creating New Vendor: " + newVendorName
     );
 
     const vendorCollection = await VendorsCollection();
@@ -37,6 +46,11 @@ export const createNewVendor = async (newVendorName: string) => {
   }
 };
 
+/**
+ * Method to check if a vendor exists in the database with the given vendorKey
+ * @param vendorKey given vendorKey to check
+ * @returns true if vendor exists, false if vendor does not exist
+ */
 export const checkVendorExists = async (vendorKey: string) => {
   try {
     //SERVER LOGGING
@@ -57,6 +71,11 @@ export const checkVendorExists = async (vendorKey: string) => {
   }
 };
 
+/**
+ * Method to remove a vendor from the database given a vendorKey
+ * @param vendorKey given vendorKey to remove vendor with
+ * @returns true if vendor was removed, false if vendor was not removed
+ */
 export const removeVendor = async (vendorKey: string) => {
   try {
     //SERVER LOGGING

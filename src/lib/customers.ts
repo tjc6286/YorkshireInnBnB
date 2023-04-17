@@ -15,7 +15,12 @@ export const getAllCustomers = async () => {
   return reviews;
 };
 
-//get customer by id
+/**
+ * Method to get a customer by its ID from the Customers collection.
+ *
+ * @param customerID given customer ID to search for
+ * @returns Customer object
+ */
 export const getCustomerByID = async (customerID: string) => {
   //SERVER LOGGING
   logMessage(
