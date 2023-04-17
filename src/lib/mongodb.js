@@ -32,7 +32,7 @@ const connectToDB = async () => {
 export const disconnectDB = async () => {
   if (connectedClient) {
     logYellow(
-      "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n",
+      "[Closing DB connection] - " + new Date().toLocaleTimeString() + "\n"
     );
     await connectedClient.close();
   }
@@ -40,6 +40,7 @@ export const disconnectDB = async () => {
 
 /**
  * Get access to the DB
+ *
  * @returns {Promise<MongoClient>} The mongo client
  */
 export const getDB = async () => {

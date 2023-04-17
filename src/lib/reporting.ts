@@ -7,6 +7,11 @@ import {
   disconnectDB,
 } from "./mongodb";
 
+/**
+ * Method to count the number of reservations per room
+ *
+ * @returns Array of objects with roomId, roomName, and count
+ */
 export const countReservationsPerRoom = async () => {
   //SERVER LOGGING
   logMessage("Method: countReservationsPerRoom", "Counting Reservations");
@@ -55,6 +60,11 @@ export const countReservationsPerRoom = async () => {
   }
 };
 
+/**
+ * Method to sum the total profit made per room
+ *
+ * @returns Array of objects with roomId, roomName, and totalSum of profit made
+ */
 export const sumTotalPerRoom = async () => {
   //SERVER LOGGING
   logMessage("Method: sumTotalPerRoom", "Summing Totals");
@@ -110,6 +120,11 @@ export const sumTotalPerRoom = async () => {
   }
 };
 
+/**
+ * Method to count the number of bookings per source
+ *
+ * @returns Array of objects with source and count
+ */
 export const countBookingSource = async () => {
   const client = new MongoClient(
     process.env.MONGODB_URI || import.meta.env.MONGODB_URI,
