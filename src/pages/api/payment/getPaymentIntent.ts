@@ -12,7 +12,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
   request.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   request.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
+    "Content-Type, Authorization",
   );
   const stripe = new Stripe(secretKey, {
     apiVersion: "2022-11-15",
@@ -39,7 +39,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
       amountDue,
       totalCost,
       customerInformation,
-      blockedOffDates
+      blockedOffDates,
     );
 
     if (!updatedTempBookingSuccess) {
@@ -60,10 +60,12 @@ export const post: APIRoute = async ({ request, redirect }) => {
               },
               unit_amount: amountDue,
             },
+
             quantity: 1,
           },
         ],
         mode: "payment",
+        expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
         success_url: `${
           process.env.SITE_DOMAIN || import.meta.env.SITE_DOMAIN
         }/confirmation/${id}`,
