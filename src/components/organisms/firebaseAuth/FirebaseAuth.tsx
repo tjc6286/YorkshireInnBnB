@@ -14,7 +14,9 @@ var uiConfig = {
 const FirebaseAuth: React.FC = () => {
   React.useEffect(() => {
     //initialize firebase.
-    app;
+    const application = app;
+    console.log(application);
+
     var ui =
       firebaseui.auth.AuthUI.getInstance() ||
       new firebaseui.auth.AuthUI(firebase.auth());

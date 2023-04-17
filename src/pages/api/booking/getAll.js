@@ -1,11 +1,16 @@
 import { getAllBookings } from "../../../lib/bookings";
+import { logMessage } from "../../../lib/logger";
 
 /**
+ * Endpoint to get all bookings
  *
- * @returns
+ * @returns {Response} Returns all bookings wrapped in a Response object
  */
 export const get = async () => {
-  console.log("LOG - Get ALL BOOKINGS");
+  //SERVER LOGGING
+
+  logMessage("ENDPOINT: /api/booking/getAll", "Getting All Bookings");
+
   const bookings = await getAllBookings();
   if (!bookings) {
     return new Response(null, {

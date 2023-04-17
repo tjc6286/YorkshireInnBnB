@@ -2,12 +2,13 @@ import { getRoomById } from "../../../lib/rooms";
 import type { APIRoute } from "astro";
 
 /**
+ * API endpoint to get a room by id.
  *
- * @returns
+ * @returns { Response } returns a Response object with the room data.
  */
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();
-  
+
   if (request.headers.get("Content-Type") === "application/json") {
     const id = data.id;
     //VALIDATION FOR DATES, if NO DATES return ERROR MESSAGE

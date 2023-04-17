@@ -1,0 +1,24 @@
+---
+import { BookingLookup } from "../components/organisms/BookingLookup";
+import MainLayoutBooking from "../layouts/MainLayoutBooking.astro";
+---
+
+<MainLayoutBooking
+  title="Yorkshire Inn - Booking"
+  activePage="about"
+  heroImgPath="/assets/Logo.png">
+  <section>
+    <div class="text-black">
+      <h2 class="text-2xl font-bold my-4 mx-8">Manage Your Booking</h2>
+      <p class="mx-8 my-4">
+        Remember your confirmation number when booking travel or accommodation.
+        It's your reference for accessing your reservation details. Simply give
+        it to the service provider to access your booking information.
+      </p>
+    </div>
+    <div class="flex flex-1 items-center justify-center mb-8">
+      <BookingLookup client:only="react" />
+    </div>
+    <!-- EXAMPLE ROOM RESULT -->
+  </section>
+</MainLayoutBooking>

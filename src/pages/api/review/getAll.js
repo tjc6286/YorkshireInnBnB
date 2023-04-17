@@ -1,8 +1,8 @@
 import { getAllReviews } from "../../../lib/reviews";
 
 /**
- *
- * @returns
+ * Endpoint to get all reviews
+ * @returns {Response} Returns all reviews wrapped in a Response object
  */
 export const get = async () => {
   console.log("Log - GET ALL REVIEWS");

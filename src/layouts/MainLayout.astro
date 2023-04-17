@@ -16,9 +16,9 @@ const { title, activePage, heroImgPath } = Astro.props;
 
 //STYLES FOR NAV ITEMS
 let activeNavCss =
-  "block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
+  "mobile-nav block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
 let navCSS =
-  "block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
+  "mobile-nav block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
 
 //STYLES REFERENCE VARIABLE
 var homeCSS = "";
@@ -30,7 +30,7 @@ var contactCSS = "";
 
 // Apply the styles to navigation elements | apply different active style to active page.
 if (activePage === "home") {
-  homeCSS = activeNavCss;
+  homeCSS = navCSS;
   amenitiesCSS = navCSS;
   reviewsCSS = navCSS;
   roomsCSS = navCSS;
@@ -101,8 +101,7 @@ if (activePage === "home") {
           type="button"
           class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-controls="navbar-default"
-          aria-expanded="false"
-        >
+          aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <svg
             class="w-6 h-6"
@@ -119,11 +118,9 @@ if (activePage === "home") {
         <!-- ----DEFAULT WEB NAVIGATION---- -->
         <div
           class="hidden w-full md:block md:w-auto mx-auto relative px-5 max-w-screen-xl items-center justify-end"
-          id="navbar-default"
-        >
+          id="navbar-default">
           <ul
-            class="flex flex-col md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 bg-[#36353A] items-center"
-          >
+            class="flex flex-col md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 bg-[#36353A] items-center">
             <li>
               <a
                 href="/#home"
@@ -180,14 +177,17 @@ if (activePage === "home") {
             </li>
           </ul>
         </div>
+        <!-- <a
+          href=""
+          class="px-5 py-2 bg-transparent outline rounded-md text-white outline-1 bg-gray-600 transition-colors mx-px">
+          Manage Booking
+        </a> -->
         <!-- ----DEFAULT MOBILE NAVIGATION---- -->
         <div
           class="md:hidden transition-transform w-[90%] overflow-hidden scale-y-0 absolute top-10 mx-5 z-10"
-          id="navbar-mobile"
-        >
+          id="navbar-mobile">
           <ul
-            class="flex flex-col p-4 mt-4 border border-[#262b29] bg-[#36353A] md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0"
-          >
+            class="flex flex-col p-4 mt-4 border border-[#262b29] bg-[#36353A] md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
             <li>
               <a href="/" class={homeCSS} aria-current="page">Home</a>
             </li>
@@ -217,8 +217,7 @@ if (activePage === "home") {
     <!-- FOOTER -->
     <footer
       class="text-gray-800 bg-[#F4F7FA]"
-      style="position: relative; bottom: 0"
-    >
+      style="position: relative; bottom: 0">
       <div class="bg-[#36353A]">
         <div class="max-w-2xl mx-auto text-white py-10">
           <div class="text-center">
@@ -244,8 +243,7 @@ if (activePage === "home") {
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 my-10">
               <a href="https://www.facebook.com/theyorkshireinn/">
                 <div
-                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
-                >
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -265,8 +263,7 @@ if (activePage === "home") {
               </a>
               <a href="https://www.instagram.com/the_yorkshire_inn/">
                 <div
-                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
-                >
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -285,11 +282,9 @@ if (activePage === "home") {
                 </div>
               </a>
               <a
-                href="https://www.yelp.com/biz/the-yorkshire-inn-phelps?osq=THE+YORKSHIRE+INN"
-              >
+                href="https://www.yelp.com/biz/the-yorkshire-inn-phelps?osq=THE+YORKSHIRE+INN">
                 <div
-                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto"
-                >
+                  class="flex items-center border rounded-lg px-4 py-2 w-48 mx-auto">
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -310,8 +305,7 @@ if (activePage === "home") {
             </div>
           </div>
           <div
-            class="px-10 mt-16 lg:mt-28 flex flex-col md:flex-row md:justify-between items-center text-sm text-gray-300"
-          >
+            class="px-10 mt-16 lg:mt-28 flex flex-col md:flex-row md:justify-between items-center text-sm text-gray-300">
             <p class="order-2 md:order-1 mt-8 md:mt-0">
               &copy; COPYRIGHT © 2022 THE YORKSHIRE INN - ALL RIGHTS RESERVED.
               DESIGNED BY TEAM INFINITY.
@@ -328,10 +322,19 @@ if (activePage === "home") {
    */
   var navBtn = document.getElementById("nav_btn");
   var menu = document.getElementById("navbar-mobile");
+  var mobile_nav = document.getElementsByClassName("mobile-nav");
   navBtn?.addEventListener("click", () => {
     menu?.classList.toggle("scale-y-0");
     menu?.classList.toggle("scale-y-100");
   });
+
+  //add event listener to all to all mobile_nav elements to close the menu
+  for (var i = 0; i < mobile_nav.length; i++) {
+    mobile_nav[i].addEventListener("click", () => {
+      menu?.classList.toggle("scale-y-0");
+      menu?.classList.toggle("scale-y-100");
+    });
+  }
 </script>
 
 <style is:global>

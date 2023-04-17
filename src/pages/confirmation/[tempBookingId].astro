@@ -1,7 +1,13 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
+import { createCustomerBooking } from "../../lib/bookings";
 
-const { confirmationNumber } = Astro.params;
+const { tempBookingId } = Astro.params;
+
+const confirmationCode = await createCustomerBooking(tempBookingId!);
+if (!confirmationCode) {
+  return Astro.redirect("/");
+}
 ---
 
 <MainLayout
@@ -16,7 +22,7 @@ const { confirmationNumber } = Astro.params;
         Thank you for your booking. Your booking details are as follows:
       </p>
       <ul class="mb-4">
-        <li>Confirmation Number: {confirmationNumber}</li>
+        <li>Confirmation Number: {confirmationCode}</li>
       </ul>
       <p class="text-gray-600 mb-4">
         If you need to cancel or reschedule your appointment, please contact us

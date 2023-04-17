@@ -25,40 +25,47 @@ import MainLayout from "../layouts/MainLayout.astro";
   <MainLayout
     title="Yorkshire Inn"
     activePage="home"
-    heroImgPath="assets/Logo.png"
-  >
+    heroImgPath="assets/Logo.png">
     <!-- Hero Section. Big Image with text on top of it, and 2 buttons: one for booking, and one to check your booking -->
     <section
       id="home"
       class="flex flex-col min-h-screen bg-slate-800 text-white bg-center bg-cover bg-blend-overlay bg-fixed bg-black/30"
-      style="background-image: url('assets/bg.png')"
-    >
+      style="background-image: url('assets/bg.png')">
       <!-- Hero Section Content -->
       <div class="flex-1 flex items-center">
         <div class="text-center mx-auto px-10">
-          <h1 class="text-2xl md:text-4xl lg:text-4xl"
-            style="font-family:'Playfair Display', serif; text-transform: uppercase; letter-spacing:0.13em"
-          >
+          <h1
+            class="text-2xl md:text-4xl lg:text-4xl"
+            style="font-family:'Playfair Display', serif; text-transform: uppercase; letter-spacing:0.13em">
             The
           </h1>
-          <h1 class="text-5xl md:text-8xl lg:text-8xl"
-            style="font-family:'Playfair Display', serif; letter-spacing:0.13em"
-          >
+          <h1
+            class="text-5xl md:text-8xl lg:text-8xl"
+            style="font-family:'Playfair Display', serif; letter-spacing:0.13em">
             Yorkshire Inn
           </h1>
           <a
             class="px-5 py-2 inline-block bg-transparent outline outline-1 text-white hover:bg-gray-600 transition-colors mt-10 mx-px"
-            href="/startBooking"
-          >
+            href="/startBooking">
             <p
-              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;"
-            >
+              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
               Stay With Us
             </p>
             <p
-              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;"
-            >
+              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
               Book Now
+            </p>
+          </a>
+          <a
+            class="px-5 py-2 inline-block bg-transparent outline outline-1 text-white hover:bg-gray-600 transition-colors mt-10 mx-px"
+            href="/manageBooking">
+            <p
+              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
+              Already Booked?
+            </p>
+            <p
+              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
+              Manage Booking
             </p>
           </a>
         </div>
@@ -67,9 +74,8 @@ import MainLayout from "../layouts/MainLayout.astro";
     <!-- Amenities Section -->
     <section
       id="amenities"
-      class="scroll-mt-20 flex flex-col bg-[#F4F7FA] min-h-screen text-black justify-items-center"
-    >
-    <!-- Two images with corners stacked on top of each other, left of text -->
+      class="scroll-mt-20 flex flex-col bg-[#F4F7FA] min-h-screen text-black justify-items-center">
+      <!-- Two images with corners stacked on top of each other, left of text -->
       <div class="flex-1 flex items-center mx-auto w-[70%] md:w-[75%] sm:w-[100%]">
         <div class="mx-10 hidden lg:grid lg:grid-cols-1">
           <div style="grid-row-start: 1; grid-column-start: 1;">
@@ -77,8 +83,7 @@ import MainLayout from "../layouts/MainLayout.astro";
           </div>
           <div
             style="grid-row-start: 1; grid-column-start: 1;"
-            class="mt-44 ml-60"
-          >
+            class="mt-44 ml-60">
             <img src="assets/food 1.png" alt="Picture of Food" />
           </div>
       </div>
@@ -86,24 +91,21 @@ import MainLayout from "../layouts/MainLayout.astro";
         <div class="flex-1 flex items-center px-1 py-2 flex-col">
           <h2
             class="p-1 m-1"
-            style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 25px; letter-spacing: 0.035em;"
-          >
+            style="font-family: 'Playfair Display', serif; font-weight: 600; font-size: 25px; letter-spacing: 0.035em;">
             A freshly cooked farm to table breakfast served <span
               style="color: #0068A5">every morning</span
             >
           </h2>
           <p
             class="p-1 m-1"
-            style="font-family: 'Playfair Display', serif; font-weight: 500; font-size: 17px; line-height:129%; letter-spacing: 0.035em;"
-          >
+            style="font-family: 'Playfair Display', serif; font-weight: 500; font-size: 17px; line-height:129%; letter-spacing: 0.035em;">
             We use locally sourced and organic produce, eggs and meat when they
             are available. If you let us know of any special dietary requests
             upfront we will be more than happy to accommodate.
           </p>
           <p
             class="p-1 m-1"
-            style="font-family: 'Playfair Display', serif; font-weight: 500; font-size: 17px; line-height:129%; letter-spacing: 0.035em;"
-          >
+            style="font-family: 'Playfair Display', serif; font-weight: 500; font-size: 17px; line-height:129%; letter-spacing: 0.035em;">
             There is freshly brewed coffee and tea available first thing in the
             morning, and we have Keurig coffee machines available throughout the
             day. We are trying to be kind to the environment and compost with
@@ -115,10 +117,9 @@ import MainLayout from "../layouts/MainLayout.astro";
       <div class="flex-1 items-center mx-auto">
         <div class="text-center justify-center">
           <h2
-          style="font-family: 'Playfair Display', serif; font-size:25px; font-weight: 500; letter-spacing: 0.035em;"
-        >
-          Amenities for those staying with us
-        </h2>
+            style="font-family: 'Playfair Display', serif; font-size:25px; font-weight: 500; letter-spacing: 0.035em;">
+            Amenities for those staying with us
+          </h2>
           <div class="px-2 py-2 flex mb-4">
             <div class="w-1/2">
               <img class="mx-auto" src="assets/image 6.png" />
@@ -151,33 +152,39 @@ import MainLayout from "../layouts/MainLayout.astro";
     <!-- Break Section. Half Hero section, with another button to take user to booking. -->
     <section
       class="hidden md:flex flex-col min-h-[45vh] bg-slate-800 text-white bg-center bg-cover bg-blend-overlay bg-fixed bg-black/30"
-      style="background-image: url('assets/bg.png')"
-    >
+      style="background-image: url('assets/bg.png')">
       <!-- Break Section Content -->
       <div class="flex-1 flex items-center">
         <div class="text-center mx-auto">
           <h1
-            style="font-family:'Playfair Display', serif; font-size: 32pt; text-transform: uppercase; letter-spacing:0.13em"
-          >
+            style="font-family:'Playfair Display', serif; font-size: 32pt; text-transform: uppercase; letter-spacing:0.13em">
             Welcome to Your Home Away From Home at
           </h1>
           <h1
-            style="font-family:'Playfair Display', serif; font-size: 64pt; letter-spacing:0.13em"
-          >
+            style="font-family:'Playfair Display', serif; font-size: 64pt; letter-spacing:0.13em">
             The Yorkshire Inn!
           </h1>
           <a
             class="px-5 py-2 inline-block bg-transparent outline outline-1 text-white hover:bg-gray-600 transition-colors mt-10 mx-px"
-            href="/startBooking"
-          >
+            href="/startBooking">
             <p
-              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;"
-            >
+              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
               Stay With Us
             </p>
             <p
-              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;"
-            >
+              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
+              Book Now
+            </p>
+          </a>
+          <a
+            class="px-5 py-2 inline-block bg-transparent outline outline-1 text-white hover:bg-gray-600 transition-colors mt-10 mx-px"
+            href="/startBooking">
+            <p
+              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
+              Stay With Us
+            </p>
+            <p
+              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
               Book Now
             </p>
           </a>
@@ -188,58 +195,50 @@ import MainLayout from "../layouts/MainLayout.astro";
     <section id="room" class="scroll-mt-8 flex flex-col bg-[#F4F7FA] text-black justify-items-center">
       <section>
         <div
-          class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0"
-        >
+          class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0">
           <div
-            class="grid grid-cols-1 gap-y-8 lg:grid-rows-1 lg:items-center lg:gap-x-16"
-          >
+            class="grid grid-cols-1 gap-y-8 lg:grid-rows-1 lg:items-center lg:gap-x-16">
             <div class="text-black max-w-xl text-center sm:text-left">
               <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
                 Rooms
               </h2>
-      
+
               <p class="mt-4 text-gray-500">
                 Rooms available at The Yorkshire Inn
               </p>
               <!-- Large Screen buttons for carousel -->
               <div class="hidden lg:mt-8 lg:flex lg:gap-4">
                 <button
-                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-                >
+                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
                   <span class="sr-only">Previous Slide</span>
                   <svg
                     class="h-5 w-5 -rotate-180 transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
-      
+
                 <button
-                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-                >
+                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
                   <span class="sr-only">Next Slide</span>
                   <svg
                     class="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
               </div>
@@ -250,55 +249,71 @@ import MainLayout from "../layouts/MainLayout.astro";
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Rooms/blueroom 1.png" alt="Picture of Blue Room" />
+                        <img
+                          src="assets/Rooms/blueroom 1.png"
+                          alt="Picture of Blue Room"
+                        />
                         <div class="mt-4">
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             Blue Room
                           </p>
-      
+
                           <p class="mt-4 leading-relaxed text-gray-500">
-                            The Blue Room sleeps 2 in a queen bed and features a wall of south-facing windows overlooking the deck and back yard. Private bath with an oversized standup shower.
+                            The Blue Room sleeps 2 in a queen bed and features a
+                            wall of south-facing windows overlooking the deck
+                            and back yard. Private bath with an oversized
+                            standup shower.
                           </p>
                         </div>
                       </div>
                     </blockquote>
                   </div>
-      
+
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Rooms/boleroroom 1.png" alt="Picture of Bolero Room" />
+                        <img
+                          src="assets/Rooms/boleroroom 1.png"
+                          alt="Picture of Bolero Room"
+                        />
                         <div class="mt-4">
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             Bolero Room
                           </p>
-      
+
                           <p class="mt-4 leading-relaxed text-gray-500">
-                            The Bolero Room is our premium, private, romantic suite. It sleeps two in style and comfort in a king bed with an oversized bath featuring a two person jacuzzi tub and individual shower.
+                            The Bolero Room is our premium, private, romantic
+                            suite. It sleeps two in style and comfort in a king
+                            bed with an oversized bath featuring a two person
+                            jacuzzi tub and individual shower.
                           </p>
                         </div>
                       </div>
                     </blockquote>
                   </div>
-      
+
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Rooms/lodgesuit 1.png" alt="Picture of Lodge Suite" />
+                        <img
+                          src="assets/Rooms/lodgesuit 1.png"
+                          alt="Picture of Lodge Suite"
+                        />
                         <div class="mt-4">
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             Lodge Suite
                           </p>
 
                           <p class="mt-4 leading-relaxed text-gray-500">
-                            The Lodge Suite is a two-bedroom suite that sleeps up to 6 individuals. IT has a queen bed in the main room with a full and two twins in the second bedroom. It is trimmed in rough sawn cedar and features a bath with a tub and shower combination.
+                            The Lodge Suite is a two-bedroom suite that sleeps
+                            up to 6 individuals. IT has a queen bed in the main
+                            room with a full and two twins in the second
+                            bedroom. It is trimmed in rough sawn cedar and
+                            features a bath with a tub and shower combination.
                           </p>
                         </div>
                       </div>
@@ -306,17 +321,24 @@ import MainLayout from "../layouts/MainLayout.astro";
                   </div>
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Rooms/rosesuite 1.png" alt="Picture of Rose Suite" />
+                        <img
+                          src="assets/Rooms/rosesuite 1.png"
+                          alt="Picture of Rose Suite"
+                        />
                         <div class="mt-4">
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             Rose Suite
                           </p>
-      
+
                           <p class="mt-4 leading-relaxed text-gray-500">
-                            The Rose Suite is a two-bedroom suite that sleeps up to 6 individuals. Includes 2 queen beds and a daybed with trundle. It has large windows overlooking the deck and backyard. It has a second door that opens directly onto the deck. The private bath features an oversized standup shower. 
+                            The Rose Suite is a two-bedroom suite that sleeps up
+                            to 6 individuals. Includes 2 queen beds and a daybed
+                            with trundle. It has large windows overlooking the
+                            deck and backyard. It has a second door that opens
+                            directly onto the deck. The private bath features an
+                            oversized standup shower.
                           </p>
                         </div>
                       </div>
@@ -328,71 +350,61 @@ import MainLayout from "../layouts/MainLayout.astro";
               <div class="flex justify-center gap-4 lg:hidden">
                 <button
                   aria-label="Previous slide"
-                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-                >
+                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
                   <svg
                     class="h-5 w-5 -rotate-180 transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
-          
+
                 <button
                   aria-label="Next slide"
-                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-                >
+                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
                   <svg
                     class="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
               </div>
               <!-- Book now button -->
               <div class="mx-auto text-center items-center">
-              <a
-              class="px-5 py-2 inline-block bg-transparent outline outline-1 hover:bg-gray-600 hover:text-white transition-colors mt-10 mx-px"
-              href="/startBooking"
-            >
-              <p
-                style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;"
-              >
-                Stay With Us
-              </p>
-              <p
-                style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;"
-              >
-                Book Now
-              </p>
-            </a>
+                <a
+                  class="px-5 py-2 inline-block bg-transparent outline outline-1 hover:bg-gray-600 hover:text-white transition-colors mt-10 mx-px"
+                  href="/startBooking">
+                  <p
+                    style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
+                    Stay With Us
+                  </p>
+                  <p
+                    style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
+                    Book Now
+                  </p>
+                </a>
               </div>
-
             </div>
           </div>
         </div>
       </section>
       <!-- Uses Swiper js to make the carousel functional -->
       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          new Swiper('.swiper-container', {
+        document.addEventListener("DOMContentLoaded", function () {
+          new Swiper(".swiper-container", {
             loop: true,
             slidesPerView: 1,
             spaceBetween: 32,
@@ -411,24 +423,22 @@ import MainLayout from "../layouts/MainLayout.astro";
               },
             },
             navigation: {
-              nextEl: '.next-button',
-              prevEl: '.prev-button',
+              nextEl: ".next-button",
+              prevEl: ".prev-button",
             },
-          })
-        })
+          });
+        });
       </script>
     </section>
     <!-- Gallery Section, showing images fron the Inn -->
     <!-- First is for large screens, hidden on mobile -->
     <section
       id="gallery"
-      class="hidden lg:block bg-[#F4F7FA] min-h-screen text-black justify-items-center text-center scroll-mt-10"
-    >
+      class="hidden lg:block bg-[#F4F7FA] min-h-screen text-black justify-items-center text-center scroll-mt-10">
       <div class="container lg:px-32 px-4 py-8 mx-auto items-center">
         <h2
           class="py-12"
-          style="font-family: 'Playfair Display', serif; font-size:32px; font-weight: 500; letter-spacing: 0.035em;"
-        >
+          style="font-family: 'Playfair Display', serif; font-size:32px; font-weight: 500; letter-spacing: 0.035em;">
           Gallery
         </h2>
         <div class="grid grid-cols-4 grid-rows-4 grid-flow-col gap-4">
@@ -496,97 +506,97 @@ import MainLayout from "../layouts/MainLayout.astro";
     <section id="gallery" class="px-4">
       <section>
         <div
-          class="lg:hidden mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0"
-        >
+          class="lg:hidden mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0">
           <div
-            class="grid grid-cols-1 gap-y-8 lg:grid-rows-1 lg:items-center lg:gap-x-16"
-          >
+            class="grid grid-cols-1 gap-y-8 lg:grid-rows-1 lg:items-center lg:gap-x-16">
             <div class="text-black max-w-xl text-center sm:text-left">
               <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
                 Gallery
               </h2>
-      
+
               <div class="hidden lg:mt-8 lg:flex lg:gap-4">
                 <button
-                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-                >
+                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
                   <span class="sr-only">Previous Slide</span>
                   <svg
                     class="h-5 w-5 -rotate-180 transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
-      
+
                 <button
-                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-                >
+                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
                   <span class="sr-only">Next Slide</span>
                   <svg
                     class="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
               </div>
             </div>
-      
+
             <div class="lg:col-span-2 lg:mx-0">
               <div class="swiper-container !overflow-hidden">
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Gallery/mainliving.png" alt="Main Living Room" />
+                        <img
+                          src="assets/Gallery/mainliving.png"
+                          alt="Main Living Room"
+                        />
                       </div>
                     </blockquote>
                   </div>
-      
+
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Gallery/mainhall.png" alt="Picture of Inn's Main Hall" />
+                        <img
+                          src="assets/Gallery/mainhall.png"
+                          alt="Picture of Inn's Main Hall"
+                        />
                       </div>
                     </blockquote>
                   </div>
-      
+
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Gallery/bar.png" alt="Picture of the Bar" />
+                        <img
+                          src="assets/Gallery/bar.png"
+                          alt="Picture of the Bar"
+                        />
                       </div>
                     </blockquote>
                   </div>
                   <div class="swiper-slide">
                     <blockquote
-                      class="flex h-full flex-col justify-between bg-white p-12"
-                    >
+                      class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                        <img src="assets/Rooms/rosesuite 1.png" alt="Picture of Rose Suite" />
+                        <img
+                          src="assets/Rooms/rosesuite 1.png"
+                          alt="Picture of Rose Suite"
+                        />
                       </div>
                     </blockquote>
                   </div>
@@ -595,41 +605,35 @@ import MainLayout from "../layouts/MainLayout.astro";
               <div class="flex justify-center mt-6 gap-4 lg:hidden">
                 <button
                   aria-label="Previous slide"
-                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-                >
+                  class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
                   <svg
                     class="h-5 w-5 -rotate-180 transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
-          
+
                 <button
                   aria-label="Next slide"
-                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-                >
+                  class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
                   <svg
                     class="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M9 5l7 7-7 7"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      stroke-width="2"
-                    />
+                      stroke-width="2"></path>
                   </svg>
                 </button>
               </div>
@@ -639,8 +643,8 @@ import MainLayout from "../layouts/MainLayout.astro";
       </section>
       <!-- Swiper js for carousel -->
       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          new Swiper('.swiper-container', {
+        document.addEventListener("DOMContentLoaded", function () {
+          new Swiper(".swiper-container", {
             loop: true,
             slidesPerView: 1,
             spaceBetween: 32,
@@ -659,144 +663,132 @@ import MainLayout from "../layouts/MainLayout.astro";
               },
             },
             navigation: {
-              nextEl: '.next-button',
-              prevEl: '.prev-button',
+              nextEl: ".next-button",
+              prevEl: ".prev-button",
             },
-          })
-        })
+          });
+        });
       </script>
     </section>
     <!-- Review Section. Currently hard coded reviews taken from the Inn's google reviews, displayed in carousel -->
     <section id="reviews" class="scroll-mt-10">
       <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-      <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" />
+      <link
+        href="https://unpkg.com/swiper/swiper-bundle.min.css"
+        rel="stylesheet"
+      />
 
-<section>
-  <div
-    class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0"
-  >
-    <div
-      class="grid grid-cols-1 gap-y-8 lg:grid-cols-3 lg:items-center lg:gap-x-16"
-    >
-      <div class="text-black max-w-xl text-center sm:text-left">
-        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
-          Don't just take our word for it...
-          <br class="hidden sm:block lg:hidden" />
-          Read reviews from our customers
-        </h2>
+      <section>
+        <div
+          class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0">
+          <div
+            class="grid grid-cols-1 gap-y-8 lg:grid-cols-3 lg:items-center lg:gap-x-16">
+            <div class="text-black max-w-xl text-center sm:text-left">
+              <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                Don't just take our word for it...
+                <br class="hidden sm:block lg:hidden" />
+                Read reviews from our customers
+              </h2>
 
-        <p class="mt-4 text-gray-500">
-          We love to hear your feedback and how you enjoyed your stay!
-        </p>
+              <p class="mt-4 text-gray-500">
+                We love to hear your feedback and how you enjoyed your stay!
+              </p>
 
-        <div class="hidden lg:mt-8 lg:flex lg:gap-4">
-          <button
-            class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-          >
-            <span class="sr-only">Previous Slide</span>
-            <svg
-              class="h-5 w-5 -rotate-180 transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9 5l7 7-7 7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
-            </svg>
-          </button>
+              <div class="hidden lg:mt-8 lg:flex lg:gap-4">
+                <button
+                  class="prev-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
+                  <span class="sr-only">Previous Slide</span>
+                  <svg
+                    class="h-5 w-5 -rotate-180 transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"></path>
+                  </svg>
+                </button>
 
-          <button
-            class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white"
-          >
-            <span class="sr-only">Next Slide</span>
-            <svg
-              class="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9 5l7 7-7 7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+                <button
+                  class="next-button rounded-full border border-black p-3 text-black hover:bg-black hover:text-white">
+                  <span class="sr-only">Next Slide</span>
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9 5l7 7-7 7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="-mx-6 lg:col-span-2 lg:mx-0">
+              <div class="swiper-container !overflow-hidden">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12">
+                      <div>
+                      <!-- All the stars for the review -->
+                        <div class="flex gap-0.5 text-yellow-500">
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
 
-      <div class="-mx-6 lg:col-span-2 lg:mx-0">
-        <div class="swiper-container !overflow-hidden">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <blockquote
-                class="flex h-full flex-col justify-between bg-white p-12"
-              >
-                <div>
-                  <!-- All the stars for the review -->
-                  <div class="flex gap-0.5 text-yellow-500">
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
 
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
 
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
 
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-                  </div>
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+                        </div>
 
                   <!-- The review itself -->
                   <div class="mt-4">
@@ -804,261 +796,254 @@ import MainLayout from "../layouts/MainLayout.astro";
                       A wonderful, memorable experience
                     </p>
 
-                    <p class="mt-4 leading-relaxed text-gray-500">
-                      After a long day of driving, it was nice to arrive at the Yorkshire Inn. Everything felt homey and relaxing, not like our usual cookie cutter hotel stays.
-                    </p>
+                          <p class="mt-4 leading-relaxed text-gray-500">
+                            After a long day of driving, it was nice to arrive
+                            at the Yorkshire Inn. Everything felt homey and
+                            relaxing, not like our usual cookie cutter hotel
+                            stays.
+                          </p>
+                        </div>
+                      </div>
+
+                      <footer class="mt-8 text-sm text-gray-500">
+                        &mdash; Nathan Temple
+                      </footer>
+                    </blockquote>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12">
+                      <div>
+                      <!-- All the stars for the review -->
+                        <div class="flex gap-0.5 text-yellow-500">
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+                          
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+                        </div>
+
+                       <!-- The review -->
+                       <div class="mt-4">
+                          <p class="text-2xl font-bold text-black sm:text-3xl">
+                            We will be back again and look forward to another
+                            visit.
+                          </p>
+
+                          <p class="mt-4 leading-relaxed text-gray-500">
+                            This charming and historic brick inn is a very
+                            comfortable place, with cozy and well-appointed
+                            bedrooms and en-suite bathrooms. The room rates are
+                            extremely good.
+                          </p>
+                        </div>
+                      </div>
+
+                      <footer class="mt-8 text-sm text-gray-500">
+                        &mdash; Kevin Quinlan
+                      </footer>
+                    </blockquote>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <blockquote
+                      class="flex h-full flex-col justify-between bg-white p-12">
+                      <div>
+                      <!-- The stars for the review -->
+                        <div class="flex gap-0.5 text-yellow-500">
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+
+                          <svg
+                            class="h-5 w-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                            ></path>
+                          </svg>
+                        </div>
+
+                        <!-- The review -->
+                        <div class="mt-4">
+                          <p class="text-2xl font-bold text-black sm:text-3xl">
+                            Would definitely stay here again.
+                          </p>
+                          
+                          <p class="mt-4 leading-relaxed text-gray-500">
+                            We stayed for one night while in the area for a for
+                            a wedding. Hosts were very welcoming. The house is
+                            beautifully decorated, and our room was spacious and
+                            clean. Breakfast was very tasty. Also, it has a
+                            great central location- a short drive to the outlets
+                            and several wineries.
+                          </p>
+                        </div>
+                      </div>
+
+                      <footer class="mt-8 text-sm text-gray-500">
+                        &mdash; Alicia Dziak
+                      </footer>
+                    </blockquote>
                   </div>
                 </div>
-
-                <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Nathan Temple
-                </footer>
-              </blockquote>
-            </div>
-
-            <div class="swiper-slide">
-              <blockquote
-                class="flex h-full flex-col justify-between bg-white p-12"
-              >
-                <div>
-                  <!-- All the stars for the review -->
-                  <div class="flex gap-0.5 text-yellow-500">
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-                  </div>
-
-                  <!-- The review -->
-                  <div class="mt-4">
-                    <p class="text-2xl font-bold text-black sm:text-3xl">
-                      We will be back again and look forward to another visit.
-                    </p>
-
-                    <p class="mt-4 leading-relaxed text-gray-500">
-                      This charming and historic brick inn is a very comfortable place, with cozy and well-appointed bedrooms and en-suite bathrooms. The room rates are extremely good.
-                    </p>
-                  </div>
-                </div>
-
-                <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Kevin Quinlan
-                </footer>
-              </blockquote>
-            </div>
-
-            <div class="swiper-slide">
-              <blockquote
-                class="flex h-full flex-col justify-between bg-white p-12"
-              >
-                <div>
-                  <!-- The stars for the review -->
-                  <div class="flex gap-0.5 text-yellow-500">
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-
-                    <svg
-                      class="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                      />
-                    </svg>
-                  </div>
-
-                  <!-- The review -->
-                  <div class="mt-4">
-                    <p class="text-2xl font-bold text-black sm:text-3xl">
-                      Would definitely stay here again.
-                    </p>
-
-                    <p class="mt-4 leading-relaxed text-gray-500">
-                      We stayed for one night while in the area for a for a wedding. Hosts were very welcoming. The house is beautifully decorated, and our room was spacious and clean. Breakfast was very tasty. Also, it has a great central location- a short drive to the outlets and several wineries.
-                    </p>
-                  </div>
-                </div>
-
-                <footer class="mt-8 text-sm text-gray-500">
-                  &mdash; Alicia Dziak
-                </footer>
-              </blockquote>
+              </div>
             </div>
           </div>
+
+          <!-- Mobile friendly buttons, hidden on large screens -->
+          <div class="mt-8 flex justify-center gap-4 lg:hidden">
+            <button
+              aria-label="Previous slide"
+              class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
+              <svg
+                class="h-5 w-5 -rotate-180 transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 5l7 7-7 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"></path>
+              </svg>
+            </button>
+
+            <button
+              aria-label="Next slide"
+              class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 5l7 7-7 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"></path>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Mobile friendly buttons, hidden on large screens -->
-    <div class="mt-8 flex justify-center gap-4 lg:hidden">
-      <button
-        aria-label="Previous slide"
-        class="prev-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-      >
-        <svg
-          class="h-5 w-5 -rotate-180 transform"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M9 5l7 7-7 7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
-        </svg>
-      </button>
-
-      <button
-        aria-label="Next slide"
-        class="next-button rounded-full border border-black p-4 text-black hover:bg-black hover:text-white"
-      >
-        <svg
-          class="h-5 w-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M9 5l7 7-7 7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
-        </svg>
-      </button>
-    </div>
-  </div>
-</section>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    new Swiper('.swiper-container', {
-      loop: true,
-      slidesPerView: 1,
-      spaceBetween: 32,
-      autoplay: {
-        delay: 8000,
-      },
-      breakpoints: {
-        640: {
-          centeredSlides: true,
-          slidesPerView: 1.25,
-        },
-        1024: {
-          centeredSlides: false,
-          slidesPerView: 1.25,
-        },
-      },
-      navigation: {
-        nextEl: '.next-button',
-        prevEl: '.prev-button',
-      },
-    })
-  })
-</script>
-</section>
+      </section>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          new Swiper(".swiper-container", {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 32,
+            autoplay: {
+              delay: 8000,
+            },
+            breakpoints: {
+              640: {
+                centeredSlides: true,
+                slidesPerView: 1.25,
+              },
+              1024: {
+                centeredSlides: false,
+                slidesPerView: 1.25,
+              },
+            },
+            navigation: {
+              nextEl: ".next-button",
+              prevEl: ".prev-button",
+            },
+          });
+        });
+      </script>
+    </section>
 
     <!-- Contact Section. Map on left, and contact information on right -->
     <section
       id="contact"
-      class="scroll-mt-20 mb-32 text-gray-800 flex flex-col bg-[#F4F7FA]"
-    >
+      class="scroll-mt-20 mb-32 text-gray-800 flex flex-col bg-[#F4F7FA]">
       <style>
         .map-container-2 {
           height: 500px;
@@ -1066,9 +1051,7 @@ import MainLayout from "../layouts/MainLayout.astro";
       </style>
       <div class="block rounded-lg lg:px-32 px-4 py-8 mx-auto">
         <div class="flex flex-wrap items-center">
-          <div
-            class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12"
-          >
+          <div class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
           <!-- Use google map's API to add map -->
             <div class="map-container-2 w-full">
               <iframe
@@ -1082,19 +1065,16 @@ import MainLayout from "../layouts/MainLayout.astro";
           <div class="grow-0 shrink-0 basis-auto w-full lg:w-6/12 xl:w-8/12">
             <h2
               class="text-center py-12"
-              style="font-family: 'Playfair Display', serif; font-size:32px; font-weight: 500; letter-spacing: 0.035em;"
-            >
+              style="font-family: 'Playfair Display', serif; font-size:32px; font-weight: 500; letter-spacing: 0.035em;">
               Contact Us
             </h2>
             <div class="flex flex-wrap pt-12 lg:pt-0">
               <div
-                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12"
-              >
+                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12">
                 <div class="flex items-start">
                   <div class="shrink-0">
                     <div
-                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center"
-                    >
+                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center">
                       <svg
                         aria-hidden="true"
                         focusable="false"
@@ -1103,12 +1083,10 @@ import MainLayout from "../layouts/MainLayout.astro";
                         class="w-5 text-white"
                         role="img"
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                      >
+                        viewBox="0 0 512 512">
                         <path
                           fill="currentColor"
-                          d="M192 208c0-17.67-14.33-32-32-32h-16c-35.35 0-64 28.65-64 64v48c0 35.35 28.65 64 64 64h16c17.67 0 32-14.33 32-32V208zm176 144c35.35 0 64-28.65 64-64v-48c0-35.35-28.65-64-64-64h-16c-17.67 0-32 14.33-32 32v112c0 17.67 14.33 32 32 32h16zM256 0C113.18 0 4.58 118.83 0 256v16c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16v-16c0-114.69 93.31-208 208-208s208 93.31 208 208h-.12c.08 2.43.12 165.72.12 165.72 0 23.35-18.93 42.28-42.28 42.28H320c0-26.51-21.49-48-48-48h-32c-26.51 0-48 21.49-48 48s21.49 48 48 48h181.72c49.86 0 90.28-40.42 90.28-90.28V256C507.42 118.83 398.82 0 256 0z"
-                        >
+                          d="M192 208c0-17.67-14.33-32-32-32h-16c-35.35 0-64 28.65-64 64v48c0 35.35 28.65 64 64 64h16c17.67 0 32-14.33 32-32V208zm176 144c35.35 0 64-28.65 64-64v-48c0-35.35-28.65-64-64-64h-16c-17.67 0-32 14.33-32 32v112c0 17.67 14.33 32 32 32h16zM256 0C113.18 0 4.58 118.83 0 256v16c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16v-16c0-114.69 93.31-208 208-208s208 93.31 208 208h-.12c.08 2.43.12 165.72.12 165.72 0 23.35-18.93 42.28-42.28 42.28H320c0-26.51-21.49-48-48-48h-32c-26.51 0-48 21.49-48 48s21.49 48 48 48h181.72c49.86 0 90.28-40.42 90.28-90.28V256C507.42 118.83 398.82 0 256 0z">
                         </path>
                       </svg>
                     </div>
@@ -1120,13 +1098,11 @@ import MainLayout from "../layouts/MainLayout.astro";
                 </div>
               </div>
               <div
-                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12"
-              >
+                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12">
                 <div class="flex items-start">
                   <div class="shrink-0">
                     <div
-                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center"
-                    >
+                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center">
                       <svg
                         aria-hidden="true"
                         focusable="false"
@@ -1135,12 +1111,10 @@ import MainLayout from "../layouts/MainLayout.astro";
                         class="w-3 text-white"
                         role="img"
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 288 512"
-                      >
+                        viewBox="0 0 288 512">
                         <path
                           fill="currentColor"
-                          d="M209.2 233.4l-108-31.6C88.7 198.2 80 186.5 80 173.5c0-16.3 13.2-29.5 29.5-29.5h66.3c12.2 0 24.2 3.7 34.2 10.5 6.1 4.1 14.3 3.1 19.5-2l34.8-34c7.1-6.9 6.1-18.4-1.8-24.5C238 74.8 207.4 64.1 176 64V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48h-2.5C45.8 64-5.4 118.7.5 183.6c4.2 46.1 39.4 83.6 83.8 96.6l102.5 30c12.5 3.7 21.2 15.3 21.2 28.3 0 16.3-13.2 29.5-29.5 29.5h-66.3C100 368 88 364.3 78 357.5c-6.1-4.1-14.3-3.1-19.5 2l-34.8 34c-7.1 6.9-6.1 18.4 1.8 24.5 24.5 19.2 55.1 29.9 86.5 30v48c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-48.2c46.6-.9 90.3-28.6 105.7-72.7 21.5-61.6-14.6-124.8-72.5-141.7z"
-                        >
+                          d="M209.2 233.4l-108-31.6C88.7 198.2 80 186.5 80 173.5c0-16.3 13.2-29.5 29.5-29.5h66.3c12.2 0 24.2 3.7 34.2 10.5 6.1 4.1 14.3 3.1 19.5-2l34.8-34c7.1-6.9 6.1-18.4-1.8-24.5C238 74.8 207.4 64.1 176 64V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48h-2.5C45.8 64-5.4 118.7.5 183.6c4.2 46.1 39.4 83.6 83.8 96.6l102.5 30c12.5 3.7 21.2 15.3 21.2 28.3 0 16.3-13.2 29.5-29.5 29.5h-66.3C100 368 88 364.3 78 357.5c-6.1-4.1-14.3-3.1-19.5 2l-34.8 34c-7.1 6.9-6.1 18.4 1.8 24.5 24.5 19.2 55.1 29.9 86.5 30v48c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16v-48.2c46.6-.9 90.3-28.6 105.7-72.7 21.5-61.6-14.6-124.8-72.5-141.7z">
                         </path>
                       </svg>
                     </div>
@@ -1152,13 +1126,11 @@ import MainLayout from "../layouts/MainLayout.astro";
                 </div>
               </div>
               <div
-                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12"
-              >
+                class="mb-12 grow-0 shrink-0 basis-auto w-full md:w-6/12 lg:w-full xl:w-6/12 px-3 md:px-6 xl:px-12">
                 <div class="flex align-start">
                   <div class="shrink-0">
                     <div
-                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center"
-                    >
+                      class="p-4 bg-[#36353A] rounded-md shadow-md w-14 h-14 flex items-center justify-center">
                       <svg
                         aria-hidden="true"
                         focusable="false"
@@ -1167,12 +1139,10 @@ import MainLayout from "../layouts/MainLayout.astro";
                         class="w-5 text-white"
                         role="img"
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 576 512"
-                      >
+                        viewBox="0 0 576 512">
                         <path
                           fill="currentColor"
-                          d="M552 64H88c-13.255 0-24 10.745-24 24v8H24c-13.255 0-24 10.745-24 24v272c0 30.928 25.072 56 56 56h472c26.51 0 48-21.49 48-48V88c0-13.255-10.745-24-24-24zM56 400a8 8 0 0 1-8-8V144h16v248a8 8 0 0 1-8 8zm236-16H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm-208-96H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm0-96H140c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h360c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12z"
-                        >
+                          d="M552 64H88c-13.255 0-24 10.745-24 24v8H24c-13.255 0-24 10.745-24 24v272c0 30.928 25.072 56 56 56h472c26.51 0 48-21.49 48-48V88c0-13.255-10.745-24-24-24zM56 400a8 8 0 0 1-8-8V144h16v248a8 8 0 0 1-8 8zm236-16H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm-208-96H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm0-96H140c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h360c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12z">
                         </path>
                       </svg>
                     </div>

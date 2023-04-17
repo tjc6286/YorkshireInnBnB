@@ -4,8 +4,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import type { DateValidationError } from "@mui/x-date-pickers/internals";
 import { addDays, eachDayOfInterval, format } from "date-fns";
 import React from "react";
-import type { TempReservation } from "../../../types/reservation";
+import type { ReservationWithPriceBreakdown } from "../../../types/reservation";
 import type { Room, RoomAvailability } from "../../../types/room";
+import type SpecialDatePrice from "../../../types/specialDatePrice";
 import ReservationsTable from "../reservationsTable";
 
 // interface DateRangeSelectorProps {}
@@ -15,7 +16,9 @@ const RoomAvailabilityDateRangeSelector = () => {
   const [endDate, setEndDate] = React.useState<string | null>(null);
   const [results, setResults] = React.useState<Array<RoomAvailability>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [itinerary, setItinerary] = React.useState<Array<TempReservation>>([]);
+  const [itinerary, setItinerary] = React.useState<
+    Array<ReservationWithPriceBreakdown>
+  >([]);
   const [numberOfGuests, setNumberOfGuests] = React.useState<number>(2);
   const [unaccountedGuests, setUnaccountedGuests] = React.useState<number>(0);
   const [errors, setErrors] = React.useState<Array<string>>([]);
@@ -41,7 +44,7 @@ const RoomAvailabilityDateRangeSelector = () => {
   };
 
   const handleNumberOfGuestsChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (results.length > 0) {
       resetDates();
@@ -68,34 +71,47 @@ const RoomAvailabilityDateRangeSelector = () => {
     ]);
   };
 
-  const calculateRoomSubtotal = (
+  const createPriceBreakdown = (
     room: Partial<Room>,
     startDate: string,
-    endDate: string,
+    endDate: string
   ) => {
-    if (!startDate || !endDate) return 0;
     const allDatesBetweenStartAndEndDate = eachDayOfInterval({
       start: new Date(startDate),
       end: new Date(endDate),
     });
     allDatesBetweenStartAndEndDate.pop();
-    const dailyPrices: Array<number> = [];
+    const dailyPrices: Array<SpecialDatePrice> = [];
 
     allDatesBetweenStartAndEndDate.forEach((date) => {
       const formattedDate = format(new Date(date), "MM/dd/yyyy");
 
       const specialDatePrice = room.specialPriceDates!.find(
-        (specialDatePrice) => specialDatePrice.date === formattedDate,
+        (specialDatePrice) => specialDatePrice.date === formattedDate
       );
 
       if (specialDatePrice) {
-        dailyPrices.push(specialDatePrice.price);
+        dailyPrices.push(specialDatePrice);
       } else {
-        dailyPrices.push(room.basePrice!);
+        dailyPrices.push({
+          date: formattedDate,
+          price: room.basePrice!,
+        } satisfies SpecialDatePrice);
       }
     });
 
-    return dailyPrices.reduce((a, b) => a + b, 0);
+    const subtotal = dailyPrices.reduce((a, b) => a + b.price, 0);
+    const tax = Math.round(subtotal * 0.1 * 100) / 100;
+    const bookingFee = Math.round(subtotal * 0.03 * 100) / 100;
+    const total = Math.round((subtotal + tax + bookingFee) * 100) / 100;
+    const priceBreakdown = {
+      dailyPrices: dailyPrices,
+      subtotal: subtotal,
+      tax: tax,
+      bookingFee: bookingFee,
+      total: total,
+    };
+    return priceBreakdown;
   };
 
   const handleSetEndDate = (newEndDate: string) => {
@@ -109,6 +125,9 @@ const RoomAvailabilityDateRangeSelector = () => {
     if (startDate && new Date(newEndDate) > addDays(new Date(startDate), 14)) {
       setErrors(["longStayError"]);
       return;
+    }
+    if (itinerary.length > 0) {
+      setItinerary([]);
     }
 
     if (errors.length > 0) {
@@ -134,7 +153,7 @@ const RoomAvailabilityDateRangeSelector = () => {
         _id: room._id!,
         roomName: room.name!,
         guestCount: numberOfGuests,
-        subtotal: calculateRoomSubtotal(room, startDate!, endDate!),
+        priceBreakdown: createPriceBreakdown(room, startDate!, endDate!),
       },
     ]);
     setResults(results.filter((result) => result._id !== room._id));
@@ -155,12 +174,16 @@ const RoomAvailabilityDateRangeSelector = () => {
       start: new Date(startDate),
       end: new Date(endDate),
     });
+
+    const formattedDates = allDatesBetweenStartAndEndDate.map((date) =>
+      format(new Date(date), "MM/dd/yyyy")
+    );
     fetch("/api/room/getRoomAvailabilityByDateRange", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(allDatesBetweenStartAndEndDate),
+      body: JSON.stringify({ dateRange: formattedDates }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -192,6 +215,7 @@ const RoomAvailabilityDateRangeSelector = () => {
           window.location.href = `/customerInformation/${data}`;
         })
         .catch((error) => {
+          console.log("THIS IS WHERE WE DIE");
           console.error("Error:", error);
         });
     } catch (error) {
@@ -318,8 +342,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   }
                   handleSelectedDates();
                 }
-          }
-        >
+          }>
           {results.length > 0 ? "Reset" : "Search"}
         </button>
       </div>
@@ -341,8 +364,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleCreateTemporaryBooking}
-              >
+                onClick={handleCreateTemporaryBooking}>
                 Book Now!
               </button>
             </div>
@@ -354,8 +376,7 @@ const RoomAvailabilityDateRangeSelector = () => {
               className={`flex text-black rounded-md border-2 border-gray-600 my-4 ${
                 !room.isAvailable ? "opacity-40" : ""
               }`}
-              key={room._id}
-            >
+              key={room._id}>
               <img
                 style={{ width: 180, height: 180 }}
                 src={`assets/Gallery/${room.imgPathName}`}
@@ -379,8 +400,7 @@ const RoomAvailabilityDateRangeSelector = () => {
                   room.isAvailable
                     ? "hover:text-white hover:bg-gray-600 transition-colors"
                     : ""
-                }`}
-              >
+                }`}>
                 {room.isAvailable ? "Add to Itinerary" : "Unavailable"}
               </button>
             </div>
