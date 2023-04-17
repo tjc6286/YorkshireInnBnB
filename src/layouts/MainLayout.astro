@@ -16,9 +16,9 @@ const { title, activePage, heroImgPath } = Astro.props;
 
 //STYLES FOR NAV ITEMS
 let activeNavCss =
-  "block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
+  "mobile-nav block py-2 pl-3 pr-4 text-black bg-white rounded md:bg-transparent md:text-[#3BA576] md:p-0";
 let navCSS =
-  "block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
+  "mobile-nav block py-2 pl-3 pr-4 text-white rounded hover:bg-neutral-600 md:hover:bg-transparent md:border-0 md:hover:text-[#3BA576] md:p-0   dark:hover:bg-[#3BA576]  ";
 
 //STYLES REFERENCE VARIABLE
 var homeCSS = "";
@@ -322,10 +322,19 @@ if (activePage === "home") {
    */
   var navBtn = document.getElementById("nav_btn");
   var menu = document.getElementById("navbar-mobile");
+  var mobile_nav = document.getElementsByClassName("mobile-nav");
   navBtn?.addEventListener("click", () => {
     menu?.classList.toggle("scale-y-0");
     menu?.classList.toggle("scale-y-100");
   });
+
+  //add event listener to all to all mobile_nav elements to close the menu
+  for (var i = 0; i < mobile_nav.length; i++) {
+    mobile_nav[i].addEventListener("click", () => {
+      menu?.classList.toggle("scale-y-0");
+      menu?.classList.toggle("scale-y-100");
+    });
+  }
 </script>
 
 <style is:global>
