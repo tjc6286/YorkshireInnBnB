@@ -1,6 +1,6 @@
 # Team Infinity: Senior Development Project
 
-**Project Name: Yorkshire Inn’s booking system upgrade **
+**Project Name** : Yorkshire Inn’s booking system upgrade
 
 **Project Objective:** 
 
