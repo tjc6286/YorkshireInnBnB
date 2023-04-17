@@ -2,8 +2,8 @@ import { insertNewReservations } from "../../../lib/reservations";
 import type { APIRoute } from "astro";
 
 /**
- *
- * @returns
+ * API endpoint to create a new reservation.
+ * @returns { Response } returns a Response object with the Inserted ID for the new reservation.
  */
 export const post: APIRoute = async ({ request }) => {
   //TODO: Validation

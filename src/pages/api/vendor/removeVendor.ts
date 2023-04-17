@@ -3,8 +3,10 @@ import { removeVendor } from "../../../lib/vendors";
 import type { APIRoute } from "astro";
 
 /**
+ * API endpoint to remove a vendor.
  *
- * @returns
+ * @param { Request } request - the request object holding the vendor key to remove.
+ * @returns { Response } returns a Response object with the boolean value for success.
  */
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {

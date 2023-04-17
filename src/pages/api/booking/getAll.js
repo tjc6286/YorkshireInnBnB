@@ -1,8 +1,10 @@
 import { getAllBookings } from "../../../lib/bookings";
 import { logMessage } from "../../../lib/logger";
+
 /**
+ * Endpoint to get all bookings
  *
- * @returns
+ * @returns {Response} Returns all bookings wrapped in a Response object
  */
 export const get = async () => {
   //SERVER LOGGING

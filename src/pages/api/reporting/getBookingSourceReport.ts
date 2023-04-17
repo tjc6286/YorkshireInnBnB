@@ -1,7 +1,12 @@
 import { countBookingSource } from "../../../lib/reporting";
 import type { APIRoute } from "astro";
 
-export const get: APIRoute = async ({ params }) => {
+/**
+ * API endpoint to get the booking source report.
+ *
+ * @returns { Response } returns a Response object with the booking source report information.
+ */
+export const get: APIRoute = async () => {
   const bookingSource = await countBookingSource();
   if (!bookingSource) {
     return new Response(null, {

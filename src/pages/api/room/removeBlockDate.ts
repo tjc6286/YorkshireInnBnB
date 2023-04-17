@@ -1,9 +1,12 @@
 import type { APIRoute } from "astro";
 import { removeBlockDate } from "../../../lib/rooms.js";
 import { logMessage } from "../../../lib/logger.js";
+
 /**
+ * API endpoint to remove block dates from a room.
  *
- * @returns
+ * @param { Request } request - Request object holding the room ID and dates
+ * @returns { Response } returns a Response object with boolean value for success
  */
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();

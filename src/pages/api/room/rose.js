@@ -1,8 +1,9 @@
 import { getRoseRoom } from "../../../lib/rooms";
 import { logMessage } from "../../../lib/logger";
+
 /**
- *
- * @returns
+ * Endpoint to get the rose room information
+ * @returns {Response} Returns the rose room information wrapped in a Response object
  */
 export const get = async () => {
   //SERVER LOGGING

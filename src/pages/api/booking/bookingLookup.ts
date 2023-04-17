@@ -5,9 +5,10 @@ import { logMessage } from "../../../lib/logger";
 import { getMultipleReservations } from "../../../lib/reservations";
 
 /**
- * API endpoint to get a booking by its transaction ID with the customer and reservation data
+ * API endpoint to get a booking by its transaction ID with the customer and reservation data.
+ *
  * @param { request } holds the request object with incoming booking ID
- * @returns
+ * @returns { Response } returns a Response object with the booking, customer, and reservation data
  */
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {

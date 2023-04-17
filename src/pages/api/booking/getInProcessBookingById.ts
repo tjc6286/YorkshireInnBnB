@@ -1,10 +1,12 @@
 import type { APIRoute } from "astro";
 import { getInProcessBookingByID } from "../../../lib/bookings";
 import { logMessage } from "../../../lib/logger";
+
 /**
+ * API endpoint to get an in process booking by its ID.
  *
- * @param { request }
- * @returns
+ * @param { request } holds the request object with incoming booking ID
+ * @returns { Response } returns a Response object with the InProcessBooking data
  */
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {

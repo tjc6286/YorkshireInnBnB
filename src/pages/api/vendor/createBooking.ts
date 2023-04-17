@@ -3,8 +3,11 @@ import { createVendorBooking } from "../../../lib/bookings";
 import { checkVendorExists } from "../../../lib/vendors";
 
 /**
+ * API endpoint to create a booking for a third party vendor. This enpoint checks
+ * the vendor key and if valid, creates the booking.
  *
- * @returns
+ * @param { Request } request - the request object holding the booking information including the vendor key.
+ * @returns { Response } returns a Response object with the confirmation code for the booking.
  */
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {

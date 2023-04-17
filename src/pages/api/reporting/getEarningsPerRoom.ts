@@ -1,7 +1,12 @@
 import { sumTotalPerRoom } from "../../../lib/reporting";
 import type { APIRoute } from "astro";
 
-export const get: APIRoute = async ({ params }) => {
+/**
+ * API endpoint to get the earnings per room report.
+ *
+ * @returns { Response } returns a Response object with the earnings per room report information.
+ */
+export const get: APIRoute = async () => {
   const earningsPerRoom = await sumTotalPerRoom();
   if (!earningsPerRoom) {
     return new Response(null, {

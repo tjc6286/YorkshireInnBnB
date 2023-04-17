@@ -15,8 +15,8 @@ import {
 
 /**
  * API endpoint to cancel a booking and its reservations
- * @param { request }
- * @returns
+ * @param { request } holds the request object with incoming booking ID
+ * @returns { Response } returns a Response object with boolean value for success
  */
 export const post: APIRoute = async ({ request }) => {
   if (request.headers.get("Content-Type") === "application/json") {

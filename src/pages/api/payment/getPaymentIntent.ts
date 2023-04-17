@@ -4,15 +4,19 @@ import { updateInProcessBooking } from "../../../lib/bookings";
 import { addHoldDates } from "../../../lib/rooms";
 const secretKey = import.meta.env.STRIPE_TEST_SECRET_KEY_PRIVATE;
 /**
+ * API Enpoint to create a Stripe Checkout Session. This is the first step in the
+ * payment process. This endpoint also takes care of updating the InProcessBooking with
+ * the customer information and the blocked off dates. And add the hold dates to the
+ * rooms in the itinerary.
  *
- * @returns
+ * @returns { Response } returns a Response object with the Stripe Checkout Session URL
  */
 export const post: APIRoute = async ({ request, redirect }) => {
   request.headers.set("Access-Control-Allow-Origin", "*");
   request.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   request.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
+    "Content-Type, Authorization"
   );
   const stripe = new Stripe(secretKey, {
     apiVersion: "2022-11-15",
@@ -39,7 +43,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
       amountDue,
       totalCost,
       customerInformation,
-      blockedOffDates,
+      blockedOffDates
     );
 
     if (!updatedTempBookingSuccess) {

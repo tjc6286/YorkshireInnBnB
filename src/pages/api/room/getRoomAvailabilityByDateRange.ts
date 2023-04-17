@@ -3,8 +3,10 @@ import { logMessage } from "../../../lib/logger.js";
 import { getRoomsAvailabilityByDateRange } from "../../../lib/rooms.js";
 
 /**
+ * API endpoint to get room availability by date range.
  *
- * @returns
+ * @param { Request } request - Request object holding the date range
+ * @returns { Response } returns a Response with all rooms that are available for the date range
  */
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();

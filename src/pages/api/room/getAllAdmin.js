@@ -1,8 +1,10 @@
 import { getAllRooms } from "../../../lib/rooms";
 import { logMessage } from "../../../lib/logger";
+
 /**
+ * Endpoint to get all rooms information with blocked dates and special price dates.
  *
- * @returns
+ * @returns {Response} Returns all rooms information wrapped in a Response object
  */
 export const get = async () => {
   //SERVER LOGGING

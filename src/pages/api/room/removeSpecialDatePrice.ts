@@ -3,8 +3,9 @@ import { logMessage } from "../../../lib/logger.js";
 import { removeSpecialDatePrice } from "../../../lib/rooms.js";
 
 /**
- *
- * @returns
+ * API endpoint to remove special date prices from a room.
+ * @param { Request } request - Request object holding the room ID and date
+ * @returns { Response } returns a Response object with boolean value for success
  */
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();

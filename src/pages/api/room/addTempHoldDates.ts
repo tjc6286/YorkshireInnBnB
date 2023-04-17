@@ -1,9 +1,10 @@
 import type { APIRoute } from "astro";
 import { addHoldDates } from "../../../lib/rooms.js";
 import { logMessage } from "../../../lib/logger.js";
+
 /**
- *
- * @returns
+ * API endpoint to add hold dates to a room
+ * @returns { Response } returns a Response object with boolean value for success
  */
 export const post: APIRoute = async ({ request }) => {
   var data = await request.json();

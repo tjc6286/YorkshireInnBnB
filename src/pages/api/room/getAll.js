@@ -1,8 +1,9 @@
 import { getAllRooms } from "../../../lib/rooms";
 import { logMessage } from "../../../lib/logger";
+
 /**
- *
- * @returns
+ * Endpoint to get all rooms information
+ * @returns {Response} Returns all rooms information wrapped in a Response object
  */
 export const get = async () => {
   //SERVER LOGGING

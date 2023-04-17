@@ -1,8 +1,9 @@
 import { getAllReservations } from "../../../lib/reservations";
 import { logMessage } from "../../../lib/logger";
+
 /**
- *
- * @returns
+ * Endpoint to get all reservations
+ * @returns {Response} Returns all reservations wrapped in a Response object
  */
 export const get = async () => {
   //SERVER LOGGING
