@@ -14,7 +14,7 @@ const ReservationsTable: React.FC<IReservationTableProps> = ({
 }) => {
   return (
     <div className="">
-      <table className="w-full rounded-md border-2 text-left text-sm">
+      <table className="w-full rounded-md border-2 text-left text-sm ">
         <thead className="bg-[#36353A] text-neutral-100 text-xs uppercase ">
           <tr>
             <th scope="col" className="px-6 py-3">

@@ -175,6 +175,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     </div>
   ) : (
     <div
+      className="flex flex-col md:flex-row w-full"
       style={{
         display: "flex",
         width: "100%",
@@ -183,6 +184,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
       }}
     >
       <div
+        // className="flex flex-col md:flex-row w-full"
         style={{
           display: "flex",
           flexDirection: "row",
@@ -210,8 +212,12 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
           >
             Your Stay
           </h2>
-          <div style={{ display: "flex", flex: 1, flexDirection: "row" }}>
+          <div
+            className="flex flex-col md:flex-row w-full"
+            // style={{ display: "flex", flex: 1, flexDirection: "row" }}
+          >
             <div
+              className="flex flex-col md:flex-row w-full"
               style={{
                 display: "flex",
                 flex: 5,
@@ -342,6 +348,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               </div>
             </div>
             <div
+              className="mx-4"
               style={{
                 display: "flex",
                 flex: 6,
@@ -350,6 +357,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               }}
             >
               <h2
+                className="pt-4"
                 style={{
                   fontFamily: "Playfair Display",
                   fontWeight: "600",

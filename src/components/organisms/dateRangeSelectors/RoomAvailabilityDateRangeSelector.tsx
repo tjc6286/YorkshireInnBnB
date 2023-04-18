@@ -44,7 +44,7 @@ const RoomAvailabilityDateRangeSelector = () => {
   };
 
   const handleNumberOfGuestsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (results.length > 0) {
       resetDates();
@@ -74,7 +74,7 @@ const RoomAvailabilityDateRangeSelector = () => {
   const createPriceBreakdown = (
     room: Partial<Room>,
     startDate: string,
-    endDate: string
+    endDate: string,
   ) => {
     const allDatesBetweenStartAndEndDate = eachDayOfInterval({
       start: new Date(startDate),
@@ -87,7 +87,7 @@ const RoomAvailabilityDateRangeSelector = () => {
       const formattedDate = format(new Date(date), "MM/dd/yyyy");
 
       const specialDatePrice = room.specialPriceDates!.find(
-        (specialDatePrice) => specialDatePrice.date === formattedDate
+        (specialDatePrice) => specialDatePrice.date === formattedDate,
       );
 
       if (specialDatePrice) {
@@ -176,7 +176,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     });
 
     const formattedDates = allDatesBetweenStartAndEndDate.map((date) =>
-      format(new Date(date), "MM/dd/yyyy")
+      format(new Date(date), "MM/dd/yyyy"),
     );
     fetch("/api/room/getRoomAvailabilityByDateRange", {
       method: "POST",
@@ -265,8 +265,8 @@ const RoomAvailabilityDateRangeSelector = () => {
 
   return (
     <div className="flex flex-1 flex-col justify-center">
-      <div className="flex flex-row items-center">
-        <div className="ml-8 mr-4 w-32">
+      <div className="flex flex-col md:flex-row items-center">
+        <div className="ml-8 mr-4 py-4 w-32">
           <TextField
             required
             label="Number of Guests"
@@ -276,7 +276,7 @@ const RoomAvailabilityDateRangeSelector = () => {
           />
         </div>
 
-        <div className="mx-4">
+        <div className="m-4 ">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label={"Start Date"}
@@ -296,7 +296,7 @@ const RoomAvailabilityDateRangeSelector = () => {
             />
           </LocalizationProvider>
         </div>
-        <div className="mx-4">
+        <div className="m-4">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label={"End Date"}
@@ -342,13 +342,14 @@ const RoomAvailabilityDateRangeSelector = () => {
                   }
                   handleSelectedDates();
                 }
-          }>
+          }
+        >
           {results.length > 0 ? "Reset" : "Search"}
         </button>
       </div>
       <div className="m-8 h-full">
         {itinerary.length > 0 && (
-          <>
+          <div className="">
             <ReservationsTable
               reservations={itinerary}
               onRemove={handleRemoveItineraryItem}
@@ -364,19 +365,21 @@ const RoomAvailabilityDateRangeSelector = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleCreateTemporaryBooking}>
+                onClick={handleCreateTemporaryBooking}
+              >
                 Book Now!
               </button>
             </div>
-          </>
+          </div>
         )}
         {results.length > 0 ? (
           results.map((room: Partial<RoomAvailability>) => (
             <div
-              className={`flex text-black rounded-md border-2 border-gray-600 my-4 ${
+              className={`flex flex-col md:flex-row text-black rounded-md border-2 border-gray-600 my-4 ${
                 !room.isAvailable ? "opacity-40" : ""
               }`}
-              key={room._id}>
+              key={room._id}
+            >
               <img
                 style={{ width: 180, height: 180 }}
                 src={`assets/Gallery/${room.imgPathName}`}
@@ -400,7 +403,8 @@ const RoomAvailabilityDateRangeSelector = () => {
                   room.isAvailable
                     ? "hover:text-white hover:bg-gray-600 transition-colors"
                     : ""
-                }`}>
+                }`}
+              >
                 {room.isAvailable ? "Add to Itinerary" : "Unavailable"}
               </button>
             </div>
