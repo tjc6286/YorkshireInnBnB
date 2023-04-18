@@ -28,7 +28,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 //CHART.js OPTIONS
@@ -93,6 +93,7 @@ const AdminReporting: React.FC = () => {
     ],
   });
 
+  //This function handles the chart Labels on the x axis
   const updateChartLabels = (labels: string[]) => {
     setData((prevData) => ({
       ...prevData,
@@ -100,6 +101,7 @@ const AdminReporting: React.FC = () => {
     }));
   };
 
+  //This function updates the chart data
   const updateChartData = (data: number[]) => {
     setData((prevData) => ({
       ...prevData,
@@ -112,6 +114,7 @@ const AdminReporting: React.FC = () => {
     }));
   };
 
+  //This function updates the chart Lenged text
   const updateChartLegend = (label: string) => {
     setData((prevData) => ({
       ...prevData,
@@ -149,6 +152,7 @@ const AdminReporting: React.FC = () => {
     setStartDate(newStartDate);
   };
 
+  //This function handles the end date picker
   const handleSetEndDate = (newEndDate: string) => {
     if (endDate && new Date(newEndDate) < new Date(endDate)) {
       return;
@@ -156,11 +160,13 @@ const AdminReporting: React.FC = () => {
     setEndDate(newEndDate);
   };
 
+  //This function resets the start and end dates to null
   const resetDates = () => {
     setStartDate(null);
     setEndDate(null);
   };
 
+  //This function handles the submit button
   const handleSubmit = () => {
     if (startDate && endDate) {
       //TODO: remove after testing
@@ -199,7 +205,7 @@ const AdminReporting: React.FC = () => {
 
     // Iterate over the array of months and format the month names and years
     const monthNamesWithYear = months.map((month) =>
-      format(month, "MMMM yyyy"),
+      format(month, "MMMM yyyy")
     );
 
     return monthNamesWithYear;
@@ -316,8 +322,7 @@ const AdminReporting: React.FC = () => {
             <div className="flex justify-between items-center">
               <a
                 href="/adminHome"
-                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-              >
+                className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
                 {" "}
                 Return Home
               </a>
@@ -328,8 +333,7 @@ const AdminReporting: React.FC = () => {
                 <p className="text-white">Logged in as : {userEmail}</p>
                 <a
                   className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                  href="#"
-                >
+                  href="#">
                   <button onClick={() => signOutUser()}>Logout</button>
                 </a>
               </div>
@@ -342,8 +346,7 @@ const AdminReporting: React.FC = () => {
                 <FormControl className="w-60">
                   <InputLabel
                     id="demo-simple-select-label"
-                    sx={{ color: "white" }}
-                  >
+                    sx={{ color: "white" }}>
                     Report
                   </InputLabel>
                   <Select
@@ -363,8 +366,7 @@ const AdminReporting: React.FC = () => {
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "white", // Border color on focus
                       },
-                    }}
-                  >
+                    }}>
                     <MenuItem value={"incomePerMonth"}>
                       Total Income Per Month
                     </MenuItem>
@@ -447,8 +449,7 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleSubmit}
-                >
+                  onClick={handleSubmit}>
                   Update
                 </button>
                 <button
@@ -460,8 +461,7 @@ const AdminReporting: React.FC = () => {
                     lineHeight: "34px",
                     letterSpacing: "0.13em",
                   }}
-                  onClick={handleExport}
-                >
+                  onClick={handleExport}>
                   Export
                 </button>
               </div>

@@ -68,6 +68,7 @@ const AdminRoom: React.FC = () => {
     }
   });
 
+  // Helper functino to set the Start Date state
   const handleSetStartDate = (newStartDate: string) => {
     if (endDate && new Date(newStartDate) > new Date(endDate)) {
       setEndDate(addDays(new Date(newStartDate), 1).toString());
@@ -76,6 +77,7 @@ const AdminRoom: React.FC = () => {
     setStartDate(newStartDate);
   };
 
+  // Helper function to set the End Date state
   const handleSetEndDate = (newEndDate: string) => {
     if (endDate && new Date(newEndDate) < new Date(endDate)) {
       return;
@@ -83,6 +85,7 @@ const AdminRoom: React.FC = () => {
     setEndDate(newEndDate);
   };
 
+  // Helper function to reset the Start and End Date states
   const resetDates = () => {
     setStartDate(null);
     setEndDate(null);
@@ -91,21 +94,13 @@ const AdminRoom: React.FC = () => {
   const handleSubmit = () => {
     if (startDate && endDate) {
       if (isBlocking || updatePrice !== "") {
-        //TODO: remove after testing
-        // console.log("submitting");
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(updatePrice);
-        // console.log(isBlocking);
-        // console.log(selectedRoom);
-
         const allDatesBetweenStartAndEndDate = eachDayOfInterval({
           start: new Date(startDate),
           end: new Date(endDate),
         });
 
         const formattedDates = allDatesBetweenStartAndEndDate.map((date) =>
-          format(date, "MM/dd/yyyy"),
+          format(date, "MM/dd/yyyy")
         );
 
         if (isBlocking) {
@@ -211,8 +206,7 @@ const AdminRoom: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-            >
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
               {" "}
               Return Home
             </a>
@@ -223,8 +217,7 @@ const AdminRoom: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#"
-              >
+                href="#">
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -343,8 +336,7 @@ const AdminRoom: React.FC = () => {
                   lineHeight: "34px",
                   letterSpacing: "0.13em",
                 }}
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit}>
                 Update
               </button>
             </div>
@@ -387,8 +379,7 @@ const AdminRoom: React.FC = () => {
                                 console.log(entry);
                                 removeBlockDate(entry.roomId, entry.date);
                               }}
-                              className="text-red-500 hover:underline"
-                            >
+                              className="text-red-500 hover:underline">
                               Remove Block
                             </button>
                           </TableCell>
@@ -428,11 +419,10 @@ const AdminRoom: React.FC = () => {
                                 console.log(entry);
                                 removeSpecialDatePrice(
                                   entry.roomId,
-                                  entry.date,
+                                  entry.date
                                 );
                               }}
-                              className="text-red-500 hover:underline"
-                            >
+                              className="text-red-500 hover:underline">
                               Remove Price Change
                             </button>
                           </TableCell>
