@@ -1,4 +1,3 @@
-import type { AnyBulkWriteOperation } from "mongodb";
 import type React from "react";
 
 interface ButtonProps {
@@ -7,6 +6,13 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
+/**
+ * The Button component is used to render a button that can be used to perform an action
+ * @param onClick The function to be called when the button is clicked
+ * @param label The text to be displayed on the button
+ * @param disabled Whether the button should be disabled or not. True if the button should be disabled. False if the button should be enabled.
+ * @returns The Button component
+ */
 const Button: React.FC<ButtonProps> = ({ label, onClick, disabled }) => {
   return (
     <button
@@ -17,7 +23,8 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, disabled }) => {
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
         backgroundColor: disabled ? "gray" : undefined,
-      }}>
+      }}
+    >
       {label}
     </button>
   );

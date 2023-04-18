@@ -39,6 +39,7 @@ const textFieldStyles = {
   },
 };
 
+//Admin Booking component - displays the UI for the manage bookings page
 const AdminBooking: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [bookingList, setBookingList] = React.useState<any[]>([]);
@@ -88,7 +89,7 @@ const AdminBooking: React.FC = () => {
     console.log(dates);
     const dateFormat = "MM/dd/yyyy";
     const dateObjects = dates.map((dateString) =>
-      parse(dateString, dateFormat, new Date())
+      parse(dateString, dateFormat, new Date()),
     );
 
     const minDate = min(dateObjects);
@@ -156,7 +157,8 @@ const AdminBooking: React.FC = () => {
           <div className="flex justify-between items-center">
             <a
               href="/adminHome"
-              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover">
+              className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
+            >
               {" "}
               Return Home
             </a>
@@ -167,7 +169,8 @@ const AdminBooking: React.FC = () => {
               <p className="text-white">Logged in as : {userEmail}</p>
               <a
                 className="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover"
-                href="#">
+                href="#"
+              >
                 <button onClick={() => signOutUser()}>Logout</button>
               </a>
             </div>
@@ -181,7 +184,8 @@ const AdminBooking: React.FC = () => {
                 onClick={handleNewBooking}
                 type="submit"
                 variant="contained"
-                color="primary">
+                color="primary"
+              >
                 Create New Booking
               </Button>
             </div>
@@ -193,7 +197,8 @@ const AdminBooking: React.FC = () => {
               ) : (
                 <TableContainer
                   component={Paper}
-                  style={{ maxHeight: "400px" }}>
+                  style={{ maxHeight: "400px" }}
+                >
                   <Table size="small">
                     <TableHead>
                       <TableRow>
@@ -230,7 +235,7 @@ const AdminBooking: React.FC = () => {
                                 {
                                   style: "currency",
                                   currency: "USD",
-                                }
+                                },
                               )}
                             </TableCell>
                             <TableCell>
@@ -243,7 +248,8 @@ const AdminBooking: React.FC = () => {
                                 style={{
                                   backgroundColor: "blue",
                                   color: "white",
-                                }}>
+                                }}
+                              >
                                 Customer
                               </Button>
                             </TableCell>
@@ -260,7 +266,8 @@ const AdminBooking: React.FC = () => {
                                   style={{
                                     backgroundColor: "red",
                                     color: "white",
-                                  }}>
+                                  }}
+                                >
                                   Cancel
                                 </Button>
                               )}
@@ -281,7 +288,8 @@ const AdminBooking: React.FC = () => {
         open={modalState}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Cancelling a Booking
@@ -299,7 +307,8 @@ const AdminBooking: React.FC = () => {
               backgroundColor: "#2196f3",
               color: "white",
               marginRight: "10px",
-            }}>
+            }}
+          >
             Cancel Booking
           </Button>
           <Button
@@ -309,7 +318,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Stop Cancel
           </Button>
         </Box>
@@ -319,7 +329,8 @@ const AdminBooking: React.FC = () => {
         open={customerModalState}
         onClose={handleCloseCustomerModal}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+      >
         <Box sx={modalStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Customer Information:
@@ -343,7 +354,8 @@ const AdminBooking: React.FC = () => {
             style={{
               backgroundColor: "red",
               color: "white",
-            }}>
+            }}
+          >
             Close
           </Button>
         </Box>

@@ -23,6 +23,7 @@ export interface IFormState {
   previousBookings?: Array<any>;
 }
 
+//this is the customer information form component
 const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
   id,
@@ -54,6 +55,8 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     allergiesDescription: "",
   });
 
+  //this is a submit handler for the customer information form.  Validates that the
+  //form is filled out.
   const validateForm = () => {
     const errors = [];
     switch (true) {
@@ -83,12 +86,14 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     return false;
   };
 
+  //this is a function that converts the currency to a number
   const convert = (currency: string) => {
     var temp = currency.replace(/[^0-9.-]+/g, "");
 
     return parseFloat(temp);
   };
 
+  //this is a function that calculates the deposit cost
   const getDepositCost = () => {
     const depositString = bookingInfo.itinerary
       .map((room: any) => room.priceBreakdown.dailyPrices[0].price)
@@ -101,6 +106,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     return convert(depositString);
   };
 
+  //this is a function that handles the change in the input fields
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -108,6 +114,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     setFormState({ ...formState, [name]: value });
   };
 
+  //this is a function that handles the submit of the form
   const handleSubmit = (event: Event) => {
     //TODO: handle submit to send to stripe page and
     event.preventDefault();
@@ -151,6 +158,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
     }
   };
 
+  //this is a function that calculates the booking price breakdown field
   const calculateBookingPriceBreakdownField = (fieldName: string) =>
     bookingInfo.itinerary
       .map((room: any) => room.priceBreakdown[fieldName])

@@ -11,6 +11,8 @@ import ReservationsTable from "../reservationsTable";
 
 // interface DateRangeSelectorProps {}
 
+// This is a component that allows the user to select a date range and get a
+//list of rooms that are available during that date range
 const RoomAvailabilityDateRangeSelector = () => {
   const [startDate, setStartDate] = React.useState<string | null>(null);
   const [endDate, setEndDate] = React.useState<string | null>(null);
@@ -29,6 +31,7 @@ const RoomAvailabilityDateRangeSelector = () => {
 
   const originalResults = React.useRef<Array<RoomAvailability>>([]);
 
+  //handle start date change
   const handleSetStartDate = (newStartDate: string) => {
     if (endDate && new Date(newStartDate) > new Date(endDate)) {
       setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
@@ -43,6 +46,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     setEndDate(addDays(new Date(newStartDate), 1).toUTCString());
   };
 
+  //handle end date change
   const handleNumberOfGuestsChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -63,6 +67,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     setNumberOfGuests(parseInt(event.target.value));
   };
 
+  //handler to remove an item from the itinerary
   const handleRemoveItineraryItem = (id: string) => {
     setItinerary(itinerary.filter((item) => item._id !== id));
     setResults([
@@ -71,6 +76,8 @@ const RoomAvailabilityDateRangeSelector = () => {
     ]);
   };
 
+  //handler to that takes information from the itinerary
+  //and creates a reservation price breakdown
   const createPriceBreakdown = (
     room: Partial<Room>,
     startDate: string,
@@ -114,6 +121,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     return priceBreakdown;
   };
 
+  //handler to set the end date
   const handleSetEndDate = (newEndDate: string) => {
     if (endDate && new Date(newEndDate) < new Date(endDate)) {
       return;
@@ -136,12 +144,15 @@ const RoomAvailabilityDateRangeSelector = () => {
     setEndDate(newEndDate);
   };
 
+  //handler to reset the page
   const resetDates = () => {
     setStartDate(null);
     setEndDate(null);
     setResults([]);
+    setItinerary([]);
   };
 
+  //handler to add a room to the itinerary
   const addToItinerary = (room: Partial<Room>) => {
     if (numberOfGuests - unaccountedGuests > room.maximumOccupancy!) {
       setUnaccountedGuests(numberOfGuests - room.maximumOccupancy!);
@@ -159,6 +170,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     setResults(results.filter((result) => result._id !== room._id));
   };
 
+  //handler function that will search for rooms based on the dates selected
   const handleSelectedDates = async () => {
     setLoading(true);
     if (!startDate || !endDate) {
@@ -196,6 +208,7 @@ const RoomAvailabilityDateRangeSelector = () => {
       });
   };
 
+  //handler function that will create a temporary booking
   const handleCreateTemporaryBooking = () => {
     try {
       fetch("/api/booking/createInProcessBooking", {
@@ -223,6 +236,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     }
   };
 
+  //error messages
   const endDateErrorMessage = React.useMemo(() => {
     switch (endDateError) {
       case "maxDate": {
@@ -243,6 +257,7 @@ const RoomAvailabilityDateRangeSelector = () => {
     }
   }, [endDateError]);
 
+  //error messages
   const startDateErrorMessage = React.useMemo(() => {
     switch (startDateError) {
       case "maxDate": {

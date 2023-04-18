@@ -25,6 +25,7 @@ const radioStyles = {
   },
 };
 
+//Admin Room component for admin to update room price and block room
 const AdminRoom: React.FC = () => {
   const [userEmail, setUserEmail] = React.useState("");
   const [startDate, setStartDate] = React.useState<string | null>(null);

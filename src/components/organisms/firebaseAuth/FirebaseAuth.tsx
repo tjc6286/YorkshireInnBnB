@@ -11,6 +11,7 @@ var uiConfig = {
   signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
 };
 
+// Configure FirebaseUI.
 const FirebaseAuth: React.FC = () => {
   React.useEffect(() => {
     //initialize firebase.

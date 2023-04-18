@@ -7,6 +7,7 @@ interface IReservationTableProps {
   unaccountedGuests?: number;
 }
 
+//This is the reservations table component.  It displays the reservations that have been made for a booking.
 const ReservationsTable: React.FC<IReservationTableProps> = ({
   reservations,
   onRemove,

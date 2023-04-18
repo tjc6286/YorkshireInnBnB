@@ -2,12 +2,13 @@ import { TextField, Typography } from "@mui/material";
 import { addDays, format, max, min, parse } from "date-fns";
 import React, { useEffect } from "react";
 
+//Booking Lookup component
 const BookingLookup = () => {
   const [booking, setBooking] = React.useState<any>();
   const [bookingId, setBookingId] = React.useState("");
   const [roomList, setRoomList] = React.useState<any>([]);
-  const [bookingNotFound, setBookingNotFound] = React.useState(false);
 
+  //this is a submit handler for the booking lookup form
   const handleSubmit = () => {
     fetch("/api/booking/bookingLookup", {
       method: "POST",
@@ -25,40 +26,18 @@ const BookingLookup = () => {
       });
   };
 
-  const cancelBooking = (bookingId: string) => {
-    fetch("/api/booking/cancelBooking", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        bookingId: bookingId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setBookingNotFound(false);
-        setBooking(data);
-        //reload window
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        setBookingNotFound(true);
-      });
-  };
-
   //get room name from the room list by room id
   const getRoomName = (roomId: string) => {
     const room = roomList.find((room: any) => room._id === roomId);
     return room?.name;
   };
 
+  //get date range from the booking dates
   const getDateRange = (dates: Array<string>) => {
     console.log(dates);
     const dateFormat = "MM/dd/yyyy";
     const dateObjects = dates.map((dateString) =>
-      parse(dateString, dateFormat, new Date())
+      parse(dateString, dateFormat, new Date()),
     );
 
     dateObjects.length === 1 &&
@@ -76,6 +55,7 @@ const BookingLookup = () => {
     return `${minDateString} - ${maxDateString} @10AM EST`;
   };
 
+  //get all rooms from the database
   useEffect(() => {
     fetch("/api/room/getAll", {
       method: "GET",
@@ -113,7 +93,8 @@ const BookingLookup = () => {
             lineHeight: "34px",
             letterSpacing: "0.13em",
           }}
-          onClick={handleSubmit}>
+          onClick={handleSubmit}
+        >
           Look up Booking
         </button>
       </div>
@@ -130,7 +111,7 @@ const BookingLookup = () => {
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
-            booking?.booking?.dates
+            booking?.booking?.dates,
           )}`}</Typography>
           <Typography className="mt-2 underline font-semibold">
             Reservations:
@@ -140,7 +121,7 @@ const BookingLookup = () => {
             return (
               <div className="my-2 px-4" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
-                  reservation.roomId
+                  reservation.roomId,
                 )}`}</Typography>
                 {reservation.allergiesIncluded && (
                   <Typography>{`Allergies: ${reservation.foodAllergies}`}</Typography>
@@ -154,7 +135,8 @@ const BookingLookup = () => {
           {booking?.booking?.isCancelled && (
             <Typography
               style={{ fontSize: "24px" }}
-              className="mt-2 font-semibold text-center text-red-600 text-2xl">
+              className="mt-2 font-semibold text-center text-red-600 text-2xl"
+            >
               Booking Has Been Cancelled
             </Typography>
           )}
@@ -165,7 +147,7 @@ const BookingLookup = () => {
         </div>
       )}
       {/* booking not found */}
-      {bookingNotFound && (
+      {booking && (
         <div className="rounded-sm border-2 border-black p-4 mt-2">
           <Typography>Booking not found</Typography>
         </div>
