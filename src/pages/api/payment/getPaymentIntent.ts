@@ -18,20 +18,25 @@ export const post: APIRoute = async ({ request, redirect }) => {
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );
+  // initialize Stripe
   const stripe = new Stripe(secretKey, {
     apiVersion: "2022-11-15",
   });
-  var data = await request.json();
+
   if (request.headers.get("Content-Type") === "application/json") {
+    var data = await request.json();
+    //Extract the data from the request body
     const { amountDue, bookingInfo, totalCost, id, customerInformation } = data;
 
+    //Get the blocked off dates from the bookingInfo
     const blockedOffDates =
       bookingInfo.itinerary[0].priceBreakdown.dailyPrices.map((item: any) => {
         return item.date;
       });
 
+    //Getting the room ids from the bookingInfo to update
     const roomsToUpdate = bookingInfo.itinerary.map((room: any) => room._id);
-
+    //Add the hold dates to the rooms
     const tempDateBlockoff = await addHoldDates(roomsToUpdate, blockedOffDates);
 
     if (!tempDateBlockoff) {
@@ -51,6 +56,7 @@ export const post: APIRoute = async ({ request, redirect }) => {
     }
 
     try {
+      //Create the Stripe Checkout Session
       const session = await stripe.checkout.sessions.create({
         line_items: [
           {
@@ -77,6 +83,8 @@ export const post: APIRoute = async ({ request, redirect }) => {
           process.env.SITE_DOMAIN || import.meta.env.SITE_DOMAIN
         }/bookingError/${id}`,
       });
+
+      //return the session url
       return new Response(JSON.stringify(session.url), { status: 303 });
     } catch (error) {
       console.log(`Error creating payment intent: ${error}`);
