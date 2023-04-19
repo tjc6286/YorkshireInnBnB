@@ -9,6 +9,7 @@ interface CustomerInformationFormProps {
   id: string;
 }
 
+//this is the form state interface
 export interface IFormState {
   firstName: string;
   lastName: string;
@@ -28,15 +29,15 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
   bookingInfo,
   id,
 }) => {
+  //this is a function that calculates the total fees
   const calculateTotalFees = () =>
     bookingInfo.itinerary
       .map(
-        (room: any) => room.priceBreakdown.tax + room.priceBreakdown.bookingFee,
+        (room: any) => room.priceBreakdown.tax + room.priceBreakdown.bookingFee
       )
       .reduce((sum: number, b: number) => sum + b, 0);
 
   const [loading, setLoading] = React.useState<boolean>(false);
-
   const [petCheck, setPetCheck] = React.useState<boolean>(false);
   const [allergyCheck, setAllergyCheck] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<string[]>([]);
@@ -108,7 +109,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
 
   //this is a function that handles the change in the input fields
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
     setFormState({ ...formState, [name]: value });
@@ -136,7 +137,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         body: JSON.stringify({
           amountDue: Math.round(getDepositCost() * 100),
           totalCost: Math.round(
-            convert(calculateBookingPriceBreakdownField("total")) * 100,
+            convert(calculateBookingPriceBreakdownField("total")) * 100
           ),
           bookingInfo: bookingInfo,
           id: id,
@@ -175,8 +176,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         width: "100%",
         height: "100dvh",
         justifyContent: "center",
-      }}
-    >
+      }}>
       <div className="m-auto">
         <CircularProgress color="inherit" />
       </div>
@@ -189,24 +189,21 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
         width: "100%",
         height: "100%",
         justifyContent: "center",
-      }}
-    >
+      }}>
       <div
         // className="flex flex-col md:flex-row w-full"
         style={{
           display: "flex",
           flexDirection: "row",
           width: "100%",
-        }}
-      >
+        }}>
         <div
           style={{
             display: "flex",
             flex: 1,
             margin: "2rem",
             flexDirection: "column",
-          }}
-        >
+          }}>
           <h2
             style={{
               fontFamily: "Playfair Display",
@@ -216,8 +213,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
               letterSpacing: "0.035em",
               color: "#000000",
               paddingBottom: "1rem",
-            }}
-          >
+            }}>
             Your Stay
           </h2>
           <div
@@ -230,8 +226,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                 display: "flex",
                 flex: 5,
                 flexDirection: "column",
-              }}
-            >
+              }}>
               <img
                 style={{ width: "100%" }}
                 src={`/assets/Gallery/yorkshirebanner.png`}
@@ -257,8 +252,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     letterSpacing: "0.035em",
                     color: "#000000",
                     paddingTop: "1rem",
-                  }}
-                >
+                  }}>
                   {bookingInfo.itinerary.length > 1 ? "Rooms" : "Room"}
                 </h2>
                 <h2
@@ -270,8 +264,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     letterSpacing: "0.035em",
                     color: "#000000",
                     paddingTop: "1rem",
-                  }}
-                >
+                  }}>
                   Guest Count
                 </h2>
                 <h2
@@ -283,8 +276,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     letterSpacing: "0.035em",
                     color: "#000000",
                     paddingTop: "1rem",
-                  }}
-                >
+                  }}>
                   Dates/Price
                 </h2>
               </div>
@@ -307,7 +299,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                             </span>
                           </div>
                         </>
-                      ),
+                      )
                     )}
                   </div>
                 </div>
@@ -345,7 +337,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                 <p className="mt-8 font-semibold text-2xl">
                   {bookingInfo.itinerary
                     .map(
-                      (room: any) => room.priceBreakdown.dailyPrices[0].price,
+                      (room: any) => room.priceBreakdown.dailyPrices[0].price
                     )
                     .reduce((sum: number, b: number) => sum + b, fees)
                     .toLocaleString("en-US", {
@@ -362,8 +354,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                 flex: 6,
                 flexDirection: "column",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <h2
                 className="pt-4"
                 style={{
@@ -376,8 +367,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   paddingBottom: "1rem",
                   textAlign: "center",
                   width: "100%",
-                }}
-              >
+                }}>
                 Customer Information
               </h2>
               <form className="w-full max-w-lg">
@@ -385,8 +375,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-first-name"
-                    >
+                      htmlFor="grid-first-name">
                       First Name
                     </label>
                     <input
@@ -410,8 +399,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/2 px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-last-name"
-                    >
+                      htmlFor="grid-last-name">
                       Last Name
                     </label>
                     <input
@@ -433,8 +421,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-email"
-                    >
+                      htmlFor="grid-email">
                       Email
                     </label>
                     <input
@@ -452,8 +439,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-phone"
-                    >
+                      htmlFor="grid-phone">
                       Phone
                     </label>
                     <input
@@ -471,8 +457,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full px-3">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-address"
-                    >
+                      htmlFor="grid-address">
                       Address
                     </label>
                     <input
@@ -492,8 +477,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-city"
-                    >
+                      htmlFor="grid-city">
                       City
                     </label>
                     <input
@@ -511,8 +495,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-state"
-                    >
+                      htmlFor="grid-state">
                       State
                     </label>
                     <div className="relative">
@@ -524,8 +507,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                         onChange={handleInputChange}
                         style={
                           errors.includes("state") ? { borderColor: "red" } : {}
-                        }
-                      >
+                        }>
                         <option value="" selected disabled></option>
                         {states.map((state) => (
                           <option key={state.name} value={state.name}>
@@ -537,8 +519,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                         <svg
                           className="fill-current h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
+                          viewBox="0 0 20 20">
                           <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                         </svg>
                       </div>
@@ -547,8 +528,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-zip"
-                    >
+                      htmlFor="grid-zip">
                       Zip
                     </label>
                     <input
@@ -566,8 +546,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-pets"
-                    >
+                      htmlFor="grid-pets">
                       Are you traveling with a pet(s)
                     </label>
                     <input
@@ -583,8 +562,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     <div className="w-full px-3">
                       <label
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="grid-pet-desc"
-                      >
+                        htmlFor="grid-pet-desc">
                         Please describe your pet(s)
                       </label>
                       <input
@@ -600,8 +578,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 py-2">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="grid-alergies"
-                    >
+                      htmlFor="grid-alergies">
                       Any Food Alergies?
                     </label>
                     <input
@@ -617,8 +594,7 @@ const CustomerInformationForm: React.FC<CustomerInformationFormProps> = ({
                     <div className="w-full px-3">
                       <label
                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="grid-allergies-desc"
-                      >
+                        htmlFor="grid-allergies-desc">
                         Please Describe Your Allergies.
                       </label>
                       <input

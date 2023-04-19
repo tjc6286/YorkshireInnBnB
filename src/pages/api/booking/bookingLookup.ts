@@ -21,19 +21,22 @@ export const post: APIRoute = async ({ request }) => {
       "Booking ID: " + bookingId
     );
 
+    //Getting booking by transaction ID
     var booking = await getBookingByTransactionID(bookingId);
 
+    //if no booking is found, return a 400
     if (!booking) {
       return new Response(null, { status: 400 });
     } else {
       //create an object holding the booking and customer data
       const customer = await getCustomerByID(booking.customerId);
-      //get reservations
 
+      //get reservations
       const reservations = await getMultipleReservations(
         Object.values(booking.reservationIds)
       );
 
+      //create return object
       const retObj = {
         booking: booking,
         customer: customer,

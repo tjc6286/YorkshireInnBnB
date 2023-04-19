@@ -37,17 +37,13 @@ const BookingLookup = () => {
     console.log(dates);
     const dateFormat = "MM/dd/yyyy";
     const dateObjects = dates.map((dateString) =>
-      parse(dateString, dateFormat, new Date()),
+      parse(dateString, dateFormat, new Date())
     );
 
     dateObjects.length === 1 &&
       dateObjects.push(new Date(addDays(dateObjects[0], 1)));
     const minDate = min(dateObjects);
     let maxDate = max(dateObjects);
-
-    // if (minDate === maxDate) {
-    //   maxDate = new Date(maxDate.setDate(maxDate.getDate() + 1));
-    // }
 
     const minDateString = format(minDate, "MM/dd/yyyy");
     const maxDateString = format(maxDate, "MM/dd/yyyy");
@@ -93,8 +89,7 @@ const BookingLookup = () => {
             lineHeight: "34px",
             letterSpacing: "0.13em",
           }}
-          onClick={handleSubmit}
-        >
+          onClick={handleSubmit}>
           Look up Booking
         </button>
       </div>
@@ -111,7 +106,7 @@ const BookingLookup = () => {
           <Typography>{`Customer Name: ${booking?.customer?.firstName} ${booking?.customer?.lastName}`}</Typography>
           <Typography>{`Email: ${booking?.customer?.email}`}</Typography>
           <Typography>{`Stay: ${getDateRange(
-            booking?.booking?.dates,
+            booking?.booking?.dates
           )}`}</Typography>
           <Typography className="mt-2 underline font-semibold">
             Reservations:
@@ -121,7 +116,7 @@ const BookingLookup = () => {
             return (
               <div className="my-2 px-4" key={reservation._id}>
                 <Typography>{`Room:${getRoomName(
-                  reservation.roomId,
+                  reservation.roomId
                 )}`}</Typography>
                 {reservation.allergiesIncluded && (
                   <Typography>{`Allergies: ${reservation.foodAllergies}`}</Typography>
@@ -135,8 +130,7 @@ const BookingLookup = () => {
           {booking?.booking?.isCancelled && (
             <Typography
               style={{ fontSize: "24px" }}
-              className="mt-2 font-semibold text-center text-red-600 text-2xl"
-            >
+              className="mt-2 font-semibold text-center text-red-600 text-2xl">
               Booking Has Been Cancelled
             </Typography>
           )}
