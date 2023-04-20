@@ -1,0 +1,61 @@
+[
+  {
+    "_id": {
+      "$oid": "63e1baba74a8017247590671"
+    },
+    "name": "The Rose Suite",
+    "description": "The Rose Suite is a two bedroom suite that sleeps up to 6 individuals. It also has large windows overlooking the deck and back yard. It has a second door that opens directly onto the deck. The private bath features an oversized standup shower.",
+    "priceRange": "$215.00-$230.00",
+    "specialPriceDates": [],
+    "maximumOccupancy": 6,
+    "basePrice": 215,
+    "unavailableDates": [],
+    "temporaryHoldDates": [],
+    "imgPathName": "rosesuite.jpg",
+    "bookedDates": []
+  },
+  {
+    "_id": {
+      "$oid": "642ee1a52add041b0e1de9ed"
+    },
+    "name": "Bolero",
+    "description": "The Bolero is our premium, private, romantic suite. It sleeps two in style and comfort with a king bed, a sitting area and an oversized bath featuring a two person jacuzzi tub and individual shower.",
+    "priceRange": "$230.00-$250.00",
+    "basePrice": 230,
+    "specialPriceDates": [],
+    "maximumOccupancy": 2,
+    "unavailableDates": [],
+    "temporaryHoldDates": [],
+    "imgPathName": "bolero.png",
+    "bookedDates": []
+  },
+  {
+    "_id": {
+      "$oid": "63e1bb0d74a8017247590672"
+    },
+    "name": "Lodge Suite",
+    "description": " The Lodge is a two bedroom suite that sleeps up to 6 individuals. It is trimmed in rough sawn cedar and features a traditonal bath with a tub and shower combination.",
+    "priceRange": "$215.00-$230.00",
+    "basePrice": 215,
+    "specialPriceDates": [],
+    "maximumOccupancy": 6,
+    "unavailableDates": [],
+    "temporaryHoldDates": [],
+    "imgPathName": "lodge.png",
+    "bookedDates": []
+  },
+  {
+    "_id": {
+      "$oid": "63e1bc0b74a8017247590673"
+    },
+    "name": "Blue Room",
+    "description": "The Blue Room sleeps 2 in a queen bed and features a wall of south-facing windows overlooking the deck and back yard. Private bath with an oversized standup shower.",
+    "priceRange": "$200.00-$230.00",
+    "specialPriceDates": [],
+    "maximumOccupancy": 2,
+    "basePrice": 230,
+    "unavailableDates": [],
+    "temporaryHoldDates": [],
+    "imgPathName": "blueroom.png"
+  }
+]
