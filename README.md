@@ -99,7 +99,7 @@ The request payload must be in JSON format and should include the following para
     - `subtotal` (integer, required): the subtotal cost of the room.
     - `tax` (integer, required): the tax amount for the room.
     - `bookingFee` (integer, required): the booking fee for the room.
-    - `total` (integer, required): the total cost of the room.
+    - `total` (integer, required): the total cost of the room. (Example: totalCost = 350, so you must send 35000 in the request).
 - `amount` (integer, required): the amount paid for the booking.
 - `datesOfStay` (array, required): an array of dates representing the dates of stay for the booking. Each date should be in the format "MM/DD/YYYY".
 - `customerInformation`  (object, required): an object containing the following parameters:
@@ -158,7 +158,7 @@ const bookingData = {
     "petsIncluded": false,
     "allergiesIncluded": false
   },
-  "totalCost": 335
+  "totalCost": 33500
 };
 
 //Example Query
