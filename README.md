@@ -115,7 +115,7 @@ The request payload must be in JSON format and should include the following para
   - `allergiesDescription` (string, optional): a description of the customer's allergies.
   - `petsIncluded` (boolean, optional): indicates if pets are included in the booking.
   - `allergiesIncluded` (boolean, optional): indicates if allergies are included in the booking.
-- `totalCost` (integer, required): the total cost of the booking, note the API will want this number to be the total cost multiplied by 100 (Example: totalCost = 350, so you must send 35000 in the request).
+- `totalCost` (integer, required): the total cost of the booking, note the API will want this number to be the total cost multiplied by 100 (Example: total = 350, so you must send 35000 in the request).
 
 ### Response
 
