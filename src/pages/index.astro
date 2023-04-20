@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 ---
+
 <!-- The above gets the navigation from MainLayout.astro. The below Allows for the scroll animation when clicking on a navigation item -->
 <style>
   :global(html, body) {
@@ -76,7 +77,8 @@ import MainLayout from "../layouts/MainLayout.astro";
       id="amenities"
       class="scroll-mt-20 flex flex-col bg-[#F4F7FA] min-h-screen text-black justify-items-center">
       <!-- Two images with corners stacked on top of each other, left of text -->
-      <div class="flex-1 flex items-center mx-auto w-[70%] md:w-[75%] sm:w-[100%]">
+      <div
+        class="flex-1 flex items-center mx-auto w-[70%] md:w-[75%] sm:w-[100%]">
         <div class="mx-10 hidden lg:grid lg:grid-cols-1">
           <div style="grid-row-start: 1; grid-column-start: 1;">
             <img src="assets/barroom 1.png" alt="Picture of Bar Room" />
@@ -86,8 +88,8 @@ import MainLayout from "../layouts/MainLayout.astro";
             class="mt-44 ml-60">
             <img src="assets/food 1.png" alt="Picture of Food" />
           </div>
-      </div>
-      <!-- Text right of images stacked on top of each other -->
+        </div>
+        <!-- Text right of images stacked on top of each other -->
         <div class="flex-1 flex items-center px-1 py-2 flex-col">
           <h2
             class="p-1 m-1"
@@ -176,23 +178,13 @@ import MainLayout from "../layouts/MainLayout.astro";
               Book Now
             </p>
           </a>
-          <a
-            class="px-5 py-2 inline-block bg-transparent outline outline-1 text-white hover:bg-gray-600 transition-colors mt-10 mx-px"
-            href="/startBooking">
-            <p
-              style="font-family: 'Martel', serif; font-weight: 400; font-size: 20px; line-height:34px; letter-spacing: 0.13em;">
-              Stay With Us
-            </p>
-            <p
-              style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.205em; text-transform: uppercase;">
-              Book Now
-            </p>
-          </a>
         </div>
       </div>
     </section>
     <!-- Room Section. Shows rooms at the Inn using a carousel -->
-    <section id="room" class="scroll-mt-8 flex flex-col bg-[#F4F7FA] text-black justify-items-center">
+    <section
+      id="room"
+      class="scroll-mt-8 flex flex-col bg-[#F4F7FA] text-black justify-items-center">
       <section>
         <div
           class="mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:pl-8 lg:pr-0">
@@ -243,7 +235,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                 </button>
               </div>
             </div>
-      <!-- Rooms. Pictures and text underneath it -->
+            <!-- Rooms. Pictures and text underneath it -->
             <div class="lg:col-span-2 lg:mx-0">
               <div class="swiper-container !overflow-hidden">
                 <div class="swiper-wrapper">
@@ -737,7 +729,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                     <blockquote
                       class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                      <!-- All the stars for the review -->
+                        <!-- All the stars for the review -->
                         <div class="flex gap-0.5 text-yellow-500">
                           <svg
                             class="h-5 w-5"
@@ -790,11 +782,11 @@ import MainLayout from "../layouts/MainLayout.astro";
                           </svg>
                         </div>
 
-                  <!-- The review itself -->
-                  <div class="mt-4">
-                    <p class="text-2xl font-bold text-black sm:text-3xl">
-                      A wonderful, memorable experience
-                    </p>
+                        <!-- The review itself -->
+                        <div class="mt-4">
+                          <p class="text-2xl font-bold text-black sm:text-3xl">
+                            A wonderful, memorable experience
+                          </p>
 
                           <p class="mt-4 leading-relaxed text-gray-500">
                             After a long day of driving, it was nice to arrive
@@ -815,7 +807,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                     <blockquote
                       class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                      <!-- All the stars for the review -->
+                        <!-- All the stars for the review -->
                         <div class="flex gap-0.5 text-yellow-500">
                           <svg
                             class="h-5 w-5"
@@ -826,7 +818,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                               d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                             ></path>
                           </svg>
-                          
+
                           <svg
                             class="h-5 w-5"
                             fill="currentColor"
@@ -868,8 +860,8 @@ import MainLayout from "../layouts/MainLayout.astro";
                           </svg>
                         </div>
 
-                       <!-- The review -->
-                       <div class="mt-4">
+                        <!-- The review -->
+                        <div class="mt-4">
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             We will be back again and look forward to another
                             visit.
@@ -894,7 +886,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                     <blockquote
                       class="flex h-full flex-col justify-between bg-white p-12">
                       <div>
-                      <!-- The stars for the review -->
+                        <!-- The stars for the review -->
                         <div class="flex gap-0.5 text-yellow-500">
                           <svg
                             class="h-5 w-5"
@@ -952,7 +944,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                           <p class="text-2xl font-bold text-black sm:text-3xl">
                             Would definitely stay here again.
                           </p>
-                          
+
                           <p class="mt-4 leading-relaxed text-gray-500">
                             We stayed for one night while in the area for a for
                             a wedding. Hosts were very welcoming. The house is
@@ -1051,8 +1043,9 @@ import MainLayout from "../layouts/MainLayout.astro";
       </style>
       <div class="block rounded-lg lg:px-32 px-4 py-8 mx-auto">
         <div class="flex flex-wrap items-center">
-          <div class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
-          <!-- Use google map's API to add map -->
+          <div
+            class="grow-0 shrink-0 basis-auto block w-full lg:flex lg:w-6/12 xl:w-4/12">
+            <!-- Use google map's API to add map -->
             <div class="map-container-2 w-full">
               <iframe
                 src="https://maps.google.com/maps?q=The+Yorkshire+Inn,+New+York+96,+Phelps,+NY,+USA&t=&z=13&ie=UTF8&iwloc=&output=embed"
